@@ -1,0 +1,3929 @@
+
+HelloWorld.elf:     file format elf32-littlearm
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .text         000015b8  10001000  10001000  00001000  2**2
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  1 .VENEER_Code  00000110  2000000c  100025b8  0000800c  2**2
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  2 Stack         00000404  2000011c  00000000  0000011c  2**0
+                  ALLOC
+  3 .bss          00000048  20000520  00000404  00008520  2**2
+                  ALLOC
+  4 .no_init      00000004  20003ffc  00003ee0  0000011c  2**2
+                  ALLOC
+  5 .debug_aranges 00000488  00000000  00000000  00008120  2**3
+                  CONTENTS, READONLY, DEBUGGING
+  6 .debug_info   00005469  00000000  00000000  000085a8  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  7 .debug_abbrev 00001438  00000000  00000000  0000da11  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  8 .debug_line   00002e4b  00000000  00000000  0000ee49  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  9 .debug_frame  00000c74  00000000  00000000  00011c94  2**2
+                  CONTENTS, READONLY, DEBUGGING
+ 10 .debug_str    00001f76  00000000  00000000  00012908  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 11 .debug_loc    000012e8  00000000  00000000  0001487e  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 12 .debug_ranges 00000368  00000000  00000000  00015b68  2**3
+                  CONTENTS, READONLY, DEBUGGING
+ 13 .build_attributes 00000399  00000000  00000000  00015ed0  2**0
+                  CONTENTS, READONLY
+
+Disassembly of section .text:
+
+10001000 <__Vectors>:
+10001000:	20 05 00 20 19 10 00 10 00 00 00 00 99 10 00 10      .. ............
+10001010:	00 04 01 00 00 00 00 80                             ........
+
+10001018 <Reset_Handler>:
+    .thumb_func 
+    .globl  Reset_Handler
+    .type   Reset_Handler, %function
+Reset_Handler: 
+/* Initialize interrupt veneer */
+	ldr	r1, =eROData
+10001018:	4911      	ldr	r1, [pc, #68]	; (10001060 <__copy_data+0xe>)
+	ldr	r2, =VeneerStart
+1000101a:	4a12      	ldr	r2, [pc, #72]	; (10001064 <__copy_data+0x12>)
+	ldr	r3, =VeneerEnd
+1000101c:	4b12      	ldr	r3, [pc, #72]	; (10001068 <__copy_data+0x16>)
+	bl  __copy_data
+1000101e:	f000 f818 	bl	10001052 <__copy_data>
+
+    ldr  r0, =SystemInit
+10001022:	4812      	ldr	r0, [pc, #72]	; (1000106c <__copy_data+0x1a>)
+    blx  r0
+10001024:	4780      	blx	r0
+	
+/* Initialize data */
+	ldr	r1, =DataLoadAddr
+10001026:	4912      	ldr	r1, [pc, #72]	; (10001070 <__copy_data+0x1e>)
+	ldr	r2, =__data_start
+10001028:	4a12      	ldr	r2, [pc, #72]	; (10001074 <__copy_data+0x22>)
+	ldr	r3, =__data_end
+1000102a:	4b13      	ldr	r3, [pc, #76]	; (10001078 <__copy_data+0x26>)
+	bl  __copy_data
+1000102c:	f000 f811 	bl	10001052 <__copy_data>
+
+/* RAM code */
+	ldr	r1, =__ram_code_load
+10001030:	4912      	ldr	r1, [pc, #72]	; (1000107c <__copy_data+0x2a>)
+	ldr	r2, =__ram_code_start
+10001032:	4a13      	ldr	r2, [pc, #76]	; (10001080 <__copy_data+0x2e>)
+	ldr	r3, =__ram_code_end
+10001034:	4b13      	ldr	r3, [pc, #76]	; (10001084 <__copy_data+0x32>)
+	bl  __copy_data
+10001036:	f000 f80c 	bl	10001052 <__copy_data>
+ *    __bss_end__: end of the BSS section.
+ *
+ *  Both addresses must be aligned to 4 bytes boundary.
+ */
+#ifndef __SKIP_BSS_CLEAR
+	ldr	r1, =__bss_start
+1000103a:	4913      	ldr	r1, [pc, #76]	; (10001088 <__copy_data+0x36>)
+	ldr	r2, =__bss_end
+1000103c:	4a13      	ldr	r2, [pc, #76]	; (1000108c <__copy_data+0x3a>)
+
+	movs	r0, 0
+1000103e:	2000      	movs	r0, #0
+
+	subs	r2, r1
+10001040:	1a52      	subs	r2, r2, r1
+	ble	.L_loop3_done
+10001042:	dd02      	ble.n	1000104a <Reset_Handler+0x32>
+
+.L_loop3:
+	subs	r2, #4
+10001044:	3a04      	subs	r2, #4
+	str	r0, [r1, r2]
+10001046:	5088      	str	r0, [r1, r2]
+	bgt	.L_loop3
+10001048:	dcfc      	bgt.n	10001044 <Reset_Handler+0x2c>
+.L_loop3_done:
+#endif /* __SKIP_BSS_CLEAR */
+
+#ifndef __SKIP_LIBC_INIT_ARRAY
+    ldr  r0, =__libc_init_array
+1000104a:	4811      	ldr	r0, [pc, #68]	; (10001090 <__copy_data+0x3e>)
+    blx  r0
+1000104c:	4780      	blx	r0
+#endif
+
+    ldr  r0, =main
+1000104e:	4811      	ldr	r0, [pc, #68]	; (10001094 <__copy_data+0x42>)
+    blx  r0
+10001050:	4780      	blx	r0
+
+10001052 <__copy_data>:
+ *    r3: end of the section to copy to
+ *
+ *  All addresses must be aligned to 4 bytes boundary.
+ *  Uses r0
+ */
+	subs	r3, r2
+10001052:	1a9b      	subs	r3, r3, r2
+	ble	.L_loop_done
+10001054:	dd03      	ble.n	1000105e <__copy_data+0xc>
+
+.L_loop:
+	subs	r3, #4
+10001056:	3b04      	subs	r3, #4
+	ldr	r0, [r1,r3]
+10001058:	58c8      	ldr	r0, [r1, r3]
+	str	r0, [r2,r3]
+1000105a:	50d0      	str	r0, [r2, r3]
+	bgt	.L_loop
+1000105c:	dcfb      	bgt.n	10001056 <__copy_data+0x4>
+
+.L_loop_done:
+	bx  lr
+1000105e:	4770      	bx	lr
+    .thumb_func 
+    .globl  Reset_Handler
+    .type   Reset_Handler, %function
+Reset_Handler: 
+/* Initialize interrupt veneer */
+	ldr	r1, =eROData
+10001060:	100025b8 	.word	0x100025b8
+	ldr	r2, =VeneerStart
+10001064:	2000000c 	.word	0x2000000c
+	ldr	r3, =VeneerEnd
+10001068:	2000011c 	.word	0x2000011c
+	bl  __copy_data
+
+    ldr  r0, =SystemInit
+1000106c:	1000109d 	.word	0x1000109d
+    blx  r0
+	
+/* Initialize data */
+	ldr	r1, =DataLoadAddr
+10001070:	100026c8 	.word	0x100026c8
+	ldr	r2, =__data_start
+10001074:	20000520 	.word	0x20000520
+	ldr	r3, =__data_end
+10001078:	20000520 	.word	0x20000520
+	bl  __copy_data
+
+/* RAM code */
+	ldr	r1, =__ram_code_load
+1000107c:	100026c8 	.word	0x100026c8
+	ldr	r2, =__ram_code_start
+10001080:	20000520 	.word	0x20000520
+	ldr	r3, =__ram_code_end
+10001084:	20000520 	.word	0x20000520
+ *    __bss_end__: end of the BSS section.
+ *
+ *  Both addresses must be aligned to 4 bytes boundary.
+ */
+#ifndef __SKIP_BSS_CLEAR
+	ldr	r1, =__bss_start
+10001088:	20000520 	.word	0x20000520
+	ldr	r2, =__bss_end
+1000108c:	20000568 	.word	0x20000568
+	bgt	.L_loop3
+.L_loop3_done:
+#endif /* __SKIP_BSS_CLEAR */
+
+#ifndef __SKIP_LIBC_INIT_ARRAY
+    ldr  r0, =__libc_init_array
+10001090:	10002285 	.word	0x10002285
+    blx  r0
+#endif
+
+    ldr  r0, =main
+10001094:	10001f09 	.word	0x10001f09
+
+10001098 <CCU40_0_IRQHandler>:
+    
+    .thumb_func
+    .weak Default_handler
+    .type Default_handler, %function
+Default_handler:
+    b  .
+10001098:	e7fe      	b.n	10001098 <CCU40_0_IRQHandler>
+	...
+
+1000109c <SystemInit>:
+/*******************************************************************************
+ * API IMPLEMENTATION
+ *******************************************************************************/
+
+__WEAK void SystemInit(void)
+{    
+1000109c:	b580      	push	{r7, lr}
+1000109e:	af00      	add	r7, sp, #0
+  SystemCoreSetup();
+100010a0:	f000 fe50 	bl	10001d44 <SystemCoreSetup>
+  SystemCoreClockSetup();
+100010a4:	f000 fe94 	bl	10001dd0 <SystemCoreClockSetup>
+}
+100010a8:	46bd      	mov	sp, r7
+100010aa:	bd80      	pop	{r7, pc}
+
+100010ac <SystemCoreClockUpdate>:
+  
+  SystemCoreClockUpdate();
+}
+
+__WEAK void SystemCoreClockUpdate(void)
+{
+100010ac:	b580      	push	{r7, lr}
+100010ae:	af00      	add	r7, sp, #0
+  static uint32_t IDIV, FDIV;
+
+  IDIV = ((SCU_CLK->CLKCR) & SCU_CLK_CLKCR_IDIV_Msk) >> SCU_CLK_CLKCR_IDIV_Pos;
+100010b0:	4b12      	ldr	r3, [pc, #72]	; (100010fc <SystemCoreClockUpdate+0x50>)
+100010b2:	681a      	ldr	r2, [r3, #0]
+100010b4:	23ff      	movs	r3, #255	; 0xff
+100010b6:	021b      	lsls	r3, r3, #8
+100010b8:	4013      	ands	r3, r2
+100010ba:	0a1a      	lsrs	r2, r3, #8
+100010bc:	4b10      	ldr	r3, [pc, #64]	; (10001100 <SystemCoreClockUpdate+0x54>)
+100010be:	601a      	str	r2, [r3, #0]
+  FDIV = ((SCU_CLK->CLKCR) & SCU_CLK_CLKCR_FDIV_Msk) >> SCU_CLK_CLKCR_FDIV_Pos;
+100010c0:	4b0e      	ldr	r3, [pc, #56]	; (100010fc <SystemCoreClockUpdate+0x50>)
+100010c2:	681b      	ldr	r3, [r3, #0]
+100010c4:	22ff      	movs	r2, #255	; 0xff
+100010c6:	401a      	ands	r2, r3
+100010c8:	4b0e      	ldr	r3, [pc, #56]	; (10001104 <SystemCoreClockUpdate+0x58>)
+100010ca:	601a      	str	r2, [r3, #0]
+  
+  if (IDIV != 0)
+100010cc:	4b0c      	ldr	r3, [pc, #48]	; (10001100 <SystemCoreClockUpdate+0x54>)
+100010ce:	681b      	ldr	r3, [r3, #0]
+100010d0:	2b00      	cmp	r3, #0
+100010d2:	d00e      	beq.n	100010f2 <SystemCoreClockUpdate+0x46>
+  {
+    /* Fractional divider is enabled and used */
+    SystemCoreClock = ((DCO1_FREQUENCY << 6U) / ((IDIV << 8) + FDIV)) << 1U;
+100010d4:	4b0a      	ldr	r3, [pc, #40]	; (10001100 <SystemCoreClockUpdate+0x54>)
+100010d6:	681b      	ldr	r3, [r3, #0]
+100010d8:	021a      	lsls	r2, r3, #8
+100010da:	4b0a      	ldr	r3, [pc, #40]	; (10001104 <SystemCoreClockUpdate+0x58>)
+100010dc:	681b      	ldr	r3, [r3, #0]
+100010de:	18d3      	adds	r3, r2, r3
+100010e0:	4809      	ldr	r0, [pc, #36]	; (10001108 <SystemCoreClockUpdate+0x5c>)
+100010e2:	1c19      	adds	r1, r3, #0
+100010e4:	f001 f83c 	bl	10002160 <__aeabi_uidiv>
+100010e8:	1c03      	adds	r3, r0, #0
+100010ea:	005a      	lsls	r2, r3, #1
+100010ec:	4b07      	ldr	r3, [pc, #28]	; (1000110c <SystemCoreClockUpdate+0x60>)
+100010ee:	601a      	str	r2, [r3, #0]
+100010f0:	e002      	b.n	100010f8 <SystemCoreClockUpdate+0x4c>
+  }
+  else
+  {
+    /* Fractional divider bypassed. Simply divide DCO_DCLK by 2 */
+    SystemCoreClock = DCO1_FREQUENCY >> 1U;
+100010f2:	4b06      	ldr	r3, [pc, #24]	; (1000110c <SystemCoreClockUpdate+0x60>)
+100010f4:	4a06      	ldr	r2, [pc, #24]	; (10001110 <SystemCoreClockUpdate+0x64>)
+100010f6:	601a      	str	r2, [r3, #0]
+  }
+}
+100010f8:	46bd      	mov	sp, r7
+100010fa:	bd80      	pop	{r7, pc}
+100010fc:	40010300 	.word	0x40010300
+10001100:	20000520 	.word	0x20000520
+10001104:	20000524 	.word	0x20000524
+10001108:	f4240000 	.word	0xf4240000
+1000110c:	20003ffc 	.word	0x20003ffc
+10001110:	01e84800 	.word	0x01e84800
+
+10001114 <XMC_GPIO_Init>:
+/*******************************************************************************
+ * API IMPLEMENTATION
+ *******************************************************************************/
+
+void XMC_GPIO_Init(XMC_GPIO_PORT_t *const port, const uint8_t pin, const XMC_GPIO_CONFIG_t *const config)
+{
+10001114:	b590      	push	{r4, r7, lr}
+10001116:	b085      	sub	sp, #20
+10001118:	af00      	add	r7, sp, #0
+1000111a:	60f8      	str	r0, [r7, #12]
+1000111c:	607a      	str	r2, [r7, #4]
+1000111e:	230b      	movs	r3, #11
+10001120:	18fb      	adds	r3, r7, r3
+10001122:	1c0a      	adds	r2, r1, #0
+10001124:	701a      	strb	r2, [r3, #0]
+  XMC_ASSERT("XMC_GPIO_Init: Invalid port", XMC_GPIO_CHECK_PORT(port));
+  XMC_ASSERT("XMC_GPIO_Init: Invalid mode", XMC_GPIO_IsModeValid(config->mode));
+  XMC_ASSERT("XMC_GPIO_Init: Invalid input hysteresis", XMC_GPIO_CHECK_INPUT_HYSTERESIS(config->input_hysteresis));
+  
+  /* Switch to input */
+  port->IOCR[pin >> 2U] &= ~(uint32_t)((uint32_t)PORT_IOCR_PC_Msk << (PORT_IOCR_PC_Size * (pin & 0x3U)));
+10001126:	230b      	movs	r3, #11
+10001128:	18fb      	adds	r3, r7, r3
+1000112a:	781b      	ldrb	r3, [r3, #0]
+1000112c:	089b      	lsrs	r3, r3, #2
+1000112e:	b2db      	uxtb	r3, r3
+10001130:	1c18      	adds	r0, r3, #0
+10001132:	230b      	movs	r3, #11
+10001134:	18fb      	adds	r3, r7, r3
+10001136:	781b      	ldrb	r3, [r3, #0]
+10001138:	089b      	lsrs	r3, r3, #2
+1000113a:	b2db      	uxtb	r3, r3
+1000113c:	1c1a      	adds	r2, r3, #0
+1000113e:	68fb      	ldr	r3, [r7, #12]
+10001140:	3204      	adds	r2, #4
+10001142:	0092      	lsls	r2, r2, #2
+10001144:	58d3      	ldr	r3, [r2, r3]
+10001146:	220b      	movs	r2, #11
+10001148:	18ba      	adds	r2, r7, r2
+1000114a:	7812      	ldrb	r2, [r2, #0]
+1000114c:	2103      	movs	r1, #3
+1000114e:	400a      	ands	r2, r1
+10001150:	00d2      	lsls	r2, r2, #3
+10001152:	1c11      	adds	r1, r2, #0
+10001154:	22f8      	movs	r2, #248	; 0xf8
+10001156:	408a      	lsls	r2, r1
+10001158:	43d2      	mvns	r2, r2
+1000115a:	401a      	ands	r2, r3
+1000115c:	1c11      	adds	r1, r2, #0
+1000115e:	68fb      	ldr	r3, [r7, #12]
+10001160:	1d02      	adds	r2, r0, #4
+10001162:	0092      	lsls	r2, r2, #2
+10001164:	50d1      	str	r1, [r2, r3]
+
+  /* HW port control is disabled */
+  port->HWSEL &= ~(uint32_t)((uint32_t)PORT_HWSEL_Msk << ((uint32_t)pin << 1U));
+10001166:	68fb      	ldr	r3, [r7, #12]
+10001168:	6f5b      	ldr	r3, [r3, #116]	; 0x74
+1000116a:	220b      	movs	r2, #11
+1000116c:	18ba      	adds	r2, r7, r2
+1000116e:	7812      	ldrb	r2, [r2, #0]
+10001170:	0052      	lsls	r2, r2, #1
+10001172:	1c11      	adds	r1, r2, #0
+10001174:	2203      	movs	r2, #3
+10001176:	408a      	lsls	r2, r1
+10001178:	43d2      	mvns	r2, r2
+1000117a:	401a      	ands	r2, r3
+1000117c:	68fb      	ldr	r3, [r7, #12]
+1000117e:	675a      	str	r2, [r3, #116]	; 0x74
+
+  /* Set input hysteresis */
+  port->PHCR[(uint32_t)pin >> 3U] &= ~(uint32_t)((uint32_t)PORT_PHCR_Msk << ((uint32_t)PORT_PHCR_Size * ((uint32_t)pin & 0x7U)));
+10001180:	230b      	movs	r3, #11
+10001182:	18fb      	adds	r3, r7, r3
+10001184:	781b      	ldrb	r3, [r3, #0]
+10001186:	08db      	lsrs	r3, r3, #3
+10001188:	b2db      	uxtb	r3, r3
+1000118a:	1c18      	adds	r0, r3, #0
+1000118c:	230b      	movs	r3, #11
+1000118e:	18fb      	adds	r3, r7, r3
+10001190:	781b      	ldrb	r3, [r3, #0]
+10001192:	08db      	lsrs	r3, r3, #3
+10001194:	b2db      	uxtb	r3, r3
+10001196:	1c1a      	adds	r2, r3, #0
+10001198:	68fb      	ldr	r3, [r7, #12]
+1000119a:	3210      	adds	r2, #16
+1000119c:	0092      	lsls	r2, r2, #2
+1000119e:	58d3      	ldr	r3, [r2, r3]
+100011a0:	220b      	movs	r2, #11
+100011a2:	18ba      	adds	r2, r7, r2
+100011a4:	7812      	ldrb	r2, [r2, #0]
+100011a6:	2107      	movs	r1, #7
+100011a8:	400a      	ands	r2, r1
+100011aa:	0092      	lsls	r2, r2, #2
+100011ac:	1c11      	adds	r1, r2, #0
+100011ae:	2204      	movs	r2, #4
+100011b0:	408a      	lsls	r2, r1
+100011b2:	43d2      	mvns	r2, r2
+100011b4:	401a      	ands	r2, r3
+100011b6:	1c11      	adds	r1, r2, #0
+100011b8:	68fb      	ldr	r3, [r7, #12]
+100011ba:	1c02      	adds	r2, r0, #0
+100011bc:	3210      	adds	r2, #16
+100011be:	0092      	lsls	r2, r2, #2
+100011c0:	50d1      	str	r1, [r2, r3]
+  port->PHCR[(uint32_t)pin >> 3U] |= (uint32_t)config->input_hysteresis << ((uint32_t)PORT_PHCR_Size * ((uint32_t)pin & 0x7U));
+100011c2:	230b      	movs	r3, #11
+100011c4:	18fb      	adds	r3, r7, r3
+100011c6:	781b      	ldrb	r3, [r3, #0]
+100011c8:	08db      	lsrs	r3, r3, #3
+100011ca:	b2db      	uxtb	r3, r3
+100011cc:	1c18      	adds	r0, r3, #0
+100011ce:	230b      	movs	r3, #11
+100011d0:	18fb      	adds	r3, r7, r3
+100011d2:	781b      	ldrb	r3, [r3, #0]
+100011d4:	08db      	lsrs	r3, r3, #3
+100011d6:	b2db      	uxtb	r3, r3
+100011d8:	1c1a      	adds	r2, r3, #0
+100011da:	68fb      	ldr	r3, [r7, #12]
+100011dc:	3210      	adds	r2, #16
+100011de:	0092      	lsls	r2, r2, #2
+100011e0:	58d2      	ldr	r2, [r2, r3]
+100011e2:	687b      	ldr	r3, [r7, #4]
+100011e4:	785b      	ldrb	r3, [r3, #1]
+100011e6:	1c1c      	adds	r4, r3, #0
+100011e8:	230b      	movs	r3, #11
+100011ea:	18fb      	adds	r3, r7, r3
+100011ec:	781b      	ldrb	r3, [r3, #0]
+100011ee:	2107      	movs	r1, #7
+100011f0:	400b      	ands	r3, r1
+100011f2:	009b      	lsls	r3, r3, #2
+100011f4:	409c      	lsls	r4, r3
+100011f6:	1c23      	adds	r3, r4, #0
+100011f8:	431a      	orrs	r2, r3
+100011fa:	1c11      	adds	r1, r2, #0
+100011fc:	68fb      	ldr	r3, [r7, #12]
+100011fe:	1c02      	adds	r2, r0, #0
+10001200:	3210      	adds	r2, #16
+10001202:	0092      	lsls	r2, r2, #2
+10001204:	50d1      	str	r1, [r2, r3]
+    
+  /* Enable digital input */
+  if (XMC_GPIO_CHECK_ANALOG_PORT(port))
+10001206:	68fb      	ldr	r3, [r7, #12]
+10001208:	4a20      	ldr	r2, [pc, #128]	; (1000128c <XMC_GPIO_Init+0x178>)
+1000120a:	4293      	cmp	r3, r2
+1000120c:	d10b      	bne.n	10001226 <XMC_GPIO_Init+0x112>
+  {    
+    port->PDISC &= ~(uint32_t)((uint32_t)0x1U << pin);
+1000120e:	68fb      	ldr	r3, [r7, #12]
+10001210:	6e1b      	ldr	r3, [r3, #96]	; 0x60
+10001212:	220b      	movs	r2, #11
+10001214:	18ba      	adds	r2, r7, r2
+10001216:	7812      	ldrb	r2, [r2, #0]
+10001218:	2101      	movs	r1, #1
+1000121a:	4091      	lsls	r1, r2
+1000121c:	1c0a      	adds	r2, r1, #0
+1000121e:	43d2      	mvns	r2, r2
+10001220:	401a      	ands	r2, r3
+10001222:	68fb      	ldr	r3, [r7, #12]
+10001224:	661a      	str	r2, [r3, #96]	; 0x60
+  }
+
+  if ((config->mode & XMC_GPIO_MODE_OE) != 0)
+10001226:	687b      	ldr	r3, [r7, #4]
+10001228:	781b      	ldrb	r3, [r3, #0]
+1000122a:	b2db      	uxtb	r3, r3
+1000122c:	b25b      	sxtb	r3, r3
+1000122e:	2b00      	cmp	r3, #0
+10001230:	da07      	bge.n	10001242 <XMC_GPIO_Init+0x12e>
+  {
+    /* If output is enabled */
+
+    /* Set output level */
+    port->OMR = (uint32_t)config->output_level << pin;
+10001232:	687b      	ldr	r3, [r7, #4]
+10001234:	685a      	ldr	r2, [r3, #4]
+10001236:	230b      	movs	r3, #11
+10001238:	18fb      	adds	r3, r7, r3
+1000123a:	781b      	ldrb	r3, [r3, #0]
+1000123c:	409a      	lsls	r2, r3
+1000123e:	68fb      	ldr	r3, [r7, #12]
+10001240:	605a      	str	r2, [r3, #4]
+  }
+  
+  /* Set mode */
+  port->IOCR[pin >> 2U] |= (uint32_t)config->mode << (PORT_IOCR_PC_Size * (pin & 0x3U));
+10001242:	230b      	movs	r3, #11
+10001244:	18fb      	adds	r3, r7, r3
+10001246:	781b      	ldrb	r3, [r3, #0]
+10001248:	089b      	lsrs	r3, r3, #2
+1000124a:	b2db      	uxtb	r3, r3
+1000124c:	1c18      	adds	r0, r3, #0
+1000124e:	230b      	movs	r3, #11
+10001250:	18fb      	adds	r3, r7, r3
+10001252:	781b      	ldrb	r3, [r3, #0]
+10001254:	089b      	lsrs	r3, r3, #2
+10001256:	b2db      	uxtb	r3, r3
+10001258:	1c1a      	adds	r2, r3, #0
+1000125a:	68fb      	ldr	r3, [r7, #12]
+1000125c:	3204      	adds	r2, #4
+1000125e:	0092      	lsls	r2, r2, #2
+10001260:	58d2      	ldr	r2, [r2, r3]
+10001262:	687b      	ldr	r3, [r7, #4]
+10001264:	781b      	ldrb	r3, [r3, #0]
+10001266:	1c1c      	adds	r4, r3, #0
+10001268:	230b      	movs	r3, #11
+1000126a:	18fb      	adds	r3, r7, r3
+1000126c:	781b      	ldrb	r3, [r3, #0]
+1000126e:	2103      	movs	r1, #3
+10001270:	400b      	ands	r3, r1
+10001272:	00db      	lsls	r3, r3, #3
+10001274:	409c      	lsls	r4, r3
+10001276:	1c23      	adds	r3, r4, #0
+10001278:	431a      	orrs	r2, r3
+1000127a:	1c11      	adds	r1, r2, #0
+1000127c:	68fb      	ldr	r3, [r7, #12]
+1000127e:	1d02      	adds	r2, r0, #4
+10001280:	0092      	lsls	r2, r2, #2
+10001282:	50d1      	str	r1, [r2, r3]
+}
+10001284:	46bd      	mov	sp, r7
+10001286:	b005      	add	sp, #20
+10001288:	bd90      	pop	{r4, r7, pc}
+1000128a:	46c0      	nop			; (mov r8, r8)
+1000128c:	40040200 	.word	0x40040200
+
+10001290 <XMC_SCU_LockProtectedBits>:
+#endif
+}
+
+/* API to lock protected bitfields from being modified */
+void XMC_SCU_LockProtectedBits(void)
+{
+10001290:	b580      	push	{r7, lr}
+10001292:	af00      	add	r7, sp, #0
+  SCU_GENERAL->PASSWD = SCU_GCU_PASSWD_PROT_ENABLE;
+10001294:	4b02      	ldr	r3, [pc, #8]	; (100012a0 <XMC_SCU_LockProtectedBits+0x10>)
+10001296:	22c3      	movs	r2, #195	; 0xc3
+10001298:	625a      	str	r2, [r3, #36]	; 0x24
+}
+1000129a:	46bd      	mov	sp, r7
+1000129c:	bd80      	pop	{r7, pc}
+1000129e:	46c0      	nop			; (mov r8, r8)
+100012a0:	40010000 	.word	0x40010000
+
+100012a4 <XMC_SCU_UnlockProtectedBits>:
+
+/* API to make protected bitfields available for modification */
+void XMC_SCU_UnlockProtectedBits(void)
+{
+100012a4:	b580      	push	{r7, lr}
+100012a6:	af00      	add	r7, sp, #0
+  SCU_GENERAL->PASSWD = SCU_GCU_PASSWD_PROT_DISABLE;
+100012a8:	4b05      	ldr	r3, [pc, #20]	; (100012c0 <XMC_SCU_UnlockProtectedBits+0x1c>)
+100012aa:	22c0      	movs	r2, #192	; 0xc0
+100012ac:	625a      	str	r2, [r3, #36]	; 0x24
+
+  while(((SCU_GENERAL->PASSWD) & SCU_GENERAL_PASSWD_PROTS_Msk))
+100012ae:	46c0      	nop			; (mov r8, r8)
+100012b0:	4b03      	ldr	r3, [pc, #12]	; (100012c0 <XMC_SCU_UnlockProtectedBits+0x1c>)
+100012b2:	6a5b      	ldr	r3, [r3, #36]	; 0x24
+100012b4:	2204      	movs	r2, #4
+100012b6:	4013      	ands	r3, r2
+100012b8:	d1fa      	bne.n	100012b0 <XMC_SCU_UnlockProtectedBits+0xc>
+  {
+    /* Loop until the lock is removed */
+  }
+}
+100012ba:	46bd      	mov	sp, r7
+100012bc:	bd80      	pop	{r7, pc}
+100012be:	46c0      	nop			; (mov r8, r8)
+100012c0:	40010000 	.word	0x40010000
+
+100012c4 <XMC_SCU_CLOCK_Init>:
+}
+
+
+/* API which initializes the clock tree ofthe device */
+void XMC_SCU_CLOCK_Init(const XMC_SCU_CLOCK_CONFIG_t *const config)
+{
+100012c4:	b580      	push	{r7, lr}
+100012c6:	b082      	sub	sp, #8
+100012c8:	af00      	add	r7, sp, #0
+100012ca:	6078      	str	r0, [r7, #4]
+  /* Remove protection */
+  XMC_SCU_UnlockProtectedBits();
+100012cc:	f7ff ffea 	bl	100012a4 <XMC_SCU_UnlockProtectedBits>
+  SCU_CLK->CLKCR1 = (SCU_CLK->CLKCR1 & ~SCU_CLK_CLKCR1_DCLKSEL_Msk) |
+                    config->dclk_src;
+
+#endif
+  /* Update PCLK selection mux. */
+  SCU_CLK->CLKCR = (SCU_CLK->CLKCR & (uint32_t)~(SCU_CLK_CLKCR_PCLKSEL_Msk | SCU_CLK_CLKCR_RTCCLKSEL_Msk)) |
+100012d0:	4a0c      	ldr	r2, [pc, #48]	; (10001304 <XMC_SCU_CLOCK_Init+0x40>)
+100012d2:	4b0c      	ldr	r3, [pc, #48]	; (10001304 <XMC_SCU_CLOCK_Init+0x40>)
+100012d4:	681b      	ldr	r3, [r3, #0]
+100012d6:	490c      	ldr	r1, [pc, #48]	; (10001308 <XMC_SCU_CLOCK_Init+0x44>)
+100012d8:	4019      	ands	r1, r3
+                   config->rtc_src |
+100012da:	687b      	ldr	r3, [r7, #4]
+100012dc:	689b      	ldr	r3, [r3, #8]
+  SCU_CLK->CLKCR1 = (SCU_CLK->CLKCR1 & ~SCU_CLK_CLKCR1_DCLKSEL_Msk) |
+                    config->dclk_src;
+
+#endif
+  /* Update PCLK selection mux. */
+  SCU_CLK->CLKCR = (SCU_CLK->CLKCR & (uint32_t)~(SCU_CLK_CLKCR_PCLKSEL_Msk | SCU_CLK_CLKCR_RTCCLKSEL_Msk)) |
+100012de:	4319      	orrs	r1, r3
+                   config->rtc_src |
+                   config->pclk_src;
+100012e0:	687b      	ldr	r3, [r7, #4]
+100012e2:	685b      	ldr	r3, [r3, #4]
+                    config->dclk_src;
+
+#endif
+  /* Update PCLK selection mux. */
+  SCU_CLK->CLKCR = (SCU_CLK->CLKCR & (uint32_t)~(SCU_CLK_CLKCR_PCLKSEL_Msk | SCU_CLK_CLKCR_RTCCLKSEL_Msk)) |
+                   config->rtc_src |
+100012e4:	430b      	orrs	r3, r1
+  SCU_CLK->CLKCR1 = (SCU_CLK->CLKCR1 & ~SCU_CLK_CLKCR1_DCLKSEL_Msk) |
+                    config->dclk_src;
+
+#endif
+  /* Update PCLK selection mux. */
+  SCU_CLK->CLKCR = (SCU_CLK->CLKCR & (uint32_t)~(SCU_CLK_CLKCR_PCLKSEL_Msk | SCU_CLK_CLKCR_RTCCLKSEL_Msk)) |
+100012e6:	6013      	str	r3, [r2, #0]
+                   config->rtc_src |
+                   config->pclk_src;
+
+  /* Close the lock opened above. */
+  XMC_SCU_LockProtectedBits();
+100012e8:	f7ff ffd2 	bl	10001290 <XMC_SCU_LockProtectedBits>
+
+  /* Update the dividers now */
+  XMC_SCU_CLOCK_ScaleMCLKFrequency(config->idiv, config->fdiv);
+100012ec:	687b      	ldr	r3, [r7, #4]
+100012ee:	785b      	ldrb	r3, [r3, #1]
+100012f0:	1c1a      	adds	r2, r3, #0
+100012f2:	687b      	ldr	r3, [r7, #4]
+100012f4:	781b      	ldrb	r3, [r3, #0]
+100012f6:	1c10      	adds	r0, r2, #0
+100012f8:	1c19      	adds	r1, r3, #0
+100012fa:	f000 f807 	bl	1000130c <XMC_SCU_CLOCK_ScaleMCLKFrequency>
+
+}
+100012fe:	46bd      	mov	sp, r7
+10001300:	b002      	add	sp, #8
+10001302:	bd80      	pop	{r7, pc}
+10001304:	40010300 	.word	0x40010300
+10001308:	fff0ffff 	.word	0xfff0ffff
+
+1000130c <XMC_SCU_CLOCK_ScaleMCLKFrequency>:
+}
+
+
+/* A utility routine which updates the fractional dividers in steps */
+void XMC_SCU_CLOCK_ScaleMCLKFrequency(uint32_t idiv, uint32_t fdiv)
+{
+1000130c:	b580      	push	{r7, lr}
+1000130e:	b084      	sub	sp, #16
+10001310:	af00      	add	r7, sp, #0
+10001312:	6078      	str	r0, [r7, #4]
+10001314:	6039      	str	r1, [r7, #0]
+  /* Find out current and target value of idiv */
+  uint32_t curr_idiv;
+
+  XMC_SCU_UnlockProtectedBits();
+10001316:	f7ff ffc5 	bl	100012a4 <XMC_SCU_UnlockProtectedBits>
+
+  /* Take a snapshot of value already programmed into IDIV */
+  curr_idiv = (SCU_CLK->CLKCR & SCU_CLK_CLKCR_IDIV_Msk) >> SCU_CLK_CLKCR_IDIV_Pos;
+1000131a:	4b21      	ldr	r3, [pc, #132]	; (100013a0 <XMC_SCU_CLOCK_ScaleMCLKFrequency+0x94>)
+1000131c:	681a      	ldr	r2, [r3, #0]
+1000131e:	23ff      	movs	r3, #255	; 0xff
+10001320:	021b      	lsls	r3, r3, #8
+10001322:	4013      	ands	r3, r2
+10001324:	0a1b      	lsrs	r3, r3, #8
+10001326:	60fb      	str	r3, [r7, #12]
+
+  SCU_CLK->CLKCR = (SCU_CLK->CLKCR & (uint32_t)~(SCU_CLK_CLKCR_FDIV_Msk | SCU_CLK_CLKCR_CNTADJ_Msk)) |
+                   (uint32_t)((fdiv & 0xffU) << SCU_CLK_CLKCR_FDIV_Pos) |
+                   (uint32_t)(1023UL << SCU_CLK_CLKCR_CNTADJ_Pos);
+#else
+  SCU_CLK->CLKCR = (SCU_CLK->CLKCR & (uint32_t)~(SCU_CLK_CLKCR_FDIV_Msk | SCU_CLK_CLKCR_CNTADJ_Msk)) |
+10001328:	4b1d      	ldr	r3, [pc, #116]	; (100013a0 <XMC_SCU_CLOCK_ScaleMCLKFrequency+0x94>)
+1000132a:	4a1d      	ldr	r2, [pc, #116]	; (100013a0 <XMC_SCU_CLOCK_ScaleMCLKFrequency+0x94>)
+1000132c:	6812      	ldr	r2, [r2, #0]
+1000132e:	491d      	ldr	r1, [pc, #116]	; (100013a4 <XMC_SCU_CLOCK_ScaleMCLKFrequency+0x98>)
+10001330:	4011      	ands	r1, r2
+10001332:	683a      	ldr	r2, [r7, #0]
+10001334:	430a      	orrs	r2, r1
+                   (uint32_t)(fdiv << SCU_CLK_CLKCR_FDIV_Pos) |
+10001336:	491c      	ldr	r1, [pc, #112]	; (100013a8 <XMC_SCU_CLOCK_ScaleMCLKFrequency+0x9c>)
+10001338:	430a      	orrs	r2, r1
+
+  SCU_CLK->CLKCR = (SCU_CLK->CLKCR & (uint32_t)~(SCU_CLK_CLKCR_FDIV_Msk | SCU_CLK_CLKCR_CNTADJ_Msk)) |
+                   (uint32_t)((fdiv & 0xffU) << SCU_CLK_CLKCR_FDIV_Pos) |
+                   (uint32_t)(1023UL << SCU_CLK_CLKCR_CNTADJ_Pos);
+#else
+  SCU_CLK->CLKCR = (SCU_CLK->CLKCR & (uint32_t)~(SCU_CLK_CLKCR_FDIV_Msk | SCU_CLK_CLKCR_CNTADJ_Msk)) |
+1000133a:	601a      	str	r2, [r3, #0]
+                   (uint32_t)(fdiv << SCU_CLK_CLKCR_FDIV_Pos) |
+                   (uint32_t)(1023UL << SCU_CLK_CLKCR_CNTADJ_Pos);
+#endif
+
+  while ((SCU_CLK->CLKCR)& SCU_CLK_CLKCR_VDDC2LOW_Msk)
+1000133c:	46c0      	nop			; (mov r8, r8)
+1000133e:	4b18      	ldr	r3, [pc, #96]	; (100013a0 <XMC_SCU_CLOCK_ScaleMCLKFrequency+0x94>)
+10001340:	681a      	ldr	r2, [r3, #0]
+10001342:	2380      	movs	r3, #128	; 0x80
+10001344:	05db      	lsls	r3, r3, #23
+10001346:	4013      	ands	r3, r2
+10001348:	d1f9      	bne.n	1000133e <XMC_SCU_CLOCK_ScaleMCLKFrequency+0x32>
+  {
+    /* Spin until the core supply stabilizes */
+  }
+
+  if(curr_idiv <= idiv)
+1000134a:	68fa      	ldr	r2, [r7, #12]
+1000134c:	687b      	ldr	r3, [r7, #4]
+1000134e:	429a      	cmp	r2, r3
+10001350:	d806      	bhi.n	10001360 <XMC_SCU_CLOCK_ScaleMCLKFrequency+0x54>
+  {
+    /* Requested IDIV is greater than currently programmed IDIV. So downscale the frequency */
+    XMC_SCU_CLOCK_lFrequencyDownScaling(curr_idiv, idiv);
+10001352:	68fa      	ldr	r2, [r7, #12]
+10001354:	687b      	ldr	r3, [r7, #4]
+10001356:	1c10      	adds	r0, r2, #0
+10001358:	1c19      	adds	r1, r3, #0
+1000135a:	f000 f853 	bl	10001404 <XMC_SCU_CLOCK_lFrequencyDownScaling>
+1000135e:	e005      	b.n	1000136c <XMC_SCU_CLOCK_ScaleMCLKFrequency+0x60>
+  }
+  else
+  {
+    /* Requested IDIV is lower than currently programmed IDIV. So upscale the frequency */
+    XMC_SCU_CLOCK_lFrequencyUpScaling(curr_idiv, idiv);
+10001360:	68fa      	ldr	r2, [r7, #12]
+10001362:	687b      	ldr	r3, [r7, #4]
+10001364:	1c10      	adds	r0, r2, #0
+10001366:	1c19      	adds	r1, r3, #0
+10001368:	f000 f822 	bl	100013b0 <XMC_SCU_CLOCK_lFrequencyUpScaling>
+  }
+
+  SCU_CLK->CLKCR = (SCU_CLK->CLKCR & (uint32_t)~(SCU_CLK_CLKCR_IDIV_Msk | SCU_CLK_CLKCR_CNTADJ_Msk)) |
+1000136c:	4b0c      	ldr	r3, [pc, #48]	; (100013a0 <XMC_SCU_CLOCK_ScaleMCLKFrequency+0x94>)
+1000136e:	4a0c      	ldr	r2, [pc, #48]	; (100013a0 <XMC_SCU_CLOCK_ScaleMCLKFrequency+0x94>)
+10001370:	6812      	ldr	r2, [r2, #0]
+10001372:	490e      	ldr	r1, [pc, #56]	; (100013ac <XMC_SCU_CLOCK_ScaleMCLKFrequency+0xa0>)
+10001374:	4011      	ands	r1, r2
+                   (uint32_t)(idiv << SCU_CLK_CLKCR_IDIV_Pos) | (uint32_t)(1023UL << SCU_CLK_CLKCR_CNTADJ_Pos);
+10001376:	687a      	ldr	r2, [r7, #4]
+10001378:	0212      	lsls	r2, r2, #8
+  {
+    /* Requested IDIV is lower than currently programmed IDIV. So upscale the frequency */
+    XMC_SCU_CLOCK_lFrequencyUpScaling(curr_idiv, idiv);
+  }
+
+  SCU_CLK->CLKCR = (SCU_CLK->CLKCR & (uint32_t)~(SCU_CLK_CLKCR_IDIV_Msk | SCU_CLK_CLKCR_CNTADJ_Msk)) |
+1000137a:	430a      	orrs	r2, r1
+                   (uint32_t)(idiv << SCU_CLK_CLKCR_IDIV_Pos) | (uint32_t)(1023UL << SCU_CLK_CLKCR_CNTADJ_Pos);
+1000137c:	490a      	ldr	r1, [pc, #40]	; (100013a8 <XMC_SCU_CLOCK_ScaleMCLKFrequency+0x9c>)
+1000137e:	430a      	orrs	r2, r1
+  {
+    /* Requested IDIV is lower than currently programmed IDIV. So upscale the frequency */
+    XMC_SCU_CLOCK_lFrequencyUpScaling(curr_idiv, idiv);
+  }
+
+  SCU_CLK->CLKCR = (SCU_CLK->CLKCR & (uint32_t)~(SCU_CLK_CLKCR_IDIV_Msk | SCU_CLK_CLKCR_CNTADJ_Msk)) |
+10001380:	601a      	str	r2, [r3, #0]
+                   (uint32_t)(idiv << SCU_CLK_CLKCR_IDIV_Pos) | (uint32_t)(1023UL << SCU_CLK_CLKCR_CNTADJ_Pos);
+
+  while ((SCU_CLK->CLKCR) & SCU_CLK_CLKCR_VDDC2LOW_Msk)
+10001382:	46c0      	nop			; (mov r8, r8)
+10001384:	4b06      	ldr	r3, [pc, #24]	; (100013a0 <XMC_SCU_CLOCK_ScaleMCLKFrequency+0x94>)
+10001386:	681a      	ldr	r2, [r3, #0]
+10001388:	2380      	movs	r3, #128	; 0x80
+1000138a:	05db      	lsls	r3, r3, #23
+1000138c:	4013      	ands	r3, r2
+1000138e:	d1f9      	bne.n	10001384 <XMC_SCU_CLOCK_ScaleMCLKFrequency+0x78>
+  {
+    /* Wait voltage suply stabilization */
+  }
+
+  XMC_SCU_LockProtectedBits();
+10001390:	f7ff ff7e 	bl	10001290 <XMC_SCU_LockProtectedBits>
+
+  SystemCoreClockUpdate();
+10001394:	f7ff fe8a 	bl	100010ac <SystemCoreClockUpdate>
+
+}
+10001398:	46bd      	mov	sp, r7
+1000139a:	b004      	add	sp, #16
+1000139c:	bd80      	pop	{r7, pc}
+1000139e:	46c0      	nop			; (mov r8, r8)
+100013a0:	40010300 	.word	0x40010300
+100013a4:	c00fff00 	.word	0xc00fff00
+100013a8:	3ff00000 	.word	0x3ff00000
+100013ac:	c00f00ff 	.word	0xc00f00ff
+
+100013b0 <XMC_SCU_CLOCK_lFrequencyUpScaling>:
+
+/* Utility routine to perform frequency up scaling */
+static void XMC_SCU_CLOCK_lFrequencyUpScaling(uint32_t curr_idiv, uint32_t target_idiv)
+{
+100013b0:	b580      	push	{r7, lr}
+100013b2:	b082      	sub	sp, #8
+100013b4:	af00      	add	r7, sp, #0
+100013b6:	6078      	str	r0, [r7, #4]
+100013b8:	6039      	str	r1, [r7, #0]
+  while (curr_idiv > (target_idiv * 4UL))
+100013ba:	e014      	b.n	100013e6 <XMC_SCU_CLOCK_lFrequencyUpScaling+0x36>
+  {
+    curr_idiv = (uint32_t)(curr_idiv >> 2UL);   /* Divide by 4. */
+100013bc:	687b      	ldr	r3, [r7, #4]
+100013be:	089b      	lsrs	r3, r3, #2
+100013c0:	607b      	str	r3, [r7, #4]
+
+    SCU_CLK->CLKCR = (SCU_CLK->CLKCR & (uint32_t)~(SCU_CLK_CLKCR_IDIV_Msk | SCU_CLK_CLKCR_CNTADJ_Msk)) |
+100013c2:	4b0d      	ldr	r3, [pc, #52]	; (100013f8 <XMC_SCU_CLOCK_lFrequencyUpScaling+0x48>)
+100013c4:	4a0c      	ldr	r2, [pc, #48]	; (100013f8 <XMC_SCU_CLOCK_lFrequencyUpScaling+0x48>)
+100013c6:	6812      	ldr	r2, [r2, #0]
+100013c8:	490c      	ldr	r1, [pc, #48]	; (100013fc <XMC_SCU_CLOCK_lFrequencyUpScaling+0x4c>)
+100013ca:	4011      	ands	r1, r2
+                     (uint32_t)(curr_idiv << SCU_CLK_CLKCR_IDIV_Pos) | 
+100013cc:	687a      	ldr	r2, [r7, #4]
+100013ce:	0212      	lsls	r2, r2, #8
+{
+  while (curr_idiv > (target_idiv * 4UL))
+  {
+    curr_idiv = (uint32_t)(curr_idiv >> 2UL);   /* Divide by 4. */
+
+    SCU_CLK->CLKCR = (SCU_CLK->CLKCR & (uint32_t)~(SCU_CLK_CLKCR_IDIV_Msk | SCU_CLK_CLKCR_CNTADJ_Msk)) |
+100013d0:	430a      	orrs	r2, r1
+                     (uint32_t)(curr_idiv << SCU_CLK_CLKCR_IDIV_Pos) | 
+100013d2:	490b      	ldr	r1, [pc, #44]	; (10001400 <XMC_SCU_CLOCK_lFrequencyUpScaling+0x50>)
+100013d4:	430a      	orrs	r2, r1
+{
+  while (curr_idiv > (target_idiv * 4UL))
+  {
+    curr_idiv = (uint32_t)(curr_idiv >> 2UL);   /* Divide by 4. */
+
+    SCU_CLK->CLKCR = (SCU_CLK->CLKCR & (uint32_t)~(SCU_CLK_CLKCR_IDIV_Msk | SCU_CLK_CLKCR_CNTADJ_Msk)) |
+100013d6:	601a      	str	r2, [r3, #0]
+                     (uint32_t)(curr_idiv << SCU_CLK_CLKCR_IDIV_Pos) | 
+                     (uint32_t)(1023UL << SCU_CLK_CLKCR_CNTADJ_Pos);
+
+    while (SCU_CLK->CLKCR & SCU_CLK_CLKCR_VDDC2LOW_Msk)
+100013d8:	46c0      	nop			; (mov r8, r8)
+100013da:	4b07      	ldr	r3, [pc, #28]	; (100013f8 <XMC_SCU_CLOCK_lFrequencyUpScaling+0x48>)
+100013dc:	681a      	ldr	r2, [r3, #0]
+100013de:	2380      	movs	r3, #128	; 0x80
+100013e0:	05db      	lsls	r3, r3, #23
+100013e2:	4013      	ands	r3, r2
+100013e4:	d1f9      	bne.n	100013da <XMC_SCU_CLOCK_lFrequencyUpScaling+0x2a>
+}
+
+/* Utility routine to perform frequency up scaling */
+static void XMC_SCU_CLOCK_lFrequencyUpScaling(uint32_t curr_idiv, uint32_t target_idiv)
+{
+  while (curr_idiv > (target_idiv * 4UL))
+100013e6:	683b      	ldr	r3, [r7, #0]
+100013e8:	009a      	lsls	r2, r3, #2
+100013ea:	687b      	ldr	r3, [r7, #4]
+100013ec:	429a      	cmp	r2, r3
+100013ee:	d3e5      	bcc.n	100013bc <XMC_SCU_CLOCK_lFrequencyUpScaling+0xc>
+    while (SCU_CLK->CLKCR & SCU_CLK_CLKCR_VDDC2LOW_Msk)
+    {
+    /* Wait voltage suply stabilization */
+    }
+  }
+}
+100013f0:	46bd      	mov	sp, r7
+100013f2:	b002      	add	sp, #8
+100013f4:	bd80      	pop	{r7, pc}
+100013f6:	46c0      	nop			; (mov r8, r8)
+100013f8:	40010300 	.word	0x40010300
+100013fc:	c00f00ff 	.word	0xc00f00ff
+10001400:	3ff00000 	.word	0x3ff00000
+
+10001404 <XMC_SCU_CLOCK_lFrequencyDownScaling>:
+
+/* Utility routine to perform frequency down scaling */
+static void XMC_SCU_CLOCK_lFrequencyDownScaling(uint32_t curr_idiv, uint32_t target_idiv)
+{
+10001404:	b580      	push	{r7, lr}
+10001406:	b082      	sub	sp, #8
+10001408:	af00      	add	r7, sp, #0
+1000140a:	6078      	str	r0, [r7, #4]
+1000140c:	6039      	str	r1, [r7, #0]
+
+  while ((curr_idiv * 4UL) < target_idiv)
+1000140e:	e019      	b.n	10001444 <XMC_SCU_CLOCK_lFrequencyDownScaling+0x40>
+  {
+    if(0U == curr_idiv)
+10001410:	687b      	ldr	r3, [r7, #4]
+10001412:	2b00      	cmp	r3, #0
+10001414:	d101      	bne.n	1000141a <XMC_SCU_CLOCK_lFrequencyDownScaling+0x16>
+    {
+      curr_idiv = 1U;
+10001416:	2301      	movs	r3, #1
+10001418:	607b      	str	r3, [r7, #4]
+    }
+    curr_idiv  = (uint32_t)(curr_idiv << 2UL);   /* Multiply by 4. */
+1000141a:	687b      	ldr	r3, [r7, #4]
+1000141c:	009b      	lsls	r3, r3, #2
+1000141e:	607b      	str	r3, [r7, #4]
+    SCU_CLK->CLKCR = (SCU_CLK->CLKCR & (uint32_t)~(SCU_CLK_CLKCR_IDIV_Msk | SCU_CLK_CLKCR_CNTADJ_Msk)) |
+10001420:	4b0c      	ldr	r3, [pc, #48]	; (10001454 <XMC_SCU_CLOCK_lFrequencyDownScaling+0x50>)
+10001422:	4a0c      	ldr	r2, [pc, #48]	; (10001454 <XMC_SCU_CLOCK_lFrequencyDownScaling+0x50>)
+10001424:	6812      	ldr	r2, [r2, #0]
+10001426:	490c      	ldr	r1, [pc, #48]	; (10001458 <XMC_SCU_CLOCK_lFrequencyDownScaling+0x54>)
+10001428:	4011      	ands	r1, r2
+                     (uint32_t)(curr_idiv << SCU_CLK_CLKCR_IDIV_Pos) |
+1000142a:	687a      	ldr	r2, [r7, #4]
+1000142c:	0212      	lsls	r2, r2, #8
+    if(0U == curr_idiv)
+    {
+      curr_idiv = 1U;
+    }
+    curr_idiv  = (uint32_t)(curr_idiv << 2UL);   /* Multiply by 4. */
+    SCU_CLK->CLKCR = (SCU_CLK->CLKCR & (uint32_t)~(SCU_CLK_CLKCR_IDIV_Msk | SCU_CLK_CLKCR_CNTADJ_Msk)) |
+1000142e:	430a      	orrs	r2, r1
+                     (uint32_t)(curr_idiv << SCU_CLK_CLKCR_IDIV_Pos) |
+10001430:	490a      	ldr	r1, [pc, #40]	; (1000145c <XMC_SCU_CLOCK_lFrequencyDownScaling+0x58>)
+10001432:	430a      	orrs	r2, r1
+    if(0U == curr_idiv)
+    {
+      curr_idiv = 1U;
+    }
+    curr_idiv  = (uint32_t)(curr_idiv << 2UL);   /* Multiply by 4. */
+    SCU_CLK->CLKCR = (SCU_CLK->CLKCR & (uint32_t)~(SCU_CLK_CLKCR_IDIV_Msk | SCU_CLK_CLKCR_CNTADJ_Msk)) |
+10001434:	601a      	str	r2, [r3, #0]
+                     (uint32_t)(curr_idiv << SCU_CLK_CLKCR_IDIV_Pos) |
+                     (uint32_t)(1023UL << SCU_CLK_CLKCR_CNTADJ_Pos);
+
+    while (SCU_CLK->CLKCR & SCU_CLK_CLKCR_VDDC2LOW_Msk)
+10001436:	46c0      	nop			; (mov r8, r8)
+10001438:	4b06      	ldr	r3, [pc, #24]	; (10001454 <XMC_SCU_CLOCK_lFrequencyDownScaling+0x50>)
+1000143a:	681a      	ldr	r2, [r3, #0]
+1000143c:	2380      	movs	r3, #128	; 0x80
+1000143e:	05db      	lsls	r3, r3, #23
+10001440:	4013      	ands	r3, r2
+10001442:	d1f9      	bne.n	10001438 <XMC_SCU_CLOCK_lFrequencyDownScaling+0x34>
+
+/* Utility routine to perform frequency down scaling */
+static void XMC_SCU_CLOCK_lFrequencyDownScaling(uint32_t curr_idiv, uint32_t target_idiv)
+{
+
+  while ((curr_idiv * 4UL) < target_idiv)
+10001444:	687b      	ldr	r3, [r7, #4]
+10001446:	009a      	lsls	r2, r3, #2
+10001448:	683b      	ldr	r3, [r7, #0]
+1000144a:	429a      	cmp	r2, r3
+1000144c:	d3e0      	bcc.n	10001410 <XMC_SCU_CLOCK_lFrequencyDownScaling+0xc>
+    while (SCU_CLK->CLKCR & SCU_CLK_CLKCR_VDDC2LOW_Msk)
+    {
+    /* Wait voltage suply stabilization */
+    }
+  }
+}
+1000144e:	46bd      	mov	sp, r7
+10001450:	b002      	add	sp, #8
+10001452:	bd80      	pop	{r7, pc}
+10001454:	40010300 	.word	0x40010300
+10001458:	c00f00ff 	.word	0xc00f00ff
+1000145c:	3ff00000 	.word	0x3ff00000
+
+10001460 <XMC_GPIO_SetHardwareControl>:
+  port->IOCR[(uint32_t)pin >> 2U] &= ~(uint32_t)((uint32_t)PORT_IOCR_PC_Msk << ((uint32_t)PORT_IOCR_PC_Size * ((uint32_t)pin & 0x3U)));
+  port->IOCR[(uint32_t)pin >> 2U] |= (uint32_t)mode << ((uint32_t)PORT_IOCR_PC_Size * ((uint32_t)pin & 0x3U));
+}
+
+void XMC_GPIO_SetHardwareControl(XMC_GPIO_PORT_t *const port, const uint8_t pin, const XMC_GPIO_HWCTRL_t hwctrl)
+{
+10001460:	b580      	push	{r7, lr}
+10001462:	b082      	sub	sp, #8
+10001464:	af00      	add	r7, sp, #0
+10001466:	6078      	str	r0, [r7, #4]
+10001468:	1c08      	adds	r0, r1, #0
+1000146a:	1c11      	adds	r1, r2, #0
+1000146c:	1cfb      	adds	r3, r7, #3
+1000146e:	1c02      	adds	r2, r0, #0
+10001470:	701a      	strb	r2, [r3, #0]
+10001472:	1cbb      	adds	r3, r7, #2
+10001474:	1c0a      	adds	r2, r1, #0
+10001476:	701a      	strb	r2, [r3, #0]
+  XMC_ASSERT("XMC_GPIO_SetHardwareControl: Invalid port", XMC_GPIO_CHECK_PORT(port));
+  XMC_ASSERT("XMC_GPIO_SetHardwareControl: Invalid hwctrl", XMC_GPIO_CHECK_HWCTRL(hwctrl));
+
+  port->HWSEL &= ~(uint32_t)((uint32_t)PORT_HWSEL_Msk << ((uint32_t)pin << 1U));
+10001478:	687b      	ldr	r3, [r7, #4]
+1000147a:	6f5b      	ldr	r3, [r3, #116]	; 0x74
+1000147c:	1cfa      	adds	r2, r7, #3
+1000147e:	7812      	ldrb	r2, [r2, #0]
+10001480:	0052      	lsls	r2, r2, #1
+10001482:	1c11      	adds	r1, r2, #0
+10001484:	2203      	movs	r2, #3
+10001486:	408a      	lsls	r2, r1
+10001488:	43d2      	mvns	r2, r2
+1000148a:	401a      	ands	r2, r3
+1000148c:	687b      	ldr	r3, [r7, #4]
+1000148e:	675a      	str	r2, [r3, #116]	; 0x74
+  port->HWSEL |= (uint32_t)hwctrl << ((uint32_t)pin << 1U);
+10001490:	687b      	ldr	r3, [r7, #4]
+10001492:	6f5a      	ldr	r2, [r3, #116]	; 0x74
+10001494:	1cbb      	adds	r3, r7, #2
+10001496:	781b      	ldrb	r3, [r3, #0]
+10001498:	1cf9      	adds	r1, r7, #3
+1000149a:	7809      	ldrb	r1, [r1, #0]
+1000149c:	0049      	lsls	r1, r1, #1
+1000149e:	408b      	lsls	r3, r1
+100014a0:	431a      	orrs	r2, r3
+100014a2:	687b      	ldr	r3, [r7, #4]
+100014a4:	675a      	str	r2, [r3, #116]	; 0x74
+}
+100014a6:	46bd      	mov	sp, r7
+100014a8:	b002      	add	sp, #8
+100014aa:	bd80      	pop	{r7, pc}
+
+100014ac <_init>:
+  }
+}
+
+/* Init */
+void _init(void)
+{}
+100014ac:	b580      	push	{r7, lr}
+100014ae:	af00      	add	r7, sp, #0
+100014b0:	46bd      	mov	sp, r7
+100014b2:	bd80      	pop	{r7, pc}
+
+100014b4 <__NVIC_SetPriority>:
+  \param [in]      IRQn  Interrupt number.
+  \param [in]  priority  Priority to set.
+  \note    The priority cannot be set for every processor exception.
+ */
+__STATIC_INLINE void __NVIC_SetPriority(IRQn_Type IRQn, uint32_t priority)
+{
+100014b4:	b5b0      	push	{r4, r5, r7, lr}
+100014b6:	b082      	sub	sp, #8
+100014b8:	af00      	add	r7, sp, #0
+100014ba:	1c02      	adds	r2, r0, #0
+100014bc:	6039      	str	r1, [r7, #0]
+100014be:	1dfb      	adds	r3, r7, #7
+100014c0:	701a      	strb	r2, [r3, #0]
+  if ((int32_t)(IRQn) >= 0)
+100014c2:	1dfb      	adds	r3, r7, #7
+100014c4:	781b      	ldrb	r3, [r3, #0]
+100014c6:	2b7f      	cmp	r3, #127	; 0x7f
+100014c8:	d827      	bhi.n	1000151a <__NVIC_SetPriority+0x66>
+  {
+    NVIC->IP[_IP_IDX(IRQn)]  = ((uint32_t)(NVIC->IP[_IP_IDX(IRQn)]  & ~(0xFFUL << _BIT_SHIFT(IRQn))) |
+100014ca:	4c2d      	ldr	r4, [pc, #180]	; (10001580 <__NVIC_SetPriority+0xcc>)
+100014cc:	1dfb      	adds	r3, r7, #7
+100014ce:	781b      	ldrb	r3, [r3, #0]
+100014d0:	b25b      	sxtb	r3, r3
+100014d2:	089b      	lsrs	r3, r3, #2
+100014d4:	492a      	ldr	r1, [pc, #168]	; (10001580 <__NVIC_SetPriority+0xcc>)
+100014d6:	1dfa      	adds	r2, r7, #7
+100014d8:	7812      	ldrb	r2, [r2, #0]
+100014da:	b252      	sxtb	r2, r2
+100014dc:	0892      	lsrs	r2, r2, #2
+100014de:	32c0      	adds	r2, #192	; 0xc0
+100014e0:	0092      	lsls	r2, r2, #2
+100014e2:	5852      	ldr	r2, [r2, r1]
+100014e4:	1df9      	adds	r1, r7, #7
+100014e6:	7809      	ldrb	r1, [r1, #0]
+100014e8:	1c08      	adds	r0, r1, #0
+100014ea:	2103      	movs	r1, #3
+100014ec:	4001      	ands	r1, r0
+100014ee:	00c9      	lsls	r1, r1, #3
+100014f0:	1c08      	adds	r0, r1, #0
+100014f2:	21ff      	movs	r1, #255	; 0xff
+100014f4:	4081      	lsls	r1, r0
+100014f6:	43c9      	mvns	r1, r1
+100014f8:	4011      	ands	r1, r2
+       (((priority << (8U - __NVIC_PRIO_BITS)) & (uint32_t)0xFFUL) << _BIT_SHIFT(IRQn)));
+100014fa:	683a      	ldr	r2, [r7, #0]
+100014fc:	0192      	lsls	r2, r2, #6
+100014fe:	20ff      	movs	r0, #255	; 0xff
+10001500:	4002      	ands	r2, r0
+10001502:	1df8      	adds	r0, r7, #7
+10001504:	7800      	ldrb	r0, [r0, #0]
+10001506:	1c05      	adds	r5, r0, #0
+10001508:	2003      	movs	r0, #3
+1000150a:	4028      	ands	r0, r5
+1000150c:	00c0      	lsls	r0, r0, #3
+1000150e:	4082      	lsls	r2, r0
+ */
+__STATIC_INLINE void __NVIC_SetPriority(IRQn_Type IRQn, uint32_t priority)
+{
+  if ((int32_t)(IRQn) >= 0)
+  {
+    NVIC->IP[_IP_IDX(IRQn)]  = ((uint32_t)(NVIC->IP[_IP_IDX(IRQn)]  & ~(0xFFUL << _BIT_SHIFT(IRQn))) |
+10001510:	430a      	orrs	r2, r1
+10001512:	33c0      	adds	r3, #192	; 0xc0
+10001514:	009b      	lsls	r3, r3, #2
+10001516:	511a      	str	r2, [r3, r4]
+10001518:	e02e      	b.n	10001578 <__NVIC_SetPriority+0xc4>
+       (((priority << (8U - __NVIC_PRIO_BITS)) & (uint32_t)0xFFUL) << _BIT_SHIFT(IRQn)));
+  }
+  else
+  {
+    SCB->SHP[_SHP_IDX(IRQn)] = ((uint32_t)(SCB->SHP[_SHP_IDX(IRQn)] & ~(0xFFUL << _BIT_SHIFT(IRQn))) |
+1000151a:	4c1a      	ldr	r4, [pc, #104]	; (10001584 <__NVIC_SetPriority+0xd0>)
+1000151c:	1dfb      	adds	r3, r7, #7
+1000151e:	781b      	ldrb	r3, [r3, #0]
+10001520:	1c1a      	adds	r2, r3, #0
+10001522:	230f      	movs	r3, #15
+10001524:	4013      	ands	r3, r2
+10001526:	3b08      	subs	r3, #8
+10001528:	0899      	lsrs	r1, r3, #2
+1000152a:	4a16      	ldr	r2, [pc, #88]	; (10001584 <__NVIC_SetPriority+0xd0>)
+1000152c:	1dfb      	adds	r3, r7, #7
+1000152e:	781b      	ldrb	r3, [r3, #0]
+10001530:	1c18      	adds	r0, r3, #0
+10001532:	230f      	movs	r3, #15
+10001534:	4003      	ands	r3, r0
+10001536:	3b08      	subs	r3, #8
+10001538:	089b      	lsrs	r3, r3, #2
+1000153a:	3306      	adds	r3, #6
+1000153c:	009b      	lsls	r3, r3, #2
+1000153e:	18d3      	adds	r3, r2, r3
+10001540:	685b      	ldr	r3, [r3, #4]
+10001542:	1dfa      	adds	r2, r7, #7
+10001544:	7812      	ldrb	r2, [r2, #0]
+10001546:	1c10      	adds	r0, r2, #0
+10001548:	2203      	movs	r2, #3
+1000154a:	4002      	ands	r2, r0
+1000154c:	00d2      	lsls	r2, r2, #3
+1000154e:	1c10      	adds	r0, r2, #0
+10001550:	22ff      	movs	r2, #255	; 0xff
+10001552:	4082      	lsls	r2, r0
+10001554:	43d2      	mvns	r2, r2
+10001556:	401a      	ands	r2, r3
+       (((priority << (8U - __NVIC_PRIO_BITS)) & (uint32_t)0xFFUL) << _BIT_SHIFT(IRQn)));
+10001558:	683b      	ldr	r3, [r7, #0]
+1000155a:	019b      	lsls	r3, r3, #6
+1000155c:	20ff      	movs	r0, #255	; 0xff
+1000155e:	4003      	ands	r3, r0
+10001560:	1df8      	adds	r0, r7, #7
+10001562:	7800      	ldrb	r0, [r0, #0]
+10001564:	1c05      	adds	r5, r0, #0
+10001566:	2003      	movs	r0, #3
+10001568:	4028      	ands	r0, r5
+1000156a:	00c0      	lsls	r0, r0, #3
+1000156c:	4083      	lsls	r3, r0
+    NVIC->IP[_IP_IDX(IRQn)]  = ((uint32_t)(NVIC->IP[_IP_IDX(IRQn)]  & ~(0xFFUL << _BIT_SHIFT(IRQn))) |
+       (((priority << (8U - __NVIC_PRIO_BITS)) & (uint32_t)0xFFUL) << _BIT_SHIFT(IRQn)));
+  }
+  else
+  {
+    SCB->SHP[_SHP_IDX(IRQn)] = ((uint32_t)(SCB->SHP[_SHP_IDX(IRQn)] & ~(0xFFUL << _BIT_SHIFT(IRQn))) |
+1000156e:	431a      	orrs	r2, r3
+10001570:	1d8b      	adds	r3, r1, #6
+10001572:	009b      	lsls	r3, r3, #2
+10001574:	18e3      	adds	r3, r4, r3
+10001576:	605a      	str	r2, [r3, #4]
+       (((priority << (8U - __NVIC_PRIO_BITS)) & (uint32_t)0xFFUL) << _BIT_SHIFT(IRQn)));
+  }
+}
+10001578:	46bd      	mov	sp, r7
+1000157a:	b002      	add	sp, #8
+1000157c:	bdb0      	pop	{r4, r5, r7, pc}
+1000157e:	46c0      	nop			; (mov r8, r8)
+10001580:	e000e100 	.word	0xe000e100
+10001584:	e000ed00 	.word	0xe000ed00
+
+10001588 <SysTick_Config>:
+  \note    When the variable <b>__Vendor_SysTickConfig</b> is set to 1, then the
+           function <b>SysTick_Config</b> is not included. In this case, the file <b><i>device</i>.h</b>
+           must contain a vendor-specific implementation of this function.
+ */
+__STATIC_INLINE uint32_t SysTick_Config(uint32_t ticks)
+{
+10001588:	b580      	push	{r7, lr}
+1000158a:	b082      	sub	sp, #8
+1000158c:	af00      	add	r7, sp, #0
+1000158e:	6078      	str	r0, [r7, #4]
+  if ((ticks - 1UL) > SysTick_LOAD_RELOAD_Msk)
+10001590:	687b      	ldr	r3, [r7, #4]
+10001592:	3b01      	subs	r3, #1
+10001594:	4a0c      	ldr	r2, [pc, #48]	; (100015c8 <SysTick_Config+0x40>)
+10001596:	4293      	cmp	r3, r2
+10001598:	d901      	bls.n	1000159e <SysTick_Config+0x16>
+  {
+    return (1UL);                                                   /* Reload value impossible */
+1000159a:	2301      	movs	r3, #1
+1000159c:	e010      	b.n	100015c0 <SysTick_Config+0x38>
+  }
+
+  SysTick->LOAD  = (uint32_t)(ticks - 1UL);                         /* set reload register */
+1000159e:	4b0b      	ldr	r3, [pc, #44]	; (100015cc <SysTick_Config+0x44>)
+100015a0:	687a      	ldr	r2, [r7, #4]
+100015a2:	3a01      	subs	r2, #1
+100015a4:	605a      	str	r2, [r3, #4]
+  NVIC_SetPriority (SysTick_IRQn, (1UL << __NVIC_PRIO_BITS) - 1UL); /* set Priority for Systick Interrupt */
+100015a6:	2301      	movs	r3, #1
+100015a8:	425b      	negs	r3, r3
+100015aa:	1c18      	adds	r0, r3, #0
+100015ac:	2103      	movs	r1, #3
+100015ae:	f7ff ff81 	bl	100014b4 <__NVIC_SetPriority>
+  SysTick->VAL   = 0UL;                                             /* Load the SysTick Counter Value */
+100015b2:	4b06      	ldr	r3, [pc, #24]	; (100015cc <SysTick_Config+0x44>)
+100015b4:	2200      	movs	r2, #0
+100015b6:	609a      	str	r2, [r3, #8]
+  SysTick->CTRL  = SysTick_CTRL_CLKSOURCE_Msk |
+100015b8:	4b04      	ldr	r3, [pc, #16]	; (100015cc <SysTick_Config+0x44>)
+100015ba:	2207      	movs	r2, #7
+100015bc:	601a      	str	r2, [r3, #0]
+                   SysTick_CTRL_TICKINT_Msk   |
+                   SysTick_CTRL_ENABLE_Msk;                         /* Enable SysTick IRQ and SysTick Timer */
+  return (0UL);                                                     /* Function successful */
+100015be:	2300      	movs	r3, #0
+}
+100015c0:	1c18      	adds	r0, r3, #0
+100015c2:	46bd      	mov	sp, r7
+100015c4:	b002      	add	sp, #8
+100015c6:	bd80      	pop	{r7, pc}
+100015c8:	00ffffff 	.word	0x00ffffff
+100015cc:	e000e010 	.word	0xe000e010
+
+100015d0 <SYSTIMER_lInsertTimerList>:
+**********************************************************************************************************************/
+/*
+ * This function is called to insert a timer into the timer list.
+ */
+static void SYSTIMER_lInsertTimerList(uint32_t tbl_index)
+{
+100015d0:	b590      	push	{r4, r7, lr}
+100015d2:	b087      	sub	sp, #28
+100015d4:	af00      	add	r7, sp, #0
+100015d6:	6078      	str	r0, [r7, #4]
+  SYSTIMER_OBJECT_t *object_ptr;
+  int32_t delta_ticks;
+  int32_t timer_count;
+  bool found_flag = false;
+100015d8:	230f      	movs	r3, #15
+100015da:	18fb      	adds	r3, r7, r3
+100015dc:	2200      	movs	r2, #0
+100015de:	701a      	strb	r2, [r3, #0]
+   /* Get timer time */
+  timer_count = (int32_t)g_timer_tbl[tbl_index].count;
+100015e0:	496b      	ldr	r1, [pc, #428]	; (10001790 <SYSTIMER_lInsertTimerList+0x1c0>)
+100015e2:	687a      	ldr	r2, [r7, #4]
+100015e4:	1c13      	adds	r3, r2, #0
+100015e6:	00db      	lsls	r3, r3, #3
+100015e8:	189b      	adds	r3, r3, r2
+100015ea:	009b      	lsls	r3, r3, #2
+100015ec:	18cb      	adds	r3, r1, r3
+100015ee:	3318      	adds	r3, #24
+100015f0:	681b      	ldr	r3, [r3, #0]
+100015f2:	60bb      	str	r3, [r7, #8]
+  /* Check if Timer list is NULL */
+  if (NULL == g_timer_list)
+100015f4:	4b67      	ldr	r3, [pc, #412]	; (10001794 <SYSTIMER_lInsertTimerList+0x1c4>)
+100015f6:	681b      	ldr	r3, [r3, #0]
+100015f8:	2b00      	cmp	r3, #0
+100015fa:	d109      	bne.n	10001610 <SYSTIMER_lInsertTimerList+0x40>
+  {
+    /* Set this as first Timer */
+    g_timer_list = &g_timer_tbl[tbl_index];
+100015fc:	687a      	ldr	r2, [r7, #4]
+100015fe:	1c13      	adds	r3, r2, #0
+10001600:	00db      	lsls	r3, r3, #3
+10001602:	189b      	adds	r3, r3, r2
+10001604:	009b      	lsls	r3, r3, #2
+10001606:	4a62      	ldr	r2, [pc, #392]	; (10001790 <SYSTIMER_lInsertTimerList+0x1c0>)
+10001608:	189a      	adds	r2, r3, r2
+1000160a:	4b62      	ldr	r3, [pc, #392]	; (10001794 <SYSTIMER_lInsertTimerList+0x1c4>)
+1000160c:	601a      	str	r2, [r3, #0]
+1000160e:	e0bc      	b.n	1000178a <SYSTIMER_lInsertTimerList+0x1ba>
+  }
+  /* If not, find the correct place, and insert the specified timer */
+  else
+  {
+    object_ptr = g_timer_list;
+10001610:	4b60      	ldr	r3, [pc, #384]	; (10001794 <SYSTIMER_lInsertTimerList+0x1c4>)
+10001612:	681b      	ldr	r3, [r3, #0]
+10001614:	617b      	str	r3, [r7, #20]
+    /* Get timer tick */
+    delta_ticks = timer_count;
+10001616:	68bb      	ldr	r3, [r7, #8]
+10001618:	613b      	str	r3, [r7, #16]
+    /* Find correct place for inserting the timer */
+    while ((NULL != object_ptr) && (false == found_flag))
+1000161a:	e0aa      	b.n	10001772 <SYSTIMER_lInsertTimerList+0x1a2>
+    {
+      /* Get timer Count Difference */
+      delta_ticks -= (int32_t)object_ptr->count;
+1000161c:	697b      	ldr	r3, [r7, #20]
+1000161e:	699b      	ldr	r3, [r3, #24]
+10001620:	1c1a      	adds	r2, r3, #0
+10001622:	693b      	ldr	r3, [r7, #16]
+10001624:	1a9b      	subs	r3, r3, r2
+10001626:	613b      	str	r3, [r7, #16]
+      /* Check for delta ticks < 0 */
+      if (delta_ticks <= 0)
+10001628:	693b      	ldr	r3, [r7, #16]
+1000162a:	2b00      	cmp	r3, #0
+1000162c:	dc77      	bgt.n	1000171e <SYSTIMER_lInsertTimerList+0x14e>
+      {
+        /* Check If head item */
+        if (NULL != object_ptr->prev)
+1000162e:	697b      	ldr	r3, [r7, #20]
+10001630:	685b      	ldr	r3, [r3, #4]
+10001632:	2b00      	cmp	r3, #0
+10001634:	d025      	beq.n	10001682 <SYSTIMER_lInsertTimerList+0xb2>
+        {
+          /* If Insert to list */
+          object_ptr->prev->next = &g_timer_tbl[tbl_index];
+10001636:	697b      	ldr	r3, [r7, #20]
+10001638:	685a      	ldr	r2, [r3, #4]
+1000163a:	6879      	ldr	r1, [r7, #4]
+1000163c:	1c0b      	adds	r3, r1, #0
+1000163e:	00db      	lsls	r3, r3, #3
+10001640:	185b      	adds	r3, r3, r1
+10001642:	009b      	lsls	r3, r3, #2
+10001644:	4952      	ldr	r1, [pc, #328]	; (10001790 <SYSTIMER_lInsertTimerList+0x1c0>)
+10001646:	185b      	adds	r3, r3, r1
+10001648:	6013      	str	r3, [r2, #0]
+          g_timer_tbl[tbl_index].prev = object_ptr->prev;
+1000164a:	697b      	ldr	r3, [r7, #20]
+1000164c:	6859      	ldr	r1, [r3, #4]
+1000164e:	4850      	ldr	r0, [pc, #320]	; (10001790 <SYSTIMER_lInsertTimerList+0x1c0>)
+10001650:	687a      	ldr	r2, [r7, #4]
+10001652:	1c13      	adds	r3, r2, #0
+10001654:	00db      	lsls	r3, r3, #3
+10001656:	189b      	adds	r3, r3, r2
+10001658:	009b      	lsls	r3, r3, #2
+1000165a:	18c3      	adds	r3, r0, r3
+1000165c:	6059      	str	r1, [r3, #4]
+          g_timer_tbl[tbl_index].next = object_ptr;
+1000165e:	494c      	ldr	r1, [pc, #304]	; (10001790 <SYSTIMER_lInsertTimerList+0x1c0>)
+10001660:	687a      	ldr	r2, [r7, #4]
+10001662:	1c13      	adds	r3, r2, #0
+10001664:	00db      	lsls	r3, r3, #3
+10001666:	189b      	adds	r3, r3, r2
+10001668:	009b      	lsls	r3, r3, #2
+1000166a:	697a      	ldr	r2, [r7, #20]
+1000166c:	505a      	str	r2, [r3, r1]
+          object_ptr->prev = &g_timer_tbl[tbl_index];
+1000166e:	687a      	ldr	r2, [r7, #4]
+10001670:	1c13      	adds	r3, r2, #0
+10001672:	00db      	lsls	r3, r3, #3
+10001674:	189b      	adds	r3, r3, r2
+10001676:	009b      	lsls	r3, r3, #2
+10001678:	4a45      	ldr	r2, [pc, #276]	; (10001790 <SYSTIMER_lInsertTimerList+0x1c0>)
+1000167a:	189a      	adds	r2, r3, r2
+1000167c:	697b      	ldr	r3, [r7, #20]
+1000167e:	605a      	str	r2, [r3, #4]
+10001680:	e01b      	b.n	100016ba <SYSTIMER_lInsertTimerList+0xea>
+        }
+        else
+        {
+          /* Set Timer as first item */
+          g_timer_tbl[tbl_index].next = g_timer_list;
+10001682:	4b44      	ldr	r3, [pc, #272]	; (10001794 <SYSTIMER_lInsertTimerList+0x1c4>)
+10001684:	6818      	ldr	r0, [r3, #0]
+10001686:	4942      	ldr	r1, [pc, #264]	; (10001790 <SYSTIMER_lInsertTimerList+0x1c0>)
+10001688:	687a      	ldr	r2, [r7, #4]
+1000168a:	1c13      	adds	r3, r2, #0
+1000168c:	00db      	lsls	r3, r3, #3
+1000168e:	189b      	adds	r3, r3, r2
+10001690:	009b      	lsls	r3, r3, #2
+10001692:	5058      	str	r0, [r3, r1]
+          g_timer_list->prev = &g_timer_tbl[tbl_index];
+10001694:	4b3f      	ldr	r3, [pc, #252]	; (10001794 <SYSTIMER_lInsertTimerList+0x1c4>)
+10001696:	681a      	ldr	r2, [r3, #0]
+10001698:	6879      	ldr	r1, [r7, #4]
+1000169a:	1c0b      	adds	r3, r1, #0
+1000169c:	00db      	lsls	r3, r3, #3
+1000169e:	185b      	adds	r3, r3, r1
+100016a0:	009b      	lsls	r3, r3, #2
+100016a2:	493b      	ldr	r1, [pc, #236]	; (10001790 <SYSTIMER_lInsertTimerList+0x1c0>)
+100016a4:	185b      	adds	r3, r3, r1
+100016a6:	6053      	str	r3, [r2, #4]
+          g_timer_list = &g_timer_tbl[tbl_index];
+100016a8:	687a      	ldr	r2, [r7, #4]
+100016aa:	1c13      	adds	r3, r2, #0
+100016ac:	00db      	lsls	r3, r3, #3
+100016ae:	189b      	adds	r3, r3, r2
+100016b0:	009b      	lsls	r3, r3, #2
+100016b2:	4a37      	ldr	r2, [pc, #220]	; (10001790 <SYSTIMER_lInsertTimerList+0x1c0>)
+100016b4:	189a      	adds	r2, r3, r2
+100016b6:	4b37      	ldr	r3, [pc, #220]	; (10001794 <SYSTIMER_lInsertTimerList+0x1c4>)
+100016b8:	601a      	str	r2, [r3, #0]
+        }
+        g_timer_tbl[tbl_index].count = g_timer_tbl[tbl_index].next->count + (uint32_t)delta_ticks;
+100016ba:	4935      	ldr	r1, [pc, #212]	; (10001790 <SYSTIMER_lInsertTimerList+0x1c0>)
+100016bc:	687a      	ldr	r2, [r7, #4]
+100016be:	1c13      	adds	r3, r2, #0
+100016c0:	00db      	lsls	r3, r3, #3
+100016c2:	189b      	adds	r3, r3, r2
+100016c4:	009b      	lsls	r3, r3, #2
+100016c6:	585b      	ldr	r3, [r3, r1]
+100016c8:	699a      	ldr	r2, [r3, #24]
+100016ca:	693b      	ldr	r3, [r7, #16]
+100016cc:	18d1      	adds	r1, r2, r3
+100016ce:	4830      	ldr	r0, [pc, #192]	; (10001790 <SYSTIMER_lInsertTimerList+0x1c0>)
+100016d0:	687a      	ldr	r2, [r7, #4]
+100016d2:	1c13      	adds	r3, r2, #0
+100016d4:	00db      	lsls	r3, r3, #3
+100016d6:	189b      	adds	r3, r3, r2
+100016d8:	009b      	lsls	r3, r3, #2
+100016da:	18c3      	adds	r3, r0, r3
+100016dc:	3318      	adds	r3, #24
+100016de:	6019      	str	r1, [r3, #0]
+        g_timer_tbl[tbl_index].next->count  -= g_timer_tbl[tbl_index].count;
+100016e0:	492b      	ldr	r1, [pc, #172]	; (10001790 <SYSTIMER_lInsertTimerList+0x1c0>)
+100016e2:	687a      	ldr	r2, [r7, #4]
+100016e4:	1c13      	adds	r3, r2, #0
+100016e6:	00db      	lsls	r3, r3, #3
+100016e8:	189b      	adds	r3, r3, r2
+100016ea:	009b      	lsls	r3, r3, #2
+100016ec:	585a      	ldr	r2, [r3, r1]
+100016ee:	4828      	ldr	r0, [pc, #160]	; (10001790 <SYSTIMER_lInsertTimerList+0x1c0>)
+100016f0:	6879      	ldr	r1, [r7, #4]
+100016f2:	1c0b      	adds	r3, r1, #0
+100016f4:	00db      	lsls	r3, r3, #3
+100016f6:	185b      	adds	r3, r3, r1
+100016f8:	009b      	lsls	r3, r3, #2
+100016fa:	581b      	ldr	r3, [r3, r0]
+100016fc:	6998      	ldr	r0, [r3, #24]
+100016fe:	4c24      	ldr	r4, [pc, #144]	; (10001790 <SYSTIMER_lInsertTimerList+0x1c0>)
+10001700:	6879      	ldr	r1, [r7, #4]
+10001702:	1c0b      	adds	r3, r1, #0
+10001704:	00db      	lsls	r3, r3, #3
+10001706:	185b      	adds	r3, r3, r1
+10001708:	009b      	lsls	r3, r3, #2
+1000170a:	18e3      	adds	r3, r4, r3
+1000170c:	3318      	adds	r3, #24
+1000170e:	681b      	ldr	r3, [r3, #0]
+10001710:	1ac3      	subs	r3, r0, r3
+10001712:	6193      	str	r3, [r2, #24]
+        found_flag = true;
+10001714:	230f      	movs	r3, #15
+10001716:	18fb      	adds	r3, r7, r3
+10001718:	2201      	movs	r2, #1
+1000171a:	701a      	strb	r2, [r3, #0]
+1000171c:	e026      	b.n	1000176c <SYSTIMER_lInsertTimerList+0x19c>
+      }
+      /* Check for last item in list */
+      else
+      {
+        if ((delta_ticks > 0) && (NULL == object_ptr->next))
+1000171e:	693b      	ldr	r3, [r7, #16]
+10001720:	2b00      	cmp	r3, #0
+10001722:	dd23      	ble.n	1000176c <SYSTIMER_lInsertTimerList+0x19c>
+10001724:	697b      	ldr	r3, [r7, #20]
+10001726:	681b      	ldr	r3, [r3, #0]
+10001728:	2b00      	cmp	r3, #0
+1000172a:	d11f      	bne.n	1000176c <SYSTIMER_lInsertTimerList+0x19c>
+        {
+          /* Yes, insert into */
+          g_timer_tbl[tbl_index].prev = object_ptr;
+1000172c:	4918      	ldr	r1, [pc, #96]	; (10001790 <SYSTIMER_lInsertTimerList+0x1c0>)
+1000172e:	687a      	ldr	r2, [r7, #4]
+10001730:	1c13      	adds	r3, r2, #0
+10001732:	00db      	lsls	r3, r3, #3
+10001734:	189b      	adds	r3, r3, r2
+10001736:	009b      	lsls	r3, r3, #2
+10001738:	18cb      	adds	r3, r1, r3
+1000173a:	697a      	ldr	r2, [r7, #20]
+1000173c:	605a      	str	r2, [r3, #4]
+          object_ptr->next = &g_timer_tbl[tbl_index];
+1000173e:	687a      	ldr	r2, [r7, #4]
+10001740:	1c13      	adds	r3, r2, #0
+10001742:	00db      	lsls	r3, r3, #3
+10001744:	189b      	adds	r3, r3, r2
+10001746:	009b      	lsls	r3, r3, #2
+10001748:	4a11      	ldr	r2, [pc, #68]	; (10001790 <SYSTIMER_lInsertTimerList+0x1c0>)
+1000174a:	189a      	adds	r2, r3, r2
+1000174c:	697b      	ldr	r3, [r7, #20]
+1000174e:	601a      	str	r2, [r3, #0]
+          g_timer_tbl[tbl_index].count = (uint32_t)delta_ticks;
+10001750:	6939      	ldr	r1, [r7, #16]
+10001752:	480f      	ldr	r0, [pc, #60]	; (10001790 <SYSTIMER_lInsertTimerList+0x1c0>)
+10001754:	687a      	ldr	r2, [r7, #4]
+10001756:	1c13      	adds	r3, r2, #0
+10001758:	00db      	lsls	r3, r3, #3
+1000175a:	189b      	adds	r3, r3, r2
+1000175c:	009b      	lsls	r3, r3, #2
+1000175e:	18c3      	adds	r3, r0, r3
+10001760:	3318      	adds	r3, #24
+10001762:	6019      	str	r1, [r3, #0]
+          found_flag = true;
+10001764:	230f      	movs	r3, #15
+10001766:	18fb      	adds	r3, r7, r3
+10001768:	2201      	movs	r2, #1
+1000176a:	701a      	strb	r2, [r3, #0]
+        }
+      }
+      /* Get the next item in timer list */
+      object_ptr = object_ptr->next;
+1000176c:	697b      	ldr	r3, [r7, #20]
+1000176e:	681b      	ldr	r3, [r3, #0]
+10001770:	617b      	str	r3, [r7, #20]
+  {
+    object_ptr = g_timer_list;
+    /* Get timer tick */
+    delta_ticks = timer_count;
+    /* Find correct place for inserting the timer */
+    while ((NULL != object_ptr) && (false == found_flag))
+10001772:	697b      	ldr	r3, [r7, #20]
+10001774:	2b00      	cmp	r3, #0
+10001776:	d008      	beq.n	1000178a <SYSTIMER_lInsertTimerList+0x1ba>
+10001778:	230f      	movs	r3, #15
+1000177a:	18fb      	adds	r3, r7, r3
+1000177c:	781b      	ldrb	r3, [r3, #0]
+1000177e:	2201      	movs	r2, #1
+10001780:	4053      	eors	r3, r2
+10001782:	b2db      	uxtb	r3, r3
+10001784:	2b00      	cmp	r3, #0
+10001786:	d000      	beq.n	1000178a <SYSTIMER_lInsertTimerList+0x1ba>
+10001788:	e748      	b.n	1000161c <SYSTIMER_lInsertTimerList+0x4c>
+      }
+      /* Get the next item in timer list */
+      object_ptr = object_ptr->next;
+    }
+  }
+}
+1000178a:	46bd      	mov	sp, r7
+1000178c:	b007      	add	sp, #28
+1000178e:	bd90      	pop	{r4, r7, pc}
+10001790:	20000544 	.word	0x20000544
+10001794:	20000528 	.word	0x20000528
+
+10001798 <SYSTIMER_lRemoveTimerList>:
+
+/*
+ * This function is called to remove a timer from the timer list. 
+ */
+static void SYSTIMER_lRemoveTimerList(uint32_t tbl_index)
+{
+10001798:	b580      	push	{r7, lr}
+1000179a:	b084      	sub	sp, #16
+1000179c:	af00      	add	r7, sp, #0
+1000179e:	6078      	str	r0, [r7, #4]
+  SYSTIMER_OBJECT_t *object_ptr;
+  object_ptr = &g_timer_tbl[tbl_index];
+100017a0:	687a      	ldr	r2, [r7, #4]
+100017a2:	1c13      	adds	r3, r2, #0
+100017a4:	00db      	lsls	r3, r3, #3
+100017a6:	189b      	adds	r3, r3, r2
+100017a8:	009b      	lsls	r3, r3, #2
+100017aa:	4a28      	ldr	r2, [pc, #160]	; (1000184c <SYSTIMER_lRemoveTimerList+0xb4>)
+100017ac:	189b      	adds	r3, r3, r2
+100017ae:	60fb      	str	r3, [r7, #12]
+  /* Check whether only one timer available */
+  if ((NULL == object_ptr->prev) && (NULL == object_ptr->next ))
+100017b0:	68fb      	ldr	r3, [r7, #12]
+100017b2:	685b      	ldr	r3, [r3, #4]
+100017b4:	2b00      	cmp	r3, #0
+100017b6:	d107      	bne.n	100017c8 <SYSTIMER_lRemoveTimerList+0x30>
+100017b8:	68fb      	ldr	r3, [r7, #12]
+100017ba:	681b      	ldr	r3, [r3, #0]
+100017bc:	2b00      	cmp	r3, #0
+100017be:	d103      	bne.n	100017c8 <SYSTIMER_lRemoveTimerList+0x30>
+  {
+    /* set timer list as NULL */ 
+    g_timer_list = NULL;                  
+100017c0:	4b23      	ldr	r3, [pc, #140]	; (10001850 <SYSTIMER_lRemoveTimerList+0xb8>)
+100017c2:	2200      	movs	r2, #0
+100017c4:	601a      	str	r2, [r3, #0]
+100017c6:	e03d      	b.n	10001844 <SYSTIMER_lRemoveTimerList+0xac>
+  }
+  /* Check if the first item in timer list */
+  else if (NULL == object_ptr->prev)
+100017c8:	68fb      	ldr	r3, [r7, #12]
+100017ca:	685b      	ldr	r3, [r3, #4]
+100017cc:	2b00      	cmp	r3, #0
+100017ce:	d114      	bne.n	100017fa <SYSTIMER_lRemoveTimerList+0x62>
+  {
+    /* Remove timer from list, and reset timer list */
+    g_timer_list  = object_ptr->next;
+100017d0:	68fb      	ldr	r3, [r7, #12]
+100017d2:	681a      	ldr	r2, [r3, #0]
+100017d4:	4b1e      	ldr	r3, [pc, #120]	; (10001850 <SYSTIMER_lRemoveTimerList+0xb8>)
+100017d6:	601a      	str	r2, [r3, #0]
+    g_timer_list->prev = NULL;
+100017d8:	4b1d      	ldr	r3, [pc, #116]	; (10001850 <SYSTIMER_lRemoveTimerList+0xb8>)
+100017da:	681b      	ldr	r3, [r3, #0]
+100017dc:	2200      	movs	r2, #0
+100017de:	605a      	str	r2, [r3, #4]
+    g_timer_list->count += object_ptr->count;
+100017e0:	4b1b      	ldr	r3, [pc, #108]	; (10001850 <SYSTIMER_lRemoveTimerList+0xb8>)
+100017e2:	681b      	ldr	r3, [r3, #0]
+100017e4:	4a1a      	ldr	r2, [pc, #104]	; (10001850 <SYSTIMER_lRemoveTimerList+0xb8>)
+100017e6:	6812      	ldr	r2, [r2, #0]
+100017e8:	6991      	ldr	r1, [r2, #24]
+100017ea:	68fa      	ldr	r2, [r7, #12]
+100017ec:	6992      	ldr	r2, [r2, #24]
+100017ee:	188a      	adds	r2, r1, r2
+100017f0:	619a      	str	r2, [r3, #24]
+    object_ptr->next    = NULL;
+100017f2:	68fb      	ldr	r3, [r7, #12]
+100017f4:	2200      	movs	r2, #0
+100017f6:	601a      	str	r2, [r3, #0]
+100017f8:	e024      	b.n	10001844 <SYSTIMER_lRemoveTimerList+0xac>
+  }
+  /* Check if the last item in timer list */
+  else if (NULL == object_ptr->next)
+100017fa:	68fb      	ldr	r3, [r7, #12]
+100017fc:	681b      	ldr	r3, [r3, #0]
+100017fe:	2b00      	cmp	r3, #0
+10001800:	d107      	bne.n	10001812 <SYSTIMER_lRemoveTimerList+0x7a>
+  {
+    /* Remove timer from list */
+    object_ptr->prev->next = NULL;
+10001802:	68fb      	ldr	r3, [r7, #12]
+10001804:	685b      	ldr	r3, [r3, #4]
+10001806:	2200      	movs	r2, #0
+10001808:	601a      	str	r2, [r3, #0]
+    object_ptr->prev = NULL;
+1000180a:	68fb      	ldr	r3, [r7, #12]
+1000180c:	2200      	movs	r2, #0
+1000180e:	605a      	str	r2, [r3, #4]
+10001810:	e018      	b.n	10001844 <SYSTIMER_lRemoveTimerList+0xac>
+  }
+  else                       
+  {
+    /* Remove timer from list */
+    object_ptr->prev->next  =  object_ptr->next;
+10001812:	68fb      	ldr	r3, [r7, #12]
+10001814:	685b      	ldr	r3, [r3, #4]
+10001816:	68fa      	ldr	r2, [r7, #12]
+10001818:	6812      	ldr	r2, [r2, #0]
+1000181a:	601a      	str	r2, [r3, #0]
+    object_ptr->next->prev  =  object_ptr->prev;
+1000181c:	68fb      	ldr	r3, [r7, #12]
+1000181e:	681b      	ldr	r3, [r3, #0]
+10001820:	68fa      	ldr	r2, [r7, #12]
+10001822:	6852      	ldr	r2, [r2, #4]
+10001824:	605a      	str	r2, [r3, #4]
+    object_ptr->next->count += object_ptr->count;
+10001826:	68fb      	ldr	r3, [r7, #12]
+10001828:	681b      	ldr	r3, [r3, #0]
+1000182a:	68fa      	ldr	r2, [r7, #12]
+1000182c:	6812      	ldr	r2, [r2, #0]
+1000182e:	6991      	ldr	r1, [r2, #24]
+10001830:	68fa      	ldr	r2, [r7, #12]
+10001832:	6992      	ldr	r2, [r2, #24]
+10001834:	188a      	adds	r2, r1, r2
+10001836:	619a      	str	r2, [r3, #24]
+    object_ptr->next = NULL;
+10001838:	68fb      	ldr	r3, [r7, #12]
+1000183a:	2200      	movs	r2, #0
+1000183c:	601a      	str	r2, [r3, #0]
+    object_ptr->prev = NULL;
+1000183e:	68fb      	ldr	r3, [r7, #12]
+10001840:	2200      	movs	r2, #0
+10001842:	605a      	str	r2, [r3, #4]
+  }
+}
+10001844:	46bd      	mov	sp, r7
+10001846:	b004      	add	sp, #16
+10001848:	bd80      	pop	{r7, pc}
+1000184a:	46c0      	nop			; (mov r8, r8)
+1000184c:	20000544 	.word	0x20000544
+10001850:	20000528 	.word	0x20000528
+
+10001854 <SYSTIMER_lTimerHandler>:
+
+/*
+ * Handler function called from SysTick event handler.
+ */
+static void SYSTIMER_lTimerHandler(void)
+{
+10001854:	b580      	push	{r7, lr}
+10001856:	b082      	sub	sp, #8
+10001858:	af00      	add	r7, sp, #0
+  SYSTIMER_OBJECT_t *object_ptr;
+  /* Get first item of timer list */
+  object_ptr = g_timer_list;
+1000185a:	4b2f      	ldr	r3, [pc, #188]	; (10001918 <SYSTIMER_lTimerHandler+0xc4>)
+1000185c:	681b      	ldr	r3, [r3, #0]
+1000185e:	607b      	str	r3, [r7, #4]
+  while ((NULL != object_ptr) && (0U == object_ptr->count))
+10001860:	e050      	b.n	10001904 <SYSTIMER_lTimerHandler+0xb0>
+  {
+    if (true == object_ptr->delete_swtmr)
+10001862:	687b      	ldr	r3, [r7, #4]
+10001864:	2220      	movs	r2, #32
+10001866:	5c9b      	ldrb	r3, [r3, r2]
+10001868:	2b00      	cmp	r3, #0
+1000186a:	d013      	beq.n	10001894 <SYSTIMER_lTimerHandler+0x40>
+    {
+      /* Yes, remove this timer from timer list */
+      SYSTIMER_lRemoveTimerList((uint32_t)object_ptr->id);
+1000186c:	687b      	ldr	r3, [r7, #4]
+1000186e:	695b      	ldr	r3, [r3, #20]
+10001870:	1c18      	adds	r0, r3, #0
+10001872:	f7ff ff91 	bl	10001798 <SYSTIMER_lRemoveTimerList>
+      /* Set timer status as SYSTIMER_STATE_NOT_INITIALIZED */
+      object_ptr->state = SYSTIMER_STATE_NOT_INITIALIZED;
+10001876:	687b      	ldr	r3, [r7, #4]
+10001878:	2200      	movs	r2, #0
+1000187a:	735a      	strb	r2, [r3, #13]
+      /* Release resource which are hold by this timer */
+      g_timer_tracker &= ~(1U << object_ptr->id);
+1000187c:	687b      	ldr	r3, [r7, #4]
+1000187e:	695b      	ldr	r3, [r3, #20]
+10001880:	1c1a      	adds	r2, r3, #0
+10001882:	2301      	movs	r3, #1
+10001884:	4093      	lsls	r3, r2
+10001886:	43da      	mvns	r2, r3
+10001888:	4b24      	ldr	r3, [pc, #144]	; (1000191c <SYSTIMER_lTimerHandler+0xc8>)
+1000188a:	681b      	ldr	r3, [r3, #0]
+1000188c:	401a      	ands	r2, r3
+1000188e:	4b23      	ldr	r3, [pc, #140]	; (1000191c <SYSTIMER_lTimerHandler+0xc8>)
+10001890:	601a      	str	r2, [r3, #0]
+10001892:	e034      	b.n	100018fe <SYSTIMER_lTimerHandler+0xaa>
+    }
+    /* Check whether timer is a one shot timer */
+    else if (SYSTIMER_MODE_ONE_SHOT == object_ptr->mode)
+10001894:	687b      	ldr	r3, [r7, #4]
+10001896:	7b1b      	ldrb	r3, [r3, #12]
+10001898:	2b00      	cmp	r3, #0
+1000189a:	d112      	bne.n	100018c2 <SYSTIMER_lTimerHandler+0x6e>
+    {
+      if (SYSTIMER_STATE_RUNNING == object_ptr->state)
+1000189c:	687b      	ldr	r3, [r7, #4]
+1000189e:	7b5b      	ldrb	r3, [r3, #13]
+100018a0:	2b01      	cmp	r3, #1
+100018a2:	d12c      	bne.n	100018fe <SYSTIMER_lTimerHandler+0xaa>
+      {
+        /* Yes, remove this timer from timer list */
+        SYSTIMER_lRemoveTimerList((uint32_t)object_ptr->id);
+100018a4:	687b      	ldr	r3, [r7, #4]
+100018a6:	695b      	ldr	r3, [r3, #20]
+100018a8:	1c18      	adds	r0, r3, #0
+100018aa:	f7ff ff75 	bl	10001798 <SYSTIMER_lRemoveTimerList>
+        /* Set timer status as SYSTIMER_STATE_STOPPED */
+        object_ptr->state = SYSTIMER_STATE_STOPPED;
+100018ae:	687b      	ldr	r3, [r7, #4]
+100018b0:	2202      	movs	r2, #2
+100018b2:	735a      	strb	r2, [r3, #13]
+        /* Call timer callback function */
+        (object_ptr->callback)(object_ptr->args);
+100018b4:	687b      	ldr	r3, [r7, #4]
+100018b6:	689a      	ldr	r2, [r3, #8]
+100018b8:	687b      	ldr	r3, [r7, #4]
+100018ba:	691b      	ldr	r3, [r3, #16]
+100018bc:	1c18      	adds	r0, r3, #0
+100018be:	4790      	blx	r2
+100018c0:	e01d      	b.n	100018fe <SYSTIMER_lTimerHandler+0xaa>
+      }
+    }
+    /* Check whether timer is periodic timer */
+    else if (SYSTIMER_MODE_PERIODIC == object_ptr->mode)
+100018c2:	687b      	ldr	r3, [r7, #4]
+100018c4:	7b1b      	ldrb	r3, [r3, #12]
+100018c6:	2b01      	cmp	r3, #1
+100018c8:	d118      	bne.n	100018fc <SYSTIMER_lTimerHandler+0xa8>
+    {
+      if (SYSTIMER_STATE_RUNNING == object_ptr->state)
+100018ca:	687b      	ldr	r3, [r7, #4]
+100018cc:	7b5b      	ldrb	r3, [r3, #13]
+100018ce:	2b01      	cmp	r3, #1
+100018d0:	d115      	bne.n	100018fe <SYSTIMER_lTimerHandler+0xaa>
+      {
+        /* Yes, remove this timer from timer list */
+        SYSTIMER_lRemoveTimerList((uint32_t)object_ptr->id);
+100018d2:	687b      	ldr	r3, [r7, #4]
+100018d4:	695b      	ldr	r3, [r3, #20]
+100018d6:	1c18      	adds	r0, r3, #0
+100018d8:	f7ff ff5e 	bl	10001798 <SYSTIMER_lRemoveTimerList>
+        /* Reset timer tick */
+        object_ptr->count = object_ptr->reload;
+100018dc:	687b      	ldr	r3, [r7, #4]
+100018de:	69da      	ldr	r2, [r3, #28]
+100018e0:	687b      	ldr	r3, [r7, #4]
+100018e2:	619a      	str	r2, [r3, #24]
+        /* Insert timer into timer list */
+        SYSTIMER_lInsertTimerList((uint32_t)object_ptr->id);
+100018e4:	687b      	ldr	r3, [r7, #4]
+100018e6:	695b      	ldr	r3, [r3, #20]
+100018e8:	1c18      	adds	r0, r3, #0
+100018ea:	f7ff fe71 	bl	100015d0 <SYSTIMER_lInsertTimerList>
+        /* Call timer callback function */
+        (object_ptr->callback)(object_ptr->args);
+100018ee:	687b      	ldr	r3, [r7, #4]
+100018f0:	689a      	ldr	r2, [r3, #8]
+100018f2:	687b      	ldr	r3, [r7, #4]
+100018f4:	691b      	ldr	r3, [r3, #16]
+100018f6:	1c18      	adds	r0, r3, #0
+100018f8:	4790      	blx	r2
+100018fa:	e000      	b.n	100018fe <SYSTIMER_lTimerHandler+0xaa>
+      }
+    }
+    else
+    {
+      break;
+100018fc:	e009      	b.n	10001912 <SYSTIMER_lTimerHandler+0xbe>
+    }
+    /* Get first item of timer list */
+    object_ptr = g_timer_list;
+100018fe:	4b06      	ldr	r3, [pc, #24]	; (10001918 <SYSTIMER_lTimerHandler+0xc4>)
+10001900:	681b      	ldr	r3, [r3, #0]
+10001902:	607b      	str	r3, [r7, #4]
+static void SYSTIMER_lTimerHandler(void)
+{
+  SYSTIMER_OBJECT_t *object_ptr;
+  /* Get first item of timer list */
+  object_ptr = g_timer_list;
+  while ((NULL != object_ptr) && (0U == object_ptr->count))
+10001904:	687b      	ldr	r3, [r7, #4]
+10001906:	2b00      	cmp	r3, #0
+10001908:	d003      	beq.n	10001912 <SYSTIMER_lTimerHandler+0xbe>
+1000190a:	687b      	ldr	r3, [r7, #4]
+1000190c:	699b      	ldr	r3, [r3, #24]
+1000190e:	2b00      	cmp	r3, #0
+10001910:	d0a7      	beq.n	10001862 <SYSTIMER_lTimerHandler+0xe>
+      break;
+    }
+    /* Get first item of timer list */
+    object_ptr = g_timer_list;
+  }
+}
+10001912:	46bd      	mov	sp, r7
+10001914:	b002      	add	sp, #8
+10001916:	bd80      	pop	{r7, pc}
+10001918:	20000528 	.word	0x20000528
+1000191c:	2000052c 	.word	0x2000052c
+
+10001920 <SysTick_Handler>:
+
+/*
+ *  SysTick Event Handler.
+ */
+void SysTick_Handler(void)
+{
+10001920:	b580      	push	{r7, lr}
+10001922:	b082      	sub	sp, #8
+10001924:	af00      	add	r7, sp, #0
+  SYSTIMER_OBJECT_t *object_ptr;
+  object_ptr = g_timer_list;
+10001926:	4b0e      	ldr	r3, [pc, #56]	; (10001960 <SysTick_Handler+0x40>)
+10001928:	681b      	ldr	r3, [r3, #0]
+1000192a:	607b      	str	r3, [r7, #4]
+  g_systick_count++;
+1000192c:	4b0d      	ldr	r3, [pc, #52]	; (10001964 <SysTick_Handler+0x44>)
+1000192e:	681b      	ldr	r3, [r3, #0]
+10001930:	1c5a      	adds	r2, r3, #1
+10001932:	4b0c      	ldr	r3, [pc, #48]	; (10001964 <SysTick_Handler+0x44>)
+10001934:	601a      	str	r2, [r3, #0]
+
+  if (NULL != object_ptr)
+10001936:	687b      	ldr	r3, [r7, #4]
+10001938:	2b00      	cmp	r3, #0
+1000193a:	d00e      	beq.n	1000195a <SysTick_Handler+0x3a>
+  {
+    if (object_ptr->count > 1UL)
+1000193c:	687b      	ldr	r3, [r7, #4]
+1000193e:	699b      	ldr	r3, [r3, #24]
+10001940:	2b01      	cmp	r3, #1
+10001942:	d905      	bls.n	10001950 <SysTick_Handler+0x30>
+    {
+      object_ptr->count--;
+10001944:	687b      	ldr	r3, [r7, #4]
+10001946:	699b      	ldr	r3, [r3, #24]
+10001948:	1e5a      	subs	r2, r3, #1
+1000194a:	687b      	ldr	r3, [r7, #4]
+1000194c:	619a      	str	r2, [r3, #24]
+1000194e:	e004      	b.n	1000195a <SysTick_Handler+0x3a>
+    }
+    else
+    {
+      object_ptr->count = 0U;
+10001950:	687b      	ldr	r3, [r7, #4]
+10001952:	2200      	movs	r2, #0
+10001954:	619a      	str	r2, [r3, #24]
+      SYSTIMER_lTimerHandler();
+10001956:	f7ff ff7d 	bl	10001854 <SYSTIMER_lTimerHandler>
+    }
+  }
+}
+1000195a:	46bd      	mov	sp, r7
+1000195c:	b002      	add	sp, #8
+1000195e:	bd80      	pop	{r7, pc}
+10001960:	20000528 	.word	0x20000528
+10001964:	20000530 	.word	0x20000530
+
+10001968 <SYSTIMER_Init>:
+
+/*
+ * Initialization function which initializes the SYSTIMER APP, configures SysTick timer and SysTick exception.
+ */
+SYSTIMER_STATUS_t SYSTIMER_Init(SYSTIMER_t *handle)
+{
+10001968:	b580      	push	{r7, lr}
+1000196a:	b084      	sub	sp, #16
+1000196c:	af00      	add	r7, sp, #0
+1000196e:	6078      	str	r0, [r7, #4]
+  SYSTIMER_STATUS_t status = SYSTIMER_STATUS_SUCCESS;
+10001970:	230f      	movs	r3, #15
+10001972:	18fb      	adds	r3, r7, r3
+10001974:	2200      	movs	r2, #0
+10001976:	701a      	strb	r2, [r3, #0]
+  XMC_ASSERT("SYSTIMER_Init: SYSTIMER APP handle pointer uninitialized", (handle != NULL));
+
+  /* Check APP initialization status to ensure whether SYSTIMER_Init called or not, initialize SYSTIMER if
+   * SYSTIMER_Init called first time.
+   */
+  if (false == handle->init_status)
+10001978:	687b      	ldr	r3, [r7, #4]
+1000197a:	781b      	ldrb	r3, [r3, #0]
+1000197c:	2201      	movs	r2, #1
+1000197e:	4053      	eors	r3, r2
+10001980:	b2db      	uxtb	r3, r3
+10001982:	2b00      	cmp	r3, #0
+10001984:	d020      	beq.n	100019c8 <SYSTIMER_Init+0x60>
+  {
+    /* Initialize the header of the list */
+    g_timer_list = NULL;
+10001986:	4b14      	ldr	r3, [pc, #80]	; (100019d8 <SYSTIMER_Init+0x70>)
+10001988:	2200      	movs	r2, #0
+1000198a:	601a      	str	r2, [r3, #0]
+    /* Initialize SysTick timer */
+    status = (SYSTIMER_STATUS_t)SysTick_Config((uint32_t)(SYSTIMER_SYSTICK_CLOCK * SYSTIMER_TICK_PERIOD));
+1000198c:	23fa      	movs	r3, #250	; 0xfa
+1000198e:	01db      	lsls	r3, r3, #7
+10001990:	1c18      	adds	r0, r3, #0
+10001992:	f7ff fdf9 	bl	10001588 <SysTick_Config>
+10001996:	1c02      	adds	r2, r0, #0
+10001998:	230f      	movs	r3, #15
+1000199a:	18fb      	adds	r3, r7, r3
+1000199c:	701a      	strb	r2, [r3, #0]
+
+    if (SYSTIMER_STATUS_FAILURE == status)
+1000199e:	230f      	movs	r3, #15
+100019a0:	18fb      	adds	r3, r7, r3
+100019a2:	781b      	ldrb	r3, [r3, #0]
+100019a4:	2b01      	cmp	r3, #1
+100019a6:	d00f      	beq.n	100019c8 <SYSTIMER_Init+0x60>
+      /* setting of First SW Timer period is always and subpriority value for XMC4000 devices */
+      NVIC_SetPriority(SysTick_IRQn, NVIC_EncodePriority(
+      NVIC_GetPriorityGrouping(), SYSTIMER_PRIORITY, SYSTIMER_SUBPRIORITY));
+#elif (UC_FAMILY == XMC1)
+      /* setting of priority value for XMC1000 devices */
+      NVIC_SetPriority(SysTick_IRQn, SYSTIMER_PRIORITY);
+100019a8:	2301      	movs	r3, #1
+100019aa:	425b      	negs	r3, r3
+100019ac:	1c18      	adds	r0, r3, #0
+100019ae:	2103      	movs	r1, #3
+100019b0:	f7ff fd80 	bl	100014b4 <__NVIC_SetPriority>
+#endif      
+      g_timer_tracker = 0U;
+100019b4:	4b09      	ldr	r3, [pc, #36]	; (100019dc <SYSTIMER_Init+0x74>)
+100019b6:	2200      	movs	r2, #0
+100019b8:	601a      	str	r2, [r3, #0]
+      /* Update the Initialization status of the SYSTIMER APP instance */
+      handle->init_status = true;
+100019ba:	687b      	ldr	r3, [r7, #4]
+100019bc:	2201      	movs	r2, #1
+100019be:	701a      	strb	r2, [r3, #0]
+      status = SYSTIMER_STATUS_SUCCESS;
+100019c0:	230f      	movs	r3, #15
+100019c2:	18fb      	adds	r3, r7, r3
+100019c4:	2200      	movs	r2, #0
+100019c6:	701a      	strb	r2, [r3, #0]
+    }
+  }
+
+  return (status);
+100019c8:	230f      	movs	r3, #15
+100019ca:	18fb      	adds	r3, r7, r3
+100019cc:	781b      	ldrb	r3, [r3, #0]
+}
+100019ce:	1c18      	adds	r0, r3, #0
+100019d0:	46bd      	mov	sp, r7
+100019d2:	b004      	add	sp, #16
+100019d4:	bd80      	pop	{r7, pc}
+100019d6:	46c0      	nop			; (mov r8, r8)
+100019d8:	20000528 	.word	0x20000528
+100019dc:	2000052c 	.word	0x2000052c
+
+100019e0 <SYSTIMER_CreateTimer>:
+  uint32_t period,
+  SYSTIMER_MODE_t mode,
+  SYSTIMER_CALLBACK_t callback,
+  void  *args
+)
+{
+100019e0:	b580      	push	{r7, lr}
+100019e2:	b088      	sub	sp, #32
+100019e4:	af00      	add	r7, sp, #0
+100019e6:	60f8      	str	r0, [r7, #12]
+100019e8:	607a      	str	r2, [r7, #4]
+100019ea:	603b      	str	r3, [r7, #0]
+100019ec:	230b      	movs	r3, #11
+100019ee:	18fb      	adds	r3, r7, r3
+100019f0:	1c0a      	adds	r2, r1, #0
+100019f2:	701a      	strb	r2, [r3, #0]
+  uint32_t id = 0U;
+100019f4:	2300      	movs	r3, #0
+100019f6:	61fb      	str	r3, [r7, #28]
+  uint32_t count = 0U;
+100019f8:	2300      	movs	r3, #0
+100019fa:	61bb      	str	r3, [r7, #24]
+  uint32_t period_ratio = 0U;
+100019fc:	2300      	movs	r3, #0
+100019fe:	617b      	str	r3, [r7, #20]
+            ((period >= SYSTIMER_TICK_PERIOD_US) && (period > 0U) && (period <= 0xFFFFFFFFU)));
+  XMC_ASSERT("SYSTIMER_CreateTimer: Timer creation failure due to invalid timer mode",
+            ((SYSTIMER_MODE_ONE_SHOT == mode) || (SYSTIMER_MODE_PERIODIC == mode)));
+  XMC_ASSERT("SYSTIMER_CreateTimer: Can not create software without user callback", (NULL != callback));
+  
+  if (period < SYSTIMER_TICK_PERIOD_US)
+10001a00:	68fb      	ldr	r3, [r7, #12]
+10001a02:	4a44      	ldr	r2, [pc, #272]	; (10001b14 <SYSTIMER_CreateTimer+0x134>)
+10001a04:	4293      	cmp	r3, r2
+10001a06:	d802      	bhi.n	10001a0e <SYSTIMER_CreateTimer+0x2e>
+  {
+    id = 0U;
+10001a08:	2300      	movs	r3, #0
+10001a0a:	61fb      	str	r3, [r7, #28]
+10001a0c:	e07d      	b.n	10001b0a <SYSTIMER_CreateTimer+0x12a>
+  }
+  else
+  {
+    for (count = 0U; count < SYSTIMER_CFG_MAX_TMR; count++)
+10001a0e:	2300      	movs	r3, #0
+10001a10:	61bb      	str	r3, [r7, #24]
+10001a12:	e077      	b.n	10001b04 <SYSTIMER_CreateTimer+0x124>
+    {
+      /* Check for free timer ID */
+      if (0U == (g_timer_tracker & (1U << count)))
+10001a14:	69bb      	ldr	r3, [r7, #24]
+10001a16:	2201      	movs	r2, #1
+10001a18:	409a      	lsls	r2, r3
+10001a1a:	4b3f      	ldr	r3, [pc, #252]	; (10001b18 <SYSTIMER_CreateTimer+0x138>)
+10001a1c:	681b      	ldr	r3, [r3, #0]
+10001a1e:	4013      	ands	r3, r2
+10001a20:	d16d      	bne.n	10001afe <SYSTIMER_CreateTimer+0x11e>
+      {
+        /* If yes, assign ID to this timer */
+        g_timer_tracker |= (1U << count);
+10001a22:	69bb      	ldr	r3, [r7, #24]
+10001a24:	2201      	movs	r2, #1
+10001a26:	409a      	lsls	r2, r3
+10001a28:	4b3b      	ldr	r3, [pc, #236]	; (10001b18 <SYSTIMER_CreateTimer+0x138>)
+10001a2a:	681b      	ldr	r3, [r3, #0]
+10001a2c:	431a      	orrs	r2, r3
+10001a2e:	4b3a      	ldr	r3, [pc, #232]	; (10001b18 <SYSTIMER_CreateTimer+0x138>)
+10001a30:	601a      	str	r2, [r3, #0]
+        /* Initialize the timer as per input values */
+        g_timer_tbl[count].id     = count;
+10001a32:	493a      	ldr	r1, [pc, #232]	; (10001b1c <SYSTIMER_CreateTimer+0x13c>)
+10001a34:	69ba      	ldr	r2, [r7, #24]
+10001a36:	1c13      	adds	r3, r2, #0
+10001a38:	00db      	lsls	r3, r3, #3
+10001a3a:	189b      	adds	r3, r3, r2
+10001a3c:	009b      	lsls	r3, r3, #2
+10001a3e:	18cb      	adds	r3, r1, r3
+10001a40:	3310      	adds	r3, #16
+10001a42:	69ba      	ldr	r2, [r7, #24]
+10001a44:	605a      	str	r2, [r3, #4]
+        g_timer_tbl[count].mode   = mode;
+10001a46:	4935      	ldr	r1, [pc, #212]	; (10001b1c <SYSTIMER_CreateTimer+0x13c>)
+10001a48:	69ba      	ldr	r2, [r7, #24]
+10001a4a:	1c13      	adds	r3, r2, #0
+10001a4c:	00db      	lsls	r3, r3, #3
+10001a4e:	189b      	adds	r3, r3, r2
+10001a50:	009b      	lsls	r3, r3, #2
+10001a52:	18cb      	adds	r3, r1, r3
+10001a54:	3308      	adds	r3, #8
+10001a56:	220b      	movs	r2, #11
+10001a58:	18ba      	adds	r2, r7, r2
+10001a5a:	7812      	ldrb	r2, [r2, #0]
+10001a5c:	711a      	strb	r2, [r3, #4]
+        g_timer_tbl[count].state  = SYSTIMER_STATE_STOPPED;
+10001a5e:	492f      	ldr	r1, [pc, #188]	; (10001b1c <SYSTIMER_CreateTimer+0x13c>)
+10001a60:	69ba      	ldr	r2, [r7, #24]
+10001a62:	1c13      	adds	r3, r2, #0
+10001a64:	00db      	lsls	r3, r3, #3
+10001a66:	189b      	adds	r3, r3, r2
+10001a68:	009b      	lsls	r3, r3, #2
+10001a6a:	18cb      	adds	r3, r1, r3
+10001a6c:	3308      	adds	r3, #8
+10001a6e:	2202      	movs	r2, #2
+10001a70:	715a      	strb	r2, [r3, #5]
+        period_ratio = (uint32_t)(period / SYSTIMER_TICK_PERIOD_US);
+10001a72:	68fb      	ldr	r3, [r7, #12]
+10001a74:	1c18      	adds	r0, r3, #0
+10001a76:	23fa      	movs	r3, #250	; 0xfa
+10001a78:	0099      	lsls	r1, r3, #2
+10001a7a:	f000 fb71 	bl	10002160 <__aeabi_uidiv>
+10001a7e:	1c03      	adds	r3, r0, #0
+10001a80:	617b      	str	r3, [r7, #20]
+        g_timer_tbl[count].count  = (period_ratio + HW_TIMER_ADDITIONAL_CNT);
+10001a82:	697b      	ldr	r3, [r7, #20]
+10001a84:	1c59      	adds	r1, r3, #1
+10001a86:	4825      	ldr	r0, [pc, #148]	; (10001b1c <SYSTIMER_CreateTimer+0x13c>)
+10001a88:	69ba      	ldr	r2, [r7, #24]
+10001a8a:	1c13      	adds	r3, r2, #0
+10001a8c:	00db      	lsls	r3, r3, #3
+10001a8e:	189b      	adds	r3, r3, r2
+10001a90:	009b      	lsls	r3, r3, #2
+10001a92:	18c3      	adds	r3, r0, r3
+10001a94:	3318      	adds	r3, #24
+10001a96:	6019      	str	r1, [r3, #0]
+        g_timer_tbl[count].reload  = period_ratio;
+10001a98:	4920      	ldr	r1, [pc, #128]	; (10001b1c <SYSTIMER_CreateTimer+0x13c>)
+10001a9a:	69ba      	ldr	r2, [r7, #24]
+10001a9c:	1c13      	adds	r3, r2, #0
+10001a9e:	00db      	lsls	r3, r3, #3
+10001aa0:	189b      	adds	r3, r3, r2
+10001aa2:	009b      	lsls	r3, r3, #2
+10001aa4:	18cb      	adds	r3, r1, r3
+10001aa6:	3318      	adds	r3, #24
+10001aa8:	697a      	ldr	r2, [r7, #20]
+10001aaa:	605a      	str	r2, [r3, #4]
+        g_timer_tbl[count].callback = callback;
+10001aac:	491b      	ldr	r1, [pc, #108]	; (10001b1c <SYSTIMER_CreateTimer+0x13c>)
+10001aae:	69ba      	ldr	r2, [r7, #24]
+10001ab0:	1c13      	adds	r3, r2, #0
+10001ab2:	00db      	lsls	r3, r3, #3
+10001ab4:	189b      	adds	r3, r3, r2
+10001ab6:	009b      	lsls	r3, r3, #2
+10001ab8:	18cb      	adds	r3, r1, r3
+10001aba:	3308      	adds	r3, #8
+10001abc:	687a      	ldr	r2, [r7, #4]
+10001abe:	601a      	str	r2, [r3, #0]
+        g_timer_tbl[count].args = args;
+10001ac0:	4916      	ldr	r1, [pc, #88]	; (10001b1c <SYSTIMER_CreateTimer+0x13c>)
+10001ac2:	69ba      	ldr	r2, [r7, #24]
+10001ac4:	1c13      	adds	r3, r2, #0
+10001ac6:	00db      	lsls	r3, r3, #3
+10001ac8:	189b      	adds	r3, r3, r2
+10001aca:	009b      	lsls	r3, r3, #2
+10001acc:	18cb      	adds	r3, r1, r3
+10001ace:	3310      	adds	r3, #16
+10001ad0:	683a      	ldr	r2, [r7, #0]
+10001ad2:	601a      	str	r2, [r3, #0]
+        g_timer_tbl[count].prev   = NULL;
+10001ad4:	4911      	ldr	r1, [pc, #68]	; (10001b1c <SYSTIMER_CreateTimer+0x13c>)
+10001ad6:	69ba      	ldr	r2, [r7, #24]
+10001ad8:	1c13      	adds	r3, r2, #0
+10001ada:	00db      	lsls	r3, r3, #3
+10001adc:	189b      	adds	r3, r3, r2
+10001ade:	009b      	lsls	r3, r3, #2
+10001ae0:	18cb      	adds	r3, r1, r3
+10001ae2:	2200      	movs	r2, #0
+10001ae4:	605a      	str	r2, [r3, #4]
+        g_timer_tbl[count].next   = NULL;
+10001ae6:	490d      	ldr	r1, [pc, #52]	; (10001b1c <SYSTIMER_CreateTimer+0x13c>)
+10001ae8:	69ba      	ldr	r2, [r7, #24]
+10001aea:	1c13      	adds	r3, r2, #0
+10001aec:	00db      	lsls	r3, r3, #3
+10001aee:	189b      	adds	r3, r3, r2
+10001af0:	009b      	lsls	r3, r3, #2
+10001af2:	2200      	movs	r2, #0
+10001af4:	505a      	str	r2, [r3, r1]
+        id = count + 1U;
+10001af6:	69bb      	ldr	r3, [r7, #24]
+10001af8:	3301      	adds	r3, #1
+10001afa:	61fb      	str	r3, [r7, #28]
+        break;
+10001afc:	e005      	b.n	10001b0a <SYSTIMER_CreateTimer+0x12a>
+  {
+    id = 0U;
+  }
+  else
+  {
+    for (count = 0U; count < SYSTIMER_CFG_MAX_TMR; count++)
+10001afe:	69bb      	ldr	r3, [r7, #24]
+10001b00:	3301      	adds	r3, #1
+10001b02:	61bb      	str	r3, [r7, #24]
+10001b04:	69bb      	ldr	r3, [r7, #24]
+10001b06:	2b00      	cmp	r3, #0
+10001b08:	d084      	beq.n	10001a14 <SYSTIMER_CreateTimer+0x34>
+      }
+    }
+
+  }
+
+  return (id);
+10001b0a:	69fb      	ldr	r3, [r7, #28]
+}  
+10001b0c:	1c18      	adds	r0, r3, #0
+10001b0e:	46bd      	mov	sp, r7
+10001b10:	b008      	add	sp, #32
+10001b12:	bd80      	pop	{r7, pc}
+10001b14:	000003e7 	.word	0x000003e7
+10001b18:	2000052c 	.word	0x2000052c
+10001b1c:	20000544 	.word	0x20000544
+
+10001b20 <SYSTIMER_StartTimer>:
+
+/*
+ *  API to start the software timer.
+ */
+SYSTIMER_STATUS_t SYSTIMER_StartTimer(uint32_t id)
+{
+10001b20:	b580      	push	{r7, lr}
+10001b22:	b084      	sub	sp, #16
+10001b24:	af00      	add	r7, sp, #0
+10001b26:	6078      	str	r0, [r7, #4]
+  SYSTIMER_STATUS_t status;
+  status = SYSTIMER_STATUS_FAILURE;
+10001b28:	230f      	movs	r3, #15
+10001b2a:	18fb      	adds	r3, r7, r3
+10001b2c:	2201      	movs	r2, #1
+10001b2e:	701a      	strb	r2, [r3, #0]
+  XMC_ASSERT("SYSTIMER_StartTimer: Failure in timer restart operation due to invalid timer ID",
+            ((id <= SYSTIMER_CFG_MAX_TMR) && (id > 0U)));
+  XMC_ASSERT("SYSTIMER_StartTimer: Error during start of software timer", (0U != (g_timer_tracker & (1U << (id - 1U)))));
+  
+  /* Check if timer is running */
+  if (SYSTIMER_STATE_STOPPED == g_timer_tbl[id - 1U].state)
+10001b30:	687b      	ldr	r3, [r7, #4]
+10001b32:	1e5a      	subs	r2, r3, #1
+10001b34:	491c      	ldr	r1, [pc, #112]	; (10001ba8 <SYSTIMER_StartTimer+0x88>)
+10001b36:	1c13      	adds	r3, r2, #0
+10001b38:	00db      	lsls	r3, r3, #3
+10001b3a:	189b      	adds	r3, r3, r2
+10001b3c:	009b      	lsls	r3, r3, #2
+10001b3e:	18cb      	adds	r3, r1, r3
+10001b40:	3308      	adds	r3, #8
+10001b42:	795b      	ldrb	r3, [r3, #5]
+10001b44:	2b02      	cmp	r3, #2
+10001b46:	d128      	bne.n	10001b9a <SYSTIMER_StartTimer+0x7a>
+  {
+    g_timer_tbl[id - 1U].count = (g_timer_tbl[id - 1U].reload + HW_TIMER_ADDITIONAL_CNT);
+10001b48:	687b      	ldr	r3, [r7, #4]
+10001b4a:	1e5a      	subs	r2, r3, #1
+10001b4c:	687b      	ldr	r3, [r7, #4]
+10001b4e:	1e59      	subs	r1, r3, #1
+10001b50:	4815      	ldr	r0, [pc, #84]	; (10001ba8 <SYSTIMER_StartTimer+0x88>)
+10001b52:	1c0b      	adds	r3, r1, #0
+10001b54:	00db      	lsls	r3, r3, #3
+10001b56:	185b      	adds	r3, r3, r1
+10001b58:	009b      	lsls	r3, r3, #2
+10001b5a:	18c3      	adds	r3, r0, r3
+10001b5c:	3318      	adds	r3, #24
+10001b5e:	685b      	ldr	r3, [r3, #4]
+10001b60:	1c59      	adds	r1, r3, #1
+10001b62:	4811      	ldr	r0, [pc, #68]	; (10001ba8 <SYSTIMER_StartTimer+0x88>)
+10001b64:	1c13      	adds	r3, r2, #0
+10001b66:	00db      	lsls	r3, r3, #3
+10001b68:	189b      	adds	r3, r3, r2
+10001b6a:	009b      	lsls	r3, r3, #2
+10001b6c:	18c3      	adds	r3, r0, r3
+10001b6e:	3318      	adds	r3, #24
+10001b70:	6019      	str	r1, [r3, #0]
+    /* set timer status as SYSTIMER_STATE_RUNNING */
+    g_timer_tbl[id - 1U].state = SYSTIMER_STATE_RUNNING;
+10001b72:	687b      	ldr	r3, [r7, #4]
+10001b74:	1e5a      	subs	r2, r3, #1
+10001b76:	490c      	ldr	r1, [pc, #48]	; (10001ba8 <SYSTIMER_StartTimer+0x88>)
+10001b78:	1c13      	adds	r3, r2, #0
+10001b7a:	00db      	lsls	r3, r3, #3
+10001b7c:	189b      	adds	r3, r3, r2
+10001b7e:	009b      	lsls	r3, r3, #2
+10001b80:	18cb      	adds	r3, r1, r3
+10001b82:	3308      	adds	r3, #8
+10001b84:	2201      	movs	r2, #1
+10001b86:	715a      	strb	r2, [r3, #5]
+    /* Insert this timer into timer list */
+    SYSTIMER_lInsertTimerList((id - 1U));
+10001b88:	687b      	ldr	r3, [r7, #4]
+10001b8a:	3b01      	subs	r3, #1
+10001b8c:	1c18      	adds	r0, r3, #0
+10001b8e:	f7ff fd1f 	bl	100015d0 <SYSTIMER_lInsertTimerList>
+    status = SYSTIMER_STATUS_SUCCESS;
+10001b92:	230f      	movs	r3, #15
+10001b94:	18fb      	adds	r3, r7, r3
+10001b96:	2200      	movs	r2, #0
+10001b98:	701a      	strb	r2, [r3, #0]
+  }
+
+  return (status);
+10001b9a:	230f      	movs	r3, #15
+10001b9c:	18fb      	adds	r3, r7, r3
+10001b9e:	781b      	ldrb	r3, [r3, #0]
+}
+10001ba0:	1c18      	adds	r0, r3, #0
+10001ba2:	46bd      	mov	sp, r7
+10001ba4:	b004      	add	sp, #16
+10001ba6:	bd80      	pop	{r7, pc}
+10001ba8:	20000544 	.word	0x20000544
+
+10001bac <__NVIC_EnableIRQ>:
+  \details Enables a device specific interrupt in the NVIC interrupt controller.
+  \param [in]      IRQn  Device specific interrupt number.
+  \note    IRQn must not be negative.
+ */
+__STATIC_INLINE void __NVIC_EnableIRQ(IRQn_Type IRQn)
+{
+10001bac:	b580      	push	{r7, lr}
+10001bae:	b082      	sub	sp, #8
+10001bb0:	af00      	add	r7, sp, #0
+10001bb2:	1c02      	adds	r2, r0, #0
+10001bb4:	1dfb      	adds	r3, r7, #7
+10001bb6:	701a      	strb	r2, [r3, #0]
+  if ((int32_t)(IRQn) >= 0)
+10001bb8:	1dfb      	adds	r3, r7, #7
+10001bba:	781b      	ldrb	r3, [r3, #0]
+10001bbc:	2b7f      	cmp	r3, #127	; 0x7f
+10001bbe:	d809      	bhi.n	10001bd4 <__NVIC_EnableIRQ+0x28>
+  {
+    __COMPILER_BARRIER();
+    NVIC->ISER[0U] = (uint32_t)(1UL << (((uint32_t)IRQn) & 0x1FUL));
+10001bc0:	4b06      	ldr	r3, [pc, #24]	; (10001bdc <__NVIC_EnableIRQ+0x30>)
+10001bc2:	1dfa      	adds	r2, r7, #7
+10001bc4:	7812      	ldrb	r2, [r2, #0]
+10001bc6:	1c11      	adds	r1, r2, #0
+10001bc8:	221f      	movs	r2, #31
+10001bca:	400a      	ands	r2, r1
+10001bcc:	2101      	movs	r1, #1
+10001bce:	4091      	lsls	r1, r2
+10001bd0:	1c0a      	adds	r2, r1, #0
+10001bd2:	601a      	str	r2, [r3, #0]
+    __COMPILER_BARRIER();
+  }
+}
+10001bd4:	46bd      	mov	sp, r7
+10001bd6:	b002      	add	sp, #8
+10001bd8:	bd80      	pop	{r7, pc}
+10001bda:	46c0      	nop			; (mov r8, r8)
+10001bdc:	e000e100 	.word	0xe000e100
+
+10001be0 <__NVIC_SetPriority>:
+  \param [in]      IRQn  Interrupt number.
+  \param [in]  priority  Priority to set.
+  \note    The priority cannot be set for every processor exception.
+ */
+__STATIC_INLINE void __NVIC_SetPriority(IRQn_Type IRQn, uint32_t priority)
+{
+10001be0:	b5b0      	push	{r4, r5, r7, lr}
+10001be2:	b082      	sub	sp, #8
+10001be4:	af00      	add	r7, sp, #0
+10001be6:	1c02      	adds	r2, r0, #0
+10001be8:	6039      	str	r1, [r7, #0]
+10001bea:	1dfb      	adds	r3, r7, #7
+10001bec:	701a      	strb	r2, [r3, #0]
+  if ((int32_t)(IRQn) >= 0)
+10001bee:	1dfb      	adds	r3, r7, #7
+10001bf0:	781b      	ldrb	r3, [r3, #0]
+10001bf2:	2b7f      	cmp	r3, #127	; 0x7f
+10001bf4:	d827      	bhi.n	10001c46 <__NVIC_SetPriority+0x66>
+  {
+    NVIC->IP[_IP_IDX(IRQn)]  = ((uint32_t)(NVIC->IP[_IP_IDX(IRQn)]  & ~(0xFFUL << _BIT_SHIFT(IRQn))) |
+10001bf6:	4c2d      	ldr	r4, [pc, #180]	; (10001cac <__NVIC_SetPriority+0xcc>)
+10001bf8:	1dfb      	adds	r3, r7, #7
+10001bfa:	781b      	ldrb	r3, [r3, #0]
+10001bfc:	b25b      	sxtb	r3, r3
+10001bfe:	089b      	lsrs	r3, r3, #2
+10001c00:	492a      	ldr	r1, [pc, #168]	; (10001cac <__NVIC_SetPriority+0xcc>)
+10001c02:	1dfa      	adds	r2, r7, #7
+10001c04:	7812      	ldrb	r2, [r2, #0]
+10001c06:	b252      	sxtb	r2, r2
+10001c08:	0892      	lsrs	r2, r2, #2
+10001c0a:	32c0      	adds	r2, #192	; 0xc0
+10001c0c:	0092      	lsls	r2, r2, #2
+10001c0e:	5852      	ldr	r2, [r2, r1]
+10001c10:	1df9      	adds	r1, r7, #7
+10001c12:	7809      	ldrb	r1, [r1, #0]
+10001c14:	1c08      	adds	r0, r1, #0
+10001c16:	2103      	movs	r1, #3
+10001c18:	4001      	ands	r1, r0
+10001c1a:	00c9      	lsls	r1, r1, #3
+10001c1c:	1c08      	adds	r0, r1, #0
+10001c1e:	21ff      	movs	r1, #255	; 0xff
+10001c20:	4081      	lsls	r1, r0
+10001c22:	43c9      	mvns	r1, r1
+10001c24:	4011      	ands	r1, r2
+       (((priority << (8U - __NVIC_PRIO_BITS)) & (uint32_t)0xFFUL) << _BIT_SHIFT(IRQn)));
+10001c26:	683a      	ldr	r2, [r7, #0]
+10001c28:	0192      	lsls	r2, r2, #6
+10001c2a:	20ff      	movs	r0, #255	; 0xff
+10001c2c:	4002      	ands	r2, r0
+10001c2e:	1df8      	adds	r0, r7, #7
+10001c30:	7800      	ldrb	r0, [r0, #0]
+10001c32:	1c05      	adds	r5, r0, #0
+10001c34:	2003      	movs	r0, #3
+10001c36:	4028      	ands	r0, r5
+10001c38:	00c0      	lsls	r0, r0, #3
+10001c3a:	4082      	lsls	r2, r0
+ */
+__STATIC_INLINE void __NVIC_SetPriority(IRQn_Type IRQn, uint32_t priority)
+{
+  if ((int32_t)(IRQn) >= 0)
+  {
+    NVIC->IP[_IP_IDX(IRQn)]  = ((uint32_t)(NVIC->IP[_IP_IDX(IRQn)]  & ~(0xFFUL << _BIT_SHIFT(IRQn))) |
+10001c3c:	430a      	orrs	r2, r1
+10001c3e:	33c0      	adds	r3, #192	; 0xc0
+10001c40:	009b      	lsls	r3, r3, #2
+10001c42:	511a      	str	r2, [r3, r4]
+10001c44:	e02e      	b.n	10001ca4 <__NVIC_SetPriority+0xc4>
+       (((priority << (8U - __NVIC_PRIO_BITS)) & (uint32_t)0xFFUL) << _BIT_SHIFT(IRQn)));
+  }
+  else
+  {
+    SCB->SHP[_SHP_IDX(IRQn)] = ((uint32_t)(SCB->SHP[_SHP_IDX(IRQn)] & ~(0xFFUL << _BIT_SHIFT(IRQn))) |
+10001c46:	4c1a      	ldr	r4, [pc, #104]	; (10001cb0 <__NVIC_SetPriority+0xd0>)
+10001c48:	1dfb      	adds	r3, r7, #7
+10001c4a:	781b      	ldrb	r3, [r3, #0]
+10001c4c:	1c1a      	adds	r2, r3, #0
+10001c4e:	230f      	movs	r3, #15
+10001c50:	4013      	ands	r3, r2
+10001c52:	3b08      	subs	r3, #8
+10001c54:	0899      	lsrs	r1, r3, #2
+10001c56:	4a16      	ldr	r2, [pc, #88]	; (10001cb0 <__NVIC_SetPriority+0xd0>)
+10001c58:	1dfb      	adds	r3, r7, #7
+10001c5a:	781b      	ldrb	r3, [r3, #0]
+10001c5c:	1c18      	adds	r0, r3, #0
+10001c5e:	230f      	movs	r3, #15
+10001c60:	4003      	ands	r3, r0
+10001c62:	3b08      	subs	r3, #8
+10001c64:	089b      	lsrs	r3, r3, #2
+10001c66:	3306      	adds	r3, #6
+10001c68:	009b      	lsls	r3, r3, #2
+10001c6a:	18d3      	adds	r3, r2, r3
+10001c6c:	685b      	ldr	r3, [r3, #4]
+10001c6e:	1dfa      	adds	r2, r7, #7
+10001c70:	7812      	ldrb	r2, [r2, #0]
+10001c72:	1c10      	adds	r0, r2, #0
+10001c74:	2203      	movs	r2, #3
+10001c76:	4002      	ands	r2, r0
+10001c78:	00d2      	lsls	r2, r2, #3
+10001c7a:	1c10      	adds	r0, r2, #0
+10001c7c:	22ff      	movs	r2, #255	; 0xff
+10001c7e:	4082      	lsls	r2, r0
+10001c80:	43d2      	mvns	r2, r2
+10001c82:	401a      	ands	r2, r3
+       (((priority << (8U - __NVIC_PRIO_BITS)) & (uint32_t)0xFFUL) << _BIT_SHIFT(IRQn)));
+10001c84:	683b      	ldr	r3, [r7, #0]
+10001c86:	019b      	lsls	r3, r3, #6
+10001c88:	20ff      	movs	r0, #255	; 0xff
+10001c8a:	4003      	ands	r3, r0
+10001c8c:	1df8      	adds	r0, r7, #7
+10001c8e:	7800      	ldrb	r0, [r0, #0]
+10001c90:	1c05      	adds	r5, r0, #0
+10001c92:	2003      	movs	r0, #3
+10001c94:	4028      	ands	r0, r5
+10001c96:	00c0      	lsls	r0, r0, #3
+10001c98:	4083      	lsls	r3, r0
+    NVIC->IP[_IP_IDX(IRQn)]  = ((uint32_t)(NVIC->IP[_IP_IDX(IRQn)]  & ~(0xFFUL << _BIT_SHIFT(IRQn))) |
+       (((priority << (8U - __NVIC_PRIO_BITS)) & (uint32_t)0xFFUL) << _BIT_SHIFT(IRQn)));
+  }
+  else
+  {
+    SCB->SHP[_SHP_IDX(IRQn)] = ((uint32_t)(SCB->SHP[_SHP_IDX(IRQn)] & ~(0xFFUL << _BIT_SHIFT(IRQn))) |
+10001c9a:	431a      	orrs	r2, r3
+10001c9c:	1d8b      	adds	r3, r1, #6
+10001c9e:	009b      	lsls	r3, r3, #2
+10001ca0:	18e3      	adds	r3, r4, r3
+10001ca2:	605a      	str	r2, [r3, #4]
+       (((priority << (8U - __NVIC_PRIO_BITS)) & (uint32_t)0xFFUL) << _BIT_SHIFT(IRQn)));
+  }
+}
+10001ca4:	46bd      	mov	sp, r7
+10001ca6:	b002      	add	sp, #8
+10001ca8:	bdb0      	pop	{r4, r5, r7, pc}
+10001caa:	46c0      	nop			; (mov r8, r8)
+10001cac:	e000e100 	.word	0xe000e100
+10001cb0:	e000ed00 	.word	0xe000ed00
+
+10001cb4 <INTERRUPT_Enable>:
+ *    return 0;
+ *  }
+ * @endcode<BR> </p>
+ */
+__STATIC_INLINE void INTERRUPT_Enable(const INTERRUPT_t *const handler)
+{
+10001cb4:	b580      	push	{r7, lr}
+10001cb6:	b082      	sub	sp, #8
+10001cb8:	af00      	add	r7, sp, #0
+10001cba:	6078      	str	r0, [r7, #4]
+  XMC_ASSERT("Handler NULL", (handler != NULL));
+  NVIC_EnableIRQ(handler->node);
+10001cbc:	687b      	ldr	r3, [r7, #4]
+10001cbe:	781b      	ldrb	r3, [r3, #0]
+10001cc0:	b25b      	sxtb	r3, r3
+10001cc2:	1c18      	adds	r0, r3, #0
+10001cc4:	f7ff ff72 	bl	10001bac <__NVIC_EnableIRQ>
+}
+10001cc8:	46bd      	mov	sp, r7
+10001cca:	b002      	add	sp, #8
+10001ccc:	bd80      	pop	{r7, pc}
+10001cce:	46c0      	nop			; (mov r8, r8)
+
+10001cd0 <INTERRUPT_Init>:
+
+/*
+ * API to initialize the INTERRUPT APP
+ */
+INTERRUPT_STATUS_t INTERRUPT_Init(const INTERRUPT_t *const handler)
+{
+10001cd0:	b580      	push	{r7, lr}
+10001cd2:	b082      	sub	sp, #8
+10001cd4:	af00      	add	r7, sp, #0
+10001cd6:	6078      	str	r0, [r7, #4]
+    INTERRUPT_Enable(handler);
+  }
+#endif
+
+#if(UC_FAMILY == XMC1)
+  NVIC_SetPriority(handler->node, handler->priority);
+10001cd8:	687b      	ldr	r3, [r7, #4]
+10001cda:	781a      	ldrb	r2, [r3, #0]
+10001cdc:	687b      	ldr	r3, [r7, #4]
+10001cde:	785b      	ldrb	r3, [r3, #1]
+10001ce0:	1c19      	adds	r1, r3, #0
+10001ce2:	b253      	sxtb	r3, r2
+10001ce4:	1c18      	adds	r0, r3, #0
+10001ce6:	f7ff ff7b 	bl	10001be0 <__NVIC_SetPriority>
+#if (UC_SERIES == XMC14)
+  XMC_SCU_SetInterruptControl((uint8_t)handler->node, (XMC_SCU_IRQCTRL_t)((handler->node << 8) | handler->irqctrl));
+#endif
+
+  /* Enable the interrupt if enable_at_init is enabled */
+  if (handler->enable_at_init == true)
+10001cea:	687b      	ldr	r3, [r7, #4]
+10001cec:	789b      	ldrb	r3, [r3, #2]
+10001cee:	2b00      	cmp	r3, #0
+10001cf0:	d003      	beq.n	10001cfa <INTERRUPT_Init+0x2a>
+  {
+    INTERRUPT_Enable(handler);
+10001cf2:	687b      	ldr	r3, [r7, #4]
+10001cf4:	1c18      	adds	r0, r3, #0
+10001cf6:	f7ff ffdd 	bl	10001cb4 <INTERRUPT_Enable>
+  }
+#endif
+
+  return (INTERRUPT_STATUS_SUCCESS);
+10001cfa:	2300      	movs	r3, #0
+}
+10001cfc:	1c18      	adds	r0, r3, #0
+10001cfe:	46bd      	mov	sp, r7
+10001d00:	b002      	add	sp, #8
+10001d02:	bd80      	pop	{r7, pc}
+
+10001d04 <DIGITAL_IO_Init>:
+* @param handler Pointer pointing to APP data structure.
+* @return DIGITAL_IO_STATUS_t DIGITAL_IO APP status.
+*/
+
+DIGITAL_IO_STATUS_t DIGITAL_IO_Init(const DIGITAL_IO_t *const handler)
+{
+10001d04:	b580      	push	{r7, lr}
+10001d06:	b082      	sub	sp, #8
+10001d08:	af00      	add	r7, sp, #0
+10001d0a:	6078      	str	r0, [r7, #4]
+  XMC_ASSERT("DIGITAL_IO_Init: handler null pointer", handler != NULL);
+
+  /* Initializes input / output characteristics */
+  XMC_GPIO_Init(handler->gpio_port, handler->gpio_pin, &handler->gpio_config);
+10001d0c:	687b      	ldr	r3, [r7, #4]
+10001d0e:	6819      	ldr	r1, [r3, #0]
+10001d10:	687b      	ldr	r3, [r7, #4]
+10001d12:	7b1a      	ldrb	r2, [r3, #12]
+10001d14:	687b      	ldr	r3, [r7, #4]
+10001d16:	3304      	adds	r3, #4
+10001d18:	1c08      	adds	r0, r1, #0
+10001d1a:	1c11      	adds	r1, r2, #0
+10001d1c:	1c1a      	adds	r2, r3, #0
+10001d1e:	f7ff f9f9 	bl	10001114 <XMC_GPIO_Init>
+
+  /*Configure hardware port control*/
+  XMC_GPIO_SetHardwareControl(handler->gpio_port, handler->gpio_pin, handler->hwctrl);
+10001d22:	687b      	ldr	r3, [r7, #4]
+10001d24:	6819      	ldr	r1, [r3, #0]
+10001d26:	687b      	ldr	r3, [r7, #4]
+10001d28:	7b1a      	ldrb	r2, [r3, #12]
+10001d2a:	687b      	ldr	r3, [r7, #4]
+10001d2c:	7b5b      	ldrb	r3, [r3, #13]
+10001d2e:	1c08      	adds	r0, r1, #0
+10001d30:	1c11      	adds	r1, r2, #0
+10001d32:	1c1a      	adds	r2, r3, #0
+10001d34:	f7ff fb94 	bl	10001460 <XMC_GPIO_SetHardwareControl>
+
+  return (DIGITAL_IO_STATUS_OK);
+10001d38:	2300      	movs	r3, #0
+}
+10001d3a:	1c18      	adds	r0, r3, #0
+10001d3c:	46bd      	mov	sp, r7
+10001d3e:	b002      	add	sp, #8
+10001d40:	bd80      	pop	{r7, pc}
+10001d42:	46c0      	nop			; (mov r8, r8)
+
+10001d44 <SystemCoreSetup>:
+{
+  .initialized = false
+};
+ 
+void SystemCoreSetup(void)
+{
+10001d44:	b580      	push	{r7, lr}
+10001d46:	af00      	add	r7, sp, #0
+#if UC_SERIES == XMC14
+  /* Enable Prefetch unit */
+  SCU_GENERAL->PFUCR &= ~SCU_GENERAL_PFUCR_PFUBYP_Msk;
+#endif
+}
+10001d48:	46bd      	mov	sp, r7
+10001d4a:	bd80      	pop	{r7, pc}
+
+10001d4c <CLOCK_XMC1_Init>:
+
+/*
+ * API to initialize the CLOCK_XMC1 APP Interrupts
+ */
+CLOCK_XMC1_STATUS_t CLOCK_XMC1_Init(CLOCK_XMC1_t *handle)
+{
+10001d4c:	b580      	push	{r7, lr}
+10001d4e:	b084      	sub	sp, #16
+10001d50:	af00      	add	r7, sp, #0
+10001d52:	6078      	str	r0, [r7, #4]
+  CLOCK_XMC1_STATUS_t status = CLOCK_XMC1_STATUS_SUCCESS;
+10001d54:	230f      	movs	r3, #15
+10001d56:	18fb      	adds	r3, r7, r3
+10001d58:	2200      	movs	r2, #0
+10001d5a:	701a      	strb	r2, [r3, #0]
+  CLOCK_XMC1_STATUS_t loci_event_status = CLOCK_XMC1_STATUS_SUCCESS;
+10001d5c:	230e      	movs	r3, #14
+10001d5e:	18fb      	adds	r3, r7, r3
+10001d60:	2200      	movs	r2, #0
+10001d62:	701a      	strb	r2, [r3, #0]
+  CLOCK_XMC1_STATUS_t stdbyclkfail_status = CLOCK_XMC1_STATUS_SUCCESS;
+10001d64:	230d      	movs	r3, #13
+10001d66:	18fb      	adds	r3, r7, r3
+10001d68:	2200      	movs	r2, #0
+10001d6a:	701a      	strb	r2, [r3, #0]
+  CLOCK_XMC1_STATUS_t loss_ext_clock_event_status = CLOCK_XMC1_STATUS_SUCCESS;
+10001d6c:	230c      	movs	r3, #12
+10001d6e:	18fb      	adds	r3, r7, r3
+10001d70:	2200      	movs	r2, #0
+10001d72:	701a      	strb	r2, [r3, #0]
+  CLOCK_XMC1_STATUS_t dco1_out_sync_status = CLOCK_XMC1_STATUS_SUCCESS;
+10001d74:	230b      	movs	r3, #11
+10001d76:	18fb      	adds	r3, r7, r3
+10001d78:	2200      	movs	r2, #0
+10001d7a:	701a      	strb	r2, [r3, #0]
+
+  XMC_ASSERT("CLOCK_XMC1_Init: CLOCK_XMC1 APP handle pointer uninitialized", (handle != NULL));
+
+  if (handle->init_status == false)
+10001d7c:	687b      	ldr	r3, [r7, #4]
+10001d7e:	781b      	ldrb	r3, [r3, #0]
+10001d80:	2201      	movs	r2, #1
+10001d82:	4053      	eors	r3, r2
+10001d84:	b2db      	uxtb	r3, r3
+10001d86:	2b00      	cmp	r3, #0
+10001d88:	d01b      	beq.n	10001dc2 <CLOCK_XMC1_Init+0x76>
+
+#endif
+    }
+
+#endif
+    status = (CLOCK_XMC1_STATUS_t)(((uint32_t)loci_event_status) | ((uint32_t)stdbyclkfail_status) |
+10001d8a:	230e      	movs	r3, #14
+10001d8c:	18fa      	adds	r2, r7, r3
+10001d8e:	230d      	movs	r3, #13
+10001d90:	18fb      	adds	r3, r7, r3
+10001d92:	7812      	ldrb	r2, [r2, #0]
+10001d94:	781b      	ldrb	r3, [r3, #0]
+10001d96:	4313      	orrs	r3, r2
+10001d98:	b2da      	uxtb	r2, r3
+10001d9a:	230c      	movs	r3, #12
+10001d9c:	18fb      	adds	r3, r7, r3
+10001d9e:	781b      	ldrb	r3, [r3, #0]
+10001da0:	4313      	orrs	r3, r2
+10001da2:	b2d9      	uxtb	r1, r3
+10001da4:	230f      	movs	r3, #15
+10001da6:	18fb      	adds	r3, r7, r3
+10001da8:	220b      	movs	r2, #11
+10001daa:	18ba      	adds	r2, r7, r2
+10001dac:	7812      	ldrb	r2, [r2, #0]
+10001dae:	430a      	orrs	r2, r1
+10001db0:	701a      	strb	r2, [r3, #0]
+    		                       ((uint32_t)loss_ext_clock_event_status) | ((uint32_t)dco1_out_sync_status));
+    if (CLOCK_XMC1_STATUS_SUCCESS == status)
+10001db2:	230f      	movs	r3, #15
+10001db4:	18fb      	adds	r3, r7, r3
+10001db6:	781b      	ldrb	r3, [r3, #0]
+10001db8:	2b00      	cmp	r3, #0
+10001dba:	d102      	bne.n	10001dc2 <CLOCK_XMC1_Init+0x76>
+    {
+      handle->init_status = true;
+10001dbc:	687b      	ldr	r3, [r7, #4]
+10001dbe:	2201      	movs	r2, #1
+10001dc0:	701a      	strb	r2, [r3, #0]
+    }
+  }
+  return (status);
+10001dc2:	230f      	movs	r3, #15
+10001dc4:	18fb      	adds	r3, r7, r3
+10001dc6:	781b      	ldrb	r3, [r3, #0]
+}
+10001dc8:	1c18      	adds	r0, r3, #0
+10001dca:	46bd      	mov	sp, r7
+10001dcc:	b004      	add	sp, #16
+10001dce:	bd80      	pop	{r7, pc}
+
+10001dd0 <SystemCoreClockSetup>:
+
+/**********************************************************************************************************************
+* API IMPLEMENTATION
+**********************************************************************************************************************/
+void SystemCoreClockSetup(void)
+{
+10001dd0:	b590      	push	{r4, r7, lr}
+10001dd2:	b085      	sub	sp, #20
+10001dd4:	af00      	add	r7, sp, #0
+/* LOCAL DATA STRUCTURES */
+const XMC_SCU_CLOCK_CONFIG_t CLOCK_XMC1_0_CONFIG =
+10001dd6:	1d3b      	adds	r3, r7, #4
+10001dd8:	4a04      	ldr	r2, [pc, #16]	; (10001dec <SystemCoreClockSetup+0x1c>)
+10001dda:	ca13      	ldmia	r2!, {r0, r1, r4}
+10001ddc:	c313      	stmia	r3!, {r0, r1, r4}
+  .idiv = 1U,  /**< 8 Bit integer divider */
+
+};
+
+  /* Configure FDIV, IDIV, PCLKSEL dividers*/
+  XMC_SCU_CLOCK_Init(&CLOCK_XMC1_0_CONFIG);
+10001dde:	1d3b      	adds	r3, r7, #4
+10001de0:	1c18      	adds	r0, r3, #0
+10001de2:	f7ff fa6f 	bl	100012c4 <XMC_SCU_CLOCK_Init>
+}
+10001de6:	46bd      	mov	sp, r7
+10001de8:	b005      	add	sp, #20
+10001dea:	bd90      	pop	{r4, r7, pc}
+10001dec:	100022f4 	.word	0x100022f4
+
+10001df0 <DAVE_Init>:
+ * @param[in]  None
+ *
+ * @return  DAVE_STATUS_t <BR>
+ ******************************************************************************/
+__WEAK DAVE_STATUS_t DAVE_Init(void)
+{
+10001df0:	b590      	push	{r4, r7, lr}
+10001df2:	b083      	sub	sp, #12
+10001df4:	af00      	add	r7, sp, #0
+  DAVE_STATUS_t init_status;
+  
+  init_status = DAVE_STATUS_SUCCESS;
+10001df6:	1dfb      	adds	r3, r7, #7
+10001df8:	2200      	movs	r2, #0
+10001dfa:	701a      	strb	r2, [r3, #0]
+     /** @Initialization of APPs Init Functions */
+     init_status = (DAVE_STATUS_t)CLOCK_XMC1_Init(&CLOCK_XMC1_0);
+10001dfc:	1dfc      	adds	r4, r7, #7
+10001dfe:	4b1c      	ldr	r3, [pc, #112]	; (10001e70 <DAVE_Init+0x80>)
+10001e00:	1c18      	adds	r0, r3, #0
+10001e02:	f7ff ffa3 	bl	10001d4c <CLOCK_XMC1_Init>
+10001e06:	1c03      	adds	r3, r0, #0
+10001e08:	7023      	strb	r3, [r4, #0]
+
+  if (init_status == DAVE_STATUS_SUCCESS)
+10001e0a:	1dfb      	adds	r3, r7, #7
+10001e0c:	781b      	ldrb	r3, [r3, #0]
+10001e0e:	2b00      	cmp	r3, #0
+10001e10:	d106      	bne.n	10001e20 <DAVE_Init+0x30>
+  {
+	 /**  Initialization of INTERRUPT APP instance INT_UART_Receive */
+	 init_status = (DAVE_STATUS_t)INTERRUPT_Init(&INT_UART_Receive); 
+10001e12:	1dfc      	adds	r4, r7, #7
+10001e14:	4b17      	ldr	r3, [pc, #92]	; (10001e74 <DAVE_Init+0x84>)
+10001e16:	1c18      	adds	r0, r3, #0
+10001e18:	f7ff ff5a 	bl	10001cd0 <INTERRUPT_Init>
+10001e1c:	1c03      	adds	r3, r0, #0
+10001e1e:	7023      	strb	r3, [r4, #0]
+   } 
+  if (init_status == DAVE_STATUS_SUCCESS)
+10001e20:	1dfb      	adds	r3, r7, #7
+10001e22:	781b      	ldrb	r3, [r3, #0]
+10001e24:	2b00      	cmp	r3, #0
+10001e26:	d106      	bne.n	10001e36 <DAVE_Init+0x46>
+  {
+	 /**  Initialization of DIGITAL_IO APP instance LED_P1_P0 */
+	 init_status = (DAVE_STATUS_t)DIGITAL_IO_Init(&LED_P1_P0); 
+10001e28:	1dfc      	adds	r4, r7, #7
+10001e2a:	4b13      	ldr	r3, [pc, #76]	; (10001e78 <DAVE_Init+0x88>)
+10001e2c:	1c18      	adds	r0, r3, #0
+10001e2e:	f7ff ff69 	bl	10001d04 <DIGITAL_IO_Init>
+10001e32:	1c03      	adds	r3, r0, #0
+10001e34:	7023      	strb	r3, [r4, #0]
+   } 
+  if (init_status == DAVE_STATUS_SUCCESS)
+10001e36:	1dfb      	adds	r3, r7, #7
+10001e38:	781b      	ldrb	r3, [r3, #0]
+10001e3a:	2b00      	cmp	r3, #0
+10001e3c:	d106      	bne.n	10001e4c <DAVE_Init+0x5c>
+  {
+	 /**  Initialization of DIGITAL_IO APP instance LED_P1_P1 */
+	 init_status = (DAVE_STATUS_t)DIGITAL_IO_Init(&LED_P1_P1); 
+10001e3e:	1dfc      	adds	r4, r7, #7
+10001e40:	4b0e      	ldr	r3, [pc, #56]	; (10001e7c <DAVE_Init+0x8c>)
+10001e42:	1c18      	adds	r0, r3, #0
+10001e44:	f7ff ff5e 	bl	10001d04 <DIGITAL_IO_Init>
+10001e48:	1c03      	adds	r3, r0, #0
+10001e4a:	7023      	strb	r3, [r4, #0]
+   } 
+  if (init_status == DAVE_STATUS_SUCCESS)
+10001e4c:	1dfb      	adds	r3, r7, #7
+10001e4e:	781b      	ldrb	r3, [r3, #0]
+10001e50:	2b00      	cmp	r3, #0
+10001e52:	d106      	bne.n	10001e62 <DAVE_Init+0x72>
+  {
+	 /**  Initialization of SYSTIMER APP instance SoftwareTimer1ms */
+	 init_status = (DAVE_STATUS_t)SYSTIMER_Init(&SoftwareTimer1ms); 
+10001e54:	1dfc      	adds	r4, r7, #7
+10001e56:	4b0a      	ldr	r3, [pc, #40]	; (10001e80 <DAVE_Init+0x90>)
+10001e58:	1c18      	adds	r0, r3, #0
+10001e5a:	f7ff fd85 	bl	10001968 <SYSTIMER_Init>
+10001e5e:	1c03      	adds	r3, r0, #0
+10001e60:	7023      	strb	r3, [r4, #0]
+   }  
+  return init_status;
+10001e62:	1dfb      	adds	r3, r7, #7
+10001e64:	781b      	ldrb	r3, [r3, #0]
+} /**  End of function DAVE_Init */
+10001e66:	1c18      	adds	r0, r3, #0
+10001e68:	46bd      	mov	sp, r7
+10001e6a:	b003      	add	sp, #12
+10001e6c:	bd90      	pop	{r4, r7, pc}
+10001e6e:	46c0      	nop			; (mov r8, r8)
+10001e70:	20000538 	.word	0x20000538
+10001e74:	100022d0 	.word	0x100022d0
+10001e78:	100022d4 	.word	0x100022d4
+10001e7c:	100022e4 	.word	0x100022e4
+10001e80:	20000534 	.word	0x20000534
+
+10001e84 <XMC_GPIO_SetOutputHigh>:
+ * Register Pn_OMR is virtual and does not contain any flip-flop. A read action delivers the value of 0.
+ *
+ */
+
+__STATIC_INLINE void XMC_GPIO_SetOutputHigh(XMC_GPIO_PORT_t *const port, const uint8_t pin)
+{
+10001e84:	b580      	push	{r7, lr}
+10001e86:	b082      	sub	sp, #8
+10001e88:	af00      	add	r7, sp, #0
+10001e8a:	6078      	str	r0, [r7, #4]
+10001e8c:	1c0a      	adds	r2, r1, #0
+10001e8e:	1cfb      	adds	r3, r7, #3
+10001e90:	701a      	strb	r2, [r3, #0]
+  XMC_ASSERT("XMC_GPIO_SetOutputHigh: Invalid port", XMC_GPIO_CHECK_OUTPUT_PORT(port));
+
+  port->OMR = (uint32_t)0x1U << pin;
+10001e92:	1cfb      	adds	r3, r7, #3
+10001e94:	781b      	ldrb	r3, [r3, #0]
+10001e96:	2201      	movs	r2, #1
+10001e98:	409a      	lsls	r2, r3
+10001e9a:	687b      	ldr	r3, [r7, #4]
+10001e9c:	605a      	str	r2, [r3, #4]
+}
+10001e9e:	46bd      	mov	sp, r7
+10001ea0:	b002      	add	sp, #8
+10001ea2:	bd80      	pop	{r7, pc}
+
+10001ea4 <XMC_GPIO_SetOutputLow>:
+ * Register Pn_OMR is virtual and does not contain any flip-flop. A read action delivers the value of 0.\n
+ *
+ */
+
+__STATIC_INLINE void XMC_GPIO_SetOutputLow(XMC_GPIO_PORT_t *const port, const uint8_t pin)
+{
+10001ea4:	b580      	push	{r7, lr}
+10001ea6:	b082      	sub	sp, #8
+10001ea8:	af00      	add	r7, sp, #0
+10001eaa:	6078      	str	r0, [r7, #4]
+10001eac:	1c0a      	adds	r2, r1, #0
+10001eae:	1cfb      	adds	r3, r7, #3
+10001eb0:	701a      	strb	r2, [r3, #0]
+  XMC_ASSERT("XMC_GPIO_SetOutputLow: Invalid port", XMC_GPIO_CHECK_OUTPUT_PORT(port));
+
+  port->OMR = 0x10000U << pin;
+10001eb2:	1cfb      	adds	r3, r7, #3
+10001eb4:	781b      	ldrb	r3, [r3, #0]
+10001eb6:	2280      	movs	r2, #128	; 0x80
+10001eb8:	0252      	lsls	r2, r2, #9
+10001eba:	409a      	lsls	r2, r3
+10001ebc:	687b      	ldr	r3, [r7, #4]
+10001ebe:	605a      	str	r2, [r3, #4]
+}
+10001ec0:	46bd      	mov	sp, r7
+10001ec2:	b002      	add	sp, #8
+10001ec4:	bd80      	pop	{r7, pc}
+10001ec6:	46c0      	nop			; (mov r8, r8)
+
+10001ec8 <DIGITAL_IO_SetOutputHigh>:
+* }
+*  @endcode
+*/
+
+__STATIC_INLINE void DIGITAL_IO_SetOutputHigh(const DIGITAL_IO_t *const handler)
+{
+10001ec8:	b580      	push	{r7, lr}
+10001eca:	b082      	sub	sp, #8
+10001ecc:	af00      	add	r7, sp, #0
+10001ece:	6078      	str	r0, [r7, #4]
+  XMC_ASSERT("DIGITAL_IO_SetOutputHigh: handler null pointer", handler != NULL);
+  XMC_GPIO_SetOutputHigh(handler->gpio_port, handler->gpio_pin);
+10001ed0:	687b      	ldr	r3, [r7, #4]
+10001ed2:	681a      	ldr	r2, [r3, #0]
+10001ed4:	687b      	ldr	r3, [r7, #4]
+10001ed6:	7b1b      	ldrb	r3, [r3, #12]
+10001ed8:	1c10      	adds	r0, r2, #0
+10001eda:	1c19      	adds	r1, r3, #0
+10001edc:	f7ff ffd2 	bl	10001e84 <XMC_GPIO_SetOutputHigh>
+}
+10001ee0:	46bd      	mov	sp, r7
+10001ee2:	b002      	add	sp, #8
+10001ee4:	bd80      	pop	{r7, pc}
+10001ee6:	46c0      	nop			; (mov r8, r8)
+
+10001ee8 <DIGITAL_IO_SetOutputLow>:
+* }
+*  @endcode
+*/
+
+__STATIC_INLINE void DIGITAL_IO_SetOutputLow(const DIGITAL_IO_t *const handler)
+{
+10001ee8:	b580      	push	{r7, lr}
+10001eea:	b082      	sub	sp, #8
+10001eec:	af00      	add	r7, sp, #0
+10001eee:	6078      	str	r0, [r7, #4]
+  XMC_ASSERT("DIGITAL_IO_SetOutputLow: handler null pointer", handler != NULL);
+  XMC_GPIO_SetOutputLow(handler->gpio_port,handler->gpio_pin);
+10001ef0:	687b      	ldr	r3, [r7, #4]
+10001ef2:	681a      	ldr	r2, [r3, #0]
+10001ef4:	687b      	ldr	r3, [r7, #4]
+10001ef6:	7b1b      	ldrb	r3, [r3, #12]
+10001ef8:	1c10      	adds	r0, r2, #0
+10001efa:	1c19      	adds	r1, r3, #0
+10001efc:	f7ff ffd2 	bl	10001ea4 <XMC_GPIO_SetOutputLow>
+}
+10001f00:	46bd      	mov	sp, r7
+10001f02:	b002      	add	sp, #8
+10001f04:	bd80      	pop	{r7, pc}
+10001f06:	46c0      	nop			; (mov r8, r8)
+
+10001f08 <main>:
+void LED1ON (void);
+void LED1OFF (void);
+void LED1TOGGLE (void);
+void LEDSequence (void); // LED Sequence
+
+int main(void)	{
+10001f08:	b590      	push	{r4, r7, lr}
+10001f0a:	b083      	sub	sp, #12
+10001f0c:	af00      	add	r7, sp, #0
+	uint32_t SoftwareTimer;
+	SYSTIMER_STATUS_t statusSYSTIMER;
+
+	DAVE_Init(); // Initialization of DAVE APPs
+10001f0e:	f7ff ff6f 	bl	10001df0 <DAVE_Init>
+
+	SoftwareTimer = (uint32_t)SYSTIMER_CreateTimer(INTERVAL,SYSTIMER_MODE_PERIODIC,(void*)LEDSequence,NULL);
+10001f12:	4a0d      	ldr	r2, [pc, #52]	; (10001f48 <main+0x40>)
+10001f14:	4b0d      	ldr	r3, [pc, #52]	; (10001f4c <main+0x44>)
+10001f16:	1c10      	adds	r0, r2, #0
+10001f18:	2101      	movs	r1, #1
+10001f1a:	1c1a      	adds	r2, r3, #0
+10001f1c:	2300      	movs	r3, #0
+10001f1e:	f7ff fd5f 	bl	100019e0 <SYSTIMER_CreateTimer>
+10001f22:	1c03      	adds	r3, r0, #0
+10001f24:	607b      	str	r3, [r7, #4]
+	if (SoftwareTimer != 0U) {
+10001f26:	687b      	ldr	r3, [r7, #4]
+10001f28:	2b00      	cmp	r3, #0
+10001f2a:	d100      	bne.n	10001f2e <main+0x26>
+		;
+	}
+	else {
+		while (1); // Software timer creation is failed
+10001f2c:	e7fe      	b.n	10001f2c <main+0x24>
+	}
+	statusSYSTIMER = SYSTIMER_StartTimer(SoftwareTimer);
+10001f2e:	1cfc      	adds	r4, r7, #3
+10001f30:	687b      	ldr	r3, [r7, #4]
+10001f32:	1c18      	adds	r0, r3, #0
+10001f34:	f7ff fdf4 	bl	10001b20 <SYSTIMER_StartTimer>
+10001f38:	1c03      	adds	r3, r0, #0
+10001f3a:	7023      	strb	r3, [r4, #0]
+	if (statusSYSTIMER == SYSTIMER_STATUS_SUCCESS) {
+10001f3c:	1cfb      	adds	r3, r7, #3
+10001f3e:	781b      	ldrb	r3, [r3, #0]
+10001f40:	2b00      	cmp	r3, #0
+10001f42:	d000      	beq.n	10001f46 <main+0x3e>
+		; // Software timer is running
+	}
+	else {
+		while (1); // Error during Software timer start operation
+10001f44:	e7fe      	b.n	10001f44 <main+0x3c>
+	}
+
+	while(1U);
+10001f46:	e7fe      	b.n	10001f46 <main+0x3e>
+10001f48:	000186a0 	.word	0x000186a0
+10001f4c:	10001f51 	.word	0x10001f51
+
+10001f50 <LEDSequence>:
+}
+
+// LED Sequence
+void LEDSequence (void) {
+10001f50:	b580      	push	{r7, lr}
+10001f52:	af00      	add	r7, sp, #0
+	//SHORT: 1 LONG: 3 PAUSE_LETTER: 3 PAUSE_WORD: 7
+	switch (iTickCounter) {
+10001f54:	4b4e      	ldr	r3, [pc, #312]	; (10002090 <LEDSequence+0x140>)
+10001f56:	681b      	ldr	r3, [r3, #0]
+10001f58:	3b07      	subs	r3, #7
+10001f5a:	2bad      	cmp	r3, #173	; 0xad
+10001f5c:	d900      	bls.n	10001f60 <LEDSequence+0x10>
+10001f5e:	e08b      	b.n	10002078 <LEDSequence+0x128>
+10001f60:	009a      	lsls	r2, r3, #2
+10001f62:	4b4c      	ldr	r3, [pc, #304]	; (10002094 <LEDSequence+0x144>)
+10001f64:	18d3      	adds	r3, r2, r3
+10001f66:	681b      	ldr	r3, [r3, #0]
+10001f68:	469f      	mov	pc, r3
+		// PAUSE_WORD: 7
+		//H ....
+		case 7: LED0ON(); break;
+10001f6a:	f000 f895 	bl	10002098 <LED0ON>
+10001f6e:	e088      	b.n	10002082 <LEDSequence+0x132>
+		case 9: LED0ON(); break;
+10001f70:	f000 f892 	bl	10002098 <LED0ON>
+10001f74:	e085      	b.n	10002082 <LEDSequence+0x132>
+		case 11: LED0ON(); break;
+10001f76:	f000 f88f 	bl	10002098 <LED0ON>
+10001f7a:	e082      	b.n	10002082 <LEDSequence+0x132>
+		case 13: LED0ON(); break;
+10001f7c:	f000 f88c 	bl	10002098 <LED0ON>
+10001f80:	e07f      	b.n	10002082 <LEDSequence+0x132>
+		// PAUSE_LETTER: 3
+		//E .
+		case 17: LED0ON(); break;
+10001f82:	f000 f889 	bl	10002098 <LED0ON>
+10001f86:	e07c      	b.n	10002082 <LEDSequence+0x132>
+		// PAUSE_LETTER: 3
+		//L	.-..
+		case 21: LED0ON(); break;
+10001f88:	f000 f886 	bl	10002098 <LED0ON>
+10001f8c:	e079      	b.n	10002082 <LEDSequence+0x132>
+		case 23 ... 25: LED0ON(); break;
+10001f8e:	f000 f883 	bl	10002098 <LED0ON>
+10001f92:	e076      	b.n	10002082 <LEDSequence+0x132>
+		case 27: LED0ON(); break;
+10001f94:	f000 f880 	bl	10002098 <LED0ON>
+10001f98:	e073      	b.n	10002082 <LEDSequence+0x132>
+		case 29: LED0ON(); break;
+10001f9a:	f000 f87d 	bl	10002098 <LED0ON>
+10001f9e:	e070      	b.n	10002082 <LEDSequence+0x132>
+		// PAUSE_LETTER: 3
+		//L	.-..
+		case 33: LED0ON(); break;
+10001fa0:	f000 f87a 	bl	10002098 <LED0ON>
+10001fa4:	e06d      	b.n	10002082 <LEDSequence+0x132>
+		case 35 ... 37: LED0ON(); break;
+10001fa6:	f000 f877 	bl	10002098 <LED0ON>
+10001faa:	e06a      	b.n	10002082 <LEDSequence+0x132>
+		case 39: LED0ON(); break;
+10001fac:	f000 f874 	bl	10002098 <LED0ON>
+10001fb0:	e067      	b.n	10002082 <LEDSequence+0x132>
+		case 41: LED0ON(); break;
+10001fb2:	f000 f871 	bl	10002098 <LED0ON>
+10001fb6:	e064      	b.n	10002082 <LEDSequence+0x132>
+		// PAUSE_LETTER: 3
+		//O	---
+		case 45 ... 47: LED0ON(); break;
+10001fb8:	f000 f86e 	bl	10002098 <LED0ON>
+10001fbc:	e061      	b.n	10002082 <LEDSequence+0x132>
+		case 49 ... 51: LED0ON(); break;
+10001fbe:	f000 f86b 	bl	10002098 <LED0ON>
+10001fc2:	e05e      	b.n	10002082 <LEDSequence+0x132>
+		case 53 ... 55: LED0ON(); break;
+10001fc4:	f000 f868 	bl	10002098 <LED0ON>
+10001fc8:	e05b      	b.n	10002082 <LEDSequence+0x132>
+		// PAUSE_WORD: 7
+		//W	.--
+		case 63: LED0ON(); break;
+10001fca:	f000 f865 	bl	10002098 <LED0ON>
+10001fce:	e058      	b.n	10002082 <LEDSequence+0x132>
+		case 65 ... 67: LED0ON(); break;
+10001fd0:	f000 f862 	bl	10002098 <LED0ON>
+10001fd4:	e055      	b.n	10002082 <LEDSequence+0x132>
+		case 69 ... 71: LED0ON(); break;
+10001fd6:	f000 f85f 	bl	10002098 <LED0ON>
+10001fda:	e052      	b.n	10002082 <LEDSequence+0x132>
+		// PAUSE_LETTER: 3
+		//O	---
+		case 75 ... 77: LED0ON(); break;
+10001fdc:	f000 f85c 	bl	10002098 <LED0ON>
+10001fe0:	e04f      	b.n	10002082 <LEDSequence+0x132>
+		case 79 ... 81: LED0ON(); break;
+10001fe2:	f000 f859 	bl	10002098 <LED0ON>
+10001fe6:	e04c      	b.n	10002082 <LEDSequence+0x132>
+		case 83 ... 85: LED0ON(); break;
+10001fe8:	f000 f856 	bl	10002098 <LED0ON>
+10001fec:	e049      	b.n	10002082 <LEDSequence+0x132>
+		// PAUSE_LETTER: 3
+		//R	.-.
+		case 89: LED0ON(); break;
+10001fee:	f000 f853 	bl	10002098 <LED0ON>
+10001ff2:	e046      	b.n	10002082 <LEDSequence+0x132>
+		case 91 ... 93: LED0ON(); break;
+10001ff4:	f000 f850 	bl	10002098 <LED0ON>
+10001ff8:	e043      	b.n	10002082 <LEDSequence+0x132>
+		case 95: LED0ON(); break;
+10001ffa:	f000 f84d 	bl	10002098 <LED0ON>
+10001ffe:	e040      	b.n	10002082 <LEDSequence+0x132>
+		// PAUSE_LETTER: 3
+		//L	.-..
+		case 99: LED0ON(); break;
+10002000:	f000 f84a 	bl	10002098 <LED0ON>
+10002004:	e03d      	b.n	10002082 <LEDSequence+0x132>
+		case 101 ... 103: LED0ON(); break;
+10002006:	f000 f847 	bl	10002098 <LED0ON>
+1000200a:	e03a      	b.n	10002082 <LEDSequence+0x132>
+		case 105: LED0ON(); break;
+1000200c:	f000 f844 	bl	10002098 <LED0ON>
+10002010:	e037      	b.n	10002082 <LEDSequence+0x132>
+		case 107: LED0ON(); break;
+10002012:	f000 f841 	bl	10002098 <LED0ON>
+10002016:	e034      	b.n	10002082 <LEDSequence+0x132>
+		// PAUSE_LETTER: 3
+		//D	-..
+		case 111 ... 113: LED0ON(); break;
+10002018:	f000 f83e 	bl	10002098 <LED0ON>
+1000201c:	e031      	b.n	10002082 <LEDSequence+0x132>
+		case 115: LED0ON(); break;
+1000201e:	f000 f83b 	bl	10002098 <LED0ON>
+10002022:	e02e      	b.n	10002082 <LEDSequence+0x132>
+		case 117: LED0ON(); break;
+10002024:	f000 f838 	bl	10002098 <LED0ON>
+10002028:	e02b      	b.n	10002082 <LEDSequence+0x132>
+
+		// PAUSE_LETTER: 7
+		//S	...
+		case 125: LED1ON(); break;
+1000202a:	f000 f867 	bl	100020fc <LED1ON>
+1000202e:	e028      	b.n	10002082 <LEDSequence+0x132>
+		case 127: LED1ON(); break;
+10002030:	f000 f864 	bl	100020fc <LED1ON>
+10002034:	e025      	b.n	10002082 <LEDSequence+0x132>
+		case 129: LED1ON(); break;
+10002036:	f000 f861 	bl	100020fc <LED1ON>
+1000203a:	e022      	b.n	10002082 <LEDSequence+0x132>
+
+		// PAUSE_WORD: 3
+		//O	---
+		case 133 ... 135: LED1ON(); break;
+1000203c:	f000 f85e 	bl	100020fc <LED1ON>
+10002040:	e01f      	b.n	10002082 <LEDSequence+0x132>
+		case 137 ... 139: LED1ON(); break;
+10002042:	f000 f85b 	bl	100020fc <LED1ON>
+10002046:	e01c      	b.n	10002082 <LEDSequence+0x132>
+		case 141 ... 143: LED1ON(); break;
+10002048:	f000 f858 	bl	100020fc <LED1ON>
+1000204c:	e019      	b.n	10002082 <LEDSequence+0x132>
+
+		// PAUSE_WORD: 3
+		//S	...
+		case 147: LED1ON(); break;
+1000204e:	f000 f855 	bl	100020fc <LED1ON>
+10002052:	e016      	b.n	10002082 <LEDSequence+0x132>
+		case 149: LED1ON(); break;
+10002054:	f000 f852 	bl	100020fc <LED1ON>
+10002058:	e013      	b.n	10002082 <LEDSequence+0x132>
+		case 151: LED1ON(); break;
+1000205a:	f000 f84f 	bl	100020fc <LED1ON>
+1000205e:	e010      	b.n	10002082 <LEDSequence+0x132>
+
+		// BLINKING NOT-SYNCHRONOUS
+		case 159: LED0TOGGLE(); break;
+10002060:	f000 f83a 	bl	100020d8 <LED0TOGGLE>
+10002064:	e00d      	b.n	10002082 <LEDSequence+0x132>
+		case 160 ... 179: LED0TOGGLE(), LED1TOGGLE(); break;
+10002066:	f000 f837 	bl	100020d8 <LED0TOGGLE>
+1000206a:	f000 f867 	bl	1000213c <LED1TOGGLE>
+1000206e:	e008      	b.n	10002082 <LEDSequence+0x132>
+
+		// TIMER RESET
+		case 180: iTickCounter = 0; break;
+10002070:	4b07      	ldr	r3, [pc, #28]	; (10002090 <LEDSequence+0x140>)
+10002072:	2200      	movs	r2, #0
+10002074:	601a      	str	r2, [r3, #0]
+10002076:	e004      	b.n	10002082 <LEDSequence+0x132>
+		default: LED0OFF(), LED1OFF(); break;
+10002078:	f000 f81e 	bl	100020b8 <LED0OFF>
+1000207c:	f000 f84e 	bl	1000211c <LED1OFF>
+10002080:	46c0      	nop			; (mov r8, r8)
+	}
+	iTickCounter++;
+10002082:	4b03      	ldr	r3, [pc, #12]	; (10002090 <LEDSequence+0x140>)
+10002084:	681b      	ldr	r3, [r3, #0]
+10002086:	1c5a      	adds	r2, r3, #1
+10002088:	4b01      	ldr	r3, [pc, #4]	; (10002090 <LEDSequence+0x140>)
+1000208a:	601a      	str	r2, [r3, #0]
+}
+1000208c:	46bd      	mov	sp, r7
+1000208e:	bd80      	pop	{r7, pc}
+10002090:	20000540 	.word	0x20000540
+10002094:	10002300 	.word	0x10002300
+
+10002098 <LED0ON>:
+
+
+void LED0ON (void) {
+10002098:	b580      	push	{r7, lr}
+1000209a:	af00      	add	r7, sp, #0
+	DIGITAL_IO_SetOutputHigh(&LED_P1_P0);
+1000209c:	4b04      	ldr	r3, [pc, #16]	; (100020b0 <LED0ON+0x18>)
+1000209e:	1c18      	adds	r0, r3, #0
+100020a0:	f7ff ff12 	bl	10001ec8 <DIGITAL_IO_SetOutputHigh>
+	bLed0 = ON;
+100020a4:	4b03      	ldr	r3, [pc, #12]	; (100020b4 <LED0ON+0x1c>)
+100020a6:	2201      	movs	r2, #1
+100020a8:	701a      	strb	r2, [r3, #0]
+}
+100020aa:	46bd      	mov	sp, r7
+100020ac:	bd80      	pop	{r7, pc}
+100020ae:	46c0      	nop			; (mov r8, r8)
+100020b0:	100022d4 	.word	0x100022d4
+100020b4:	2000053c 	.word	0x2000053c
+
+100020b8 <LED0OFF>:
+void LED0OFF (void) {
+100020b8:	b580      	push	{r7, lr}
+100020ba:	af00      	add	r7, sp, #0
+	DIGITAL_IO_SetOutputLow(&LED_P1_P0);
+100020bc:	4b04      	ldr	r3, [pc, #16]	; (100020d0 <LED0OFF+0x18>)
+100020be:	1c18      	adds	r0, r3, #0
+100020c0:	f7ff ff12 	bl	10001ee8 <DIGITAL_IO_SetOutputLow>
+	bLed0 = OFF;
+100020c4:	4b03      	ldr	r3, [pc, #12]	; (100020d4 <LED0OFF+0x1c>)
+100020c6:	2200      	movs	r2, #0
+100020c8:	701a      	strb	r2, [r3, #0]
+}
+100020ca:	46bd      	mov	sp, r7
+100020cc:	bd80      	pop	{r7, pc}
+100020ce:	46c0      	nop			; (mov r8, r8)
+100020d0:	100022d4 	.word	0x100022d4
+100020d4:	2000053c 	.word	0x2000053c
+
+100020d8 <LED0TOGGLE>:
+void LED0TOGGLE (void) {
+100020d8:	b580      	push	{r7, lr}
+100020da:	af00      	add	r7, sp, #0
+	if (bLed0 == OFF)
+100020dc:	4b06      	ldr	r3, [pc, #24]	; (100020f8 <LED0TOGGLE+0x20>)
+100020de:	781b      	ldrb	r3, [r3, #0]
+100020e0:	2201      	movs	r2, #1
+100020e2:	4053      	eors	r3, r2
+100020e4:	b2db      	uxtb	r3, r3
+100020e6:	2b00      	cmp	r3, #0
+100020e8:	d002      	beq.n	100020f0 <LED0TOGGLE+0x18>
+		LED0ON();
+100020ea:	f7ff ffd5 	bl	10002098 <LED0ON>
+100020ee:	e001      	b.n	100020f4 <LED0TOGGLE+0x1c>
+	else
+		LED0OFF();
+100020f0:	f7ff ffe2 	bl	100020b8 <LED0OFF>
+}
+100020f4:	46bd      	mov	sp, r7
+100020f6:	bd80      	pop	{r7, pc}
+100020f8:	2000053c 	.word	0x2000053c
+
+100020fc <LED1ON>:
+void LED1ON (void) {
+100020fc:	b580      	push	{r7, lr}
+100020fe:	af00      	add	r7, sp, #0
+	DIGITAL_IO_SetOutputHigh(&LED_P1_P1);
+10002100:	4b04      	ldr	r3, [pc, #16]	; (10002114 <LED1ON+0x18>)
+10002102:	1c18      	adds	r0, r3, #0
+10002104:	f7ff fee0 	bl	10001ec8 <DIGITAL_IO_SetOutputHigh>
+	bLed1 = ON;
+10002108:	4b03      	ldr	r3, [pc, #12]	; (10002118 <LED1ON+0x1c>)
+1000210a:	2201      	movs	r2, #1
+1000210c:	701a      	strb	r2, [r3, #0]
+}
+1000210e:	46bd      	mov	sp, r7
+10002110:	bd80      	pop	{r7, pc}
+10002112:	46c0      	nop			; (mov r8, r8)
+10002114:	100022e4 	.word	0x100022e4
+10002118:	2000053d 	.word	0x2000053d
+
+1000211c <LED1OFF>:
+void LED1OFF (void) {
+1000211c:	b580      	push	{r7, lr}
+1000211e:	af00      	add	r7, sp, #0
+	DIGITAL_IO_SetOutputLow(&LED_P1_P1);
+10002120:	4b04      	ldr	r3, [pc, #16]	; (10002134 <LED1OFF+0x18>)
+10002122:	1c18      	adds	r0, r3, #0
+10002124:	f7ff fee0 	bl	10001ee8 <DIGITAL_IO_SetOutputLow>
+	bLed1 = OFF;
+10002128:	4b03      	ldr	r3, [pc, #12]	; (10002138 <LED1OFF+0x1c>)
+1000212a:	2200      	movs	r2, #0
+1000212c:	701a      	strb	r2, [r3, #0]
+}
+1000212e:	46bd      	mov	sp, r7
+10002130:	bd80      	pop	{r7, pc}
+10002132:	46c0      	nop			; (mov r8, r8)
+10002134:	100022e4 	.word	0x100022e4
+10002138:	2000053d 	.word	0x2000053d
+
+1000213c <LED1TOGGLE>:
+void LED1TOGGLE (void) {
+1000213c:	b580      	push	{r7, lr}
+1000213e:	af00      	add	r7, sp, #0
+	if (bLed1 == OFF)
+10002140:	4b06      	ldr	r3, [pc, #24]	; (1000215c <LED1TOGGLE+0x20>)
+10002142:	781b      	ldrb	r3, [r3, #0]
+10002144:	2201      	movs	r2, #1
+10002146:	4053      	eors	r3, r2
+10002148:	b2db      	uxtb	r3, r3
+1000214a:	2b00      	cmp	r3, #0
+1000214c:	d002      	beq.n	10002154 <LED1TOGGLE+0x18>
+		LED1ON();
+1000214e:	f7ff ffd5 	bl	100020fc <LED1ON>
+10002152:	e001      	b.n	10002158 <LED1TOGGLE+0x1c>
+	else
+		LED1OFF();
+10002154:	f7ff ffe2 	bl	1000211c <LED1OFF>
+}
+10002158:	46bd      	mov	sp, r7
+1000215a:	bd80      	pop	{r7, pc}
+1000215c:	2000053d 	.word	0x2000053d
+
+10002160 <__aeabi_uidiv>:
+10002160:	2200      	movs	r2, #0
+10002162:	0843      	lsrs	r3, r0, #1
+10002164:	428b      	cmp	r3, r1
+10002166:	d374      	bcc.n	10002252 <__aeabi_uidiv+0xf2>
+10002168:	0903      	lsrs	r3, r0, #4
+1000216a:	428b      	cmp	r3, r1
+1000216c:	d35f      	bcc.n	1000222e <__aeabi_uidiv+0xce>
+1000216e:	0a03      	lsrs	r3, r0, #8
+10002170:	428b      	cmp	r3, r1
+10002172:	d344      	bcc.n	100021fe <__aeabi_uidiv+0x9e>
+10002174:	0b03      	lsrs	r3, r0, #12
+10002176:	428b      	cmp	r3, r1
+10002178:	d328      	bcc.n	100021cc <__aeabi_uidiv+0x6c>
+1000217a:	0c03      	lsrs	r3, r0, #16
+1000217c:	428b      	cmp	r3, r1
+1000217e:	d30d      	bcc.n	1000219c <__aeabi_uidiv+0x3c>
+10002180:	22ff      	movs	r2, #255	; 0xff
+10002182:	0209      	lsls	r1, r1, #8
+10002184:	ba12      	rev	r2, r2
+10002186:	0c03      	lsrs	r3, r0, #16
+10002188:	428b      	cmp	r3, r1
+1000218a:	d302      	bcc.n	10002192 <__aeabi_uidiv+0x32>
+1000218c:	1212      	asrs	r2, r2, #8
+1000218e:	0209      	lsls	r1, r1, #8
+10002190:	d065      	beq.n	1000225e <__aeabi_uidiv+0xfe>
+10002192:	0b03      	lsrs	r3, r0, #12
+10002194:	428b      	cmp	r3, r1
+10002196:	d319      	bcc.n	100021cc <__aeabi_uidiv+0x6c>
+10002198:	e000      	b.n	1000219c <__aeabi_uidiv+0x3c>
+1000219a:	0a09      	lsrs	r1, r1, #8
+1000219c:	0bc3      	lsrs	r3, r0, #15
+1000219e:	428b      	cmp	r3, r1
+100021a0:	d301      	bcc.n	100021a6 <__aeabi_uidiv+0x46>
+100021a2:	03cb      	lsls	r3, r1, #15
+100021a4:	1ac0      	subs	r0, r0, r3
+100021a6:	4152      	adcs	r2, r2
+100021a8:	0b83      	lsrs	r3, r0, #14
+100021aa:	428b      	cmp	r3, r1
+100021ac:	d301      	bcc.n	100021b2 <__aeabi_uidiv+0x52>
+100021ae:	038b      	lsls	r3, r1, #14
+100021b0:	1ac0      	subs	r0, r0, r3
+100021b2:	4152      	adcs	r2, r2
+100021b4:	0b43      	lsrs	r3, r0, #13
+100021b6:	428b      	cmp	r3, r1
+100021b8:	d301      	bcc.n	100021be <__aeabi_uidiv+0x5e>
+100021ba:	034b      	lsls	r3, r1, #13
+100021bc:	1ac0      	subs	r0, r0, r3
+100021be:	4152      	adcs	r2, r2
+100021c0:	0b03      	lsrs	r3, r0, #12
+100021c2:	428b      	cmp	r3, r1
+100021c4:	d301      	bcc.n	100021ca <__aeabi_uidiv+0x6a>
+100021c6:	030b      	lsls	r3, r1, #12
+100021c8:	1ac0      	subs	r0, r0, r3
+100021ca:	4152      	adcs	r2, r2
+100021cc:	0ac3      	lsrs	r3, r0, #11
+100021ce:	428b      	cmp	r3, r1
+100021d0:	d301      	bcc.n	100021d6 <__aeabi_uidiv+0x76>
+100021d2:	02cb      	lsls	r3, r1, #11
+100021d4:	1ac0      	subs	r0, r0, r3
+100021d6:	4152      	adcs	r2, r2
+100021d8:	0a83      	lsrs	r3, r0, #10
+100021da:	428b      	cmp	r3, r1
+100021dc:	d301      	bcc.n	100021e2 <__aeabi_uidiv+0x82>
+100021de:	028b      	lsls	r3, r1, #10
+100021e0:	1ac0      	subs	r0, r0, r3
+100021e2:	4152      	adcs	r2, r2
+100021e4:	0a43      	lsrs	r3, r0, #9
+100021e6:	428b      	cmp	r3, r1
+100021e8:	d301      	bcc.n	100021ee <__aeabi_uidiv+0x8e>
+100021ea:	024b      	lsls	r3, r1, #9
+100021ec:	1ac0      	subs	r0, r0, r3
+100021ee:	4152      	adcs	r2, r2
+100021f0:	0a03      	lsrs	r3, r0, #8
+100021f2:	428b      	cmp	r3, r1
+100021f4:	d301      	bcc.n	100021fa <__aeabi_uidiv+0x9a>
+100021f6:	020b      	lsls	r3, r1, #8
+100021f8:	1ac0      	subs	r0, r0, r3
+100021fa:	4152      	adcs	r2, r2
+100021fc:	d2cd      	bcs.n	1000219a <__aeabi_uidiv+0x3a>
+100021fe:	09c3      	lsrs	r3, r0, #7
+10002200:	428b      	cmp	r3, r1
+10002202:	d301      	bcc.n	10002208 <__aeabi_uidiv+0xa8>
+10002204:	01cb      	lsls	r3, r1, #7
+10002206:	1ac0      	subs	r0, r0, r3
+10002208:	4152      	adcs	r2, r2
+1000220a:	0983      	lsrs	r3, r0, #6
+1000220c:	428b      	cmp	r3, r1
+1000220e:	d301      	bcc.n	10002214 <__aeabi_uidiv+0xb4>
+10002210:	018b      	lsls	r3, r1, #6
+10002212:	1ac0      	subs	r0, r0, r3
+10002214:	4152      	adcs	r2, r2
+10002216:	0943      	lsrs	r3, r0, #5
+10002218:	428b      	cmp	r3, r1
+1000221a:	d301      	bcc.n	10002220 <__aeabi_uidiv+0xc0>
+1000221c:	014b      	lsls	r3, r1, #5
+1000221e:	1ac0      	subs	r0, r0, r3
+10002220:	4152      	adcs	r2, r2
+10002222:	0903      	lsrs	r3, r0, #4
+10002224:	428b      	cmp	r3, r1
+10002226:	d301      	bcc.n	1000222c <__aeabi_uidiv+0xcc>
+10002228:	010b      	lsls	r3, r1, #4
+1000222a:	1ac0      	subs	r0, r0, r3
+1000222c:	4152      	adcs	r2, r2
+1000222e:	08c3      	lsrs	r3, r0, #3
+10002230:	428b      	cmp	r3, r1
+10002232:	d301      	bcc.n	10002238 <__aeabi_uidiv+0xd8>
+10002234:	00cb      	lsls	r3, r1, #3
+10002236:	1ac0      	subs	r0, r0, r3
+10002238:	4152      	adcs	r2, r2
+1000223a:	0883      	lsrs	r3, r0, #2
+1000223c:	428b      	cmp	r3, r1
+1000223e:	d301      	bcc.n	10002244 <__aeabi_uidiv+0xe4>
+10002240:	008b      	lsls	r3, r1, #2
+10002242:	1ac0      	subs	r0, r0, r3
+10002244:	4152      	adcs	r2, r2
+10002246:	0843      	lsrs	r3, r0, #1
+10002248:	428b      	cmp	r3, r1
+1000224a:	d301      	bcc.n	10002250 <__aeabi_uidiv+0xf0>
+1000224c:	004b      	lsls	r3, r1, #1
+1000224e:	1ac0      	subs	r0, r0, r3
+10002250:	4152      	adcs	r2, r2
+10002252:	1a41      	subs	r1, r0, r1
+10002254:	d200      	bcs.n	10002258 <__aeabi_uidiv+0xf8>
+10002256:	4601      	mov	r1, r0
+10002258:	4152      	adcs	r2, r2
+1000225a:	4610      	mov	r0, r2
+1000225c:	4770      	bx	lr
+1000225e:	e7ff      	b.n	10002260 <__aeabi_uidiv+0x100>
+10002260:	b501      	push	{r0, lr}
+10002262:	2000      	movs	r0, #0
+10002264:	f000 f80c 	bl	10002280 <__aeabi_idiv0>
+10002268:	bd02      	pop	{r1, pc}
+1000226a:	46c0      	nop			; (mov r8, r8)
+
+1000226c <__aeabi_uidivmod>:
+1000226c:	2900      	cmp	r1, #0
+1000226e:	d0f7      	beq.n	10002260 <__aeabi_uidiv+0x100>
+10002270:	b503      	push	{r0, r1, lr}
+10002272:	f7ff ff75 	bl	10002160 <__aeabi_uidiv>
+10002276:	bc0e      	pop	{r1, r2, r3}
+10002278:	4342      	muls	r2, r0
+1000227a:	1a89      	subs	r1, r1, r2
+1000227c:	4718      	bx	r3
+1000227e:	46c0      	nop			; (mov r8, r8)
+
+10002280 <__aeabi_idiv0>:
+10002280:	4770      	bx	lr
+10002282:	46c0      	nop			; (mov r8, r8)
+
+10002284 <__libc_init_array>:
+10002284:	4b0e      	ldr	r3, [pc, #56]	; (100022c0 <__libc_init_array+0x3c>)
+10002286:	b570      	push	{r4, r5, r6, lr}
+10002288:	2500      	movs	r5, #0
+1000228a:	1c1e      	adds	r6, r3, #0
+1000228c:	4c0d      	ldr	r4, [pc, #52]	; (100022c4 <__libc_init_array+0x40>)
+1000228e:	1ae4      	subs	r4, r4, r3
+10002290:	10a4      	asrs	r4, r4, #2
+10002292:	42a5      	cmp	r5, r4
+10002294:	d004      	beq.n	100022a0 <__libc_init_array+0x1c>
+10002296:	00ab      	lsls	r3, r5, #2
+10002298:	58f3      	ldr	r3, [r6, r3]
+1000229a:	4798      	blx	r3
+1000229c:	3501      	adds	r5, #1
+1000229e:	e7f8      	b.n	10002292 <__libc_init_array+0xe>
+100022a0:	f7ff f904 	bl	100014ac <_init>
+100022a4:	4b08      	ldr	r3, [pc, #32]	; (100022c8 <__libc_init_array+0x44>)
+100022a6:	2500      	movs	r5, #0
+100022a8:	1c1e      	adds	r6, r3, #0
+100022aa:	4c08      	ldr	r4, [pc, #32]	; (100022cc <__libc_init_array+0x48>)
+100022ac:	1ae4      	subs	r4, r4, r3
+100022ae:	10a4      	asrs	r4, r4, #2
+100022b0:	42a5      	cmp	r5, r4
+100022b2:	d004      	beq.n	100022be <__libc_init_array+0x3a>
+100022b4:	00ab      	lsls	r3, r5, #2
+100022b6:	58f3      	ldr	r3, [r6, r3]
+100022b8:	4798      	blx	r3
+100022ba:	3501      	adds	r5, #1
+100022bc:	e7f8      	b.n	100022b0 <__libc_init_array+0x2c>
+100022be:	bd70      	pop	{r4, r5, r6, pc}
+100022c0:	20000520 	.word	0x20000520
+100022c4:	20000520 	.word	0x20000520
+100022c8:	20000520 	.word	0x20000520
+100022cc:	20000520 	.word	0x20000520
+
+100022d0 <INT_UART_Receive>:
+100022d0:	00000300                                ....
+
+100022d4 <LED_P1_P0>:
+100022d4:	40040100 00000080 00010000 00000000     ...@............
+
+100022e4 <LED_P1_P1>:
+100022e4:	40040100 00000080 00010000 00000001     ...@............
+100022f4:	00000100 00010000 00000000 10001f6a     ............j...
+10002304:	10002078 10001f70 10002078 10001f76     x ..p...x ..v...
+10002314:	10002078 10001f7c 10002078 10002078     x ..|...x ..x ..
+10002324:	10002078 10001f82 10002078 10002078     x ......x ..x ..
+10002334:	10002078 10001f88 10002078 10001f8e     x ......x ......
+10002344:	10001f8e 10001f8e 10002078 10001f94     ........x ......
+10002354:	10002078 10001f9a 10002078 10002078     x ......x ..x ..
+10002364:	10002078 10001fa0 10002078 10001fa6     x ......x ......
+10002374:	10001fa6 10001fa6 10002078 10001fac     ........x ......
+10002384:	10002078 10001fb2 10002078 10002078     x ......x ..x ..
+10002394:	10002078 10001fb8 10001fb8 10001fb8     x ..............
+100023a4:	10002078 10001fbe 10001fbe 10001fbe     x ..............
+100023b4:	10002078 10001fc4 10001fc4 10001fc4     x ..............
+100023c4:	10002078 10002078 10002078 10002078     x ..x ..x ..x ..
+100023d4:	10002078 10002078 10002078 10001fca     x ..x ..x ......
+100023e4:	10002078 10001fd0 10001fd0 10001fd0     x ..............
+100023f4:	10002078 10001fd6 10001fd6 10001fd6     x ..............
+10002404:	10002078 10002078 10002078 10001fdc     x ..x ..x ......
+10002414:	10001fdc 10001fdc 10002078 10001fe2     ........x ......
+10002424:	10001fe2 10001fe2 10002078 10001fe8     ........x ......
+10002434:	10001fe8 10001fe8 10002078 10002078     ........x ..x ..
+10002444:	10002078 10001fee 10002078 10001ff4     x ......x ......
+10002454:	10001ff4 10001ff4 10002078 10001ffa     ........x ......
+10002464:	10002078 10002078 10002078 10002000     x ..x ..x ... ..
+10002474:	10002078 10002006 10002006 10002006     x ... ... ... ..
+10002484:	10002078 1000200c 10002078 10002012     x ... ..x ... ..
+10002494:	10002078 10002078 10002078 10002018     x ..x ..x ... ..
+100024a4:	10002018 10002018 10002078 1000201e     . ... ..x ... ..
+100024b4:	10002078 10002024 10002078 10002078     x ..$ ..x ..x ..
+100024c4:	10002078 10002078 10002078 10002078     x ..x ..x ..x ..
+100024d4:	10002078 1000202a 10002078 10002030     x ..* ..x ..0 ..
+100024e4:	10002078 10002036 10002078 10002078     x ..6 ..x ..x ..
+100024f4:	10002078 1000203c 1000203c 1000203c     x ..< ..< ..< ..
+10002504:	10002078 10002042 10002042 10002042     x ..B ..B ..B ..
+10002514:	10002078 10002048 10002048 10002048     x ..H ..H ..H ..
+10002524:	10002078 10002078 10002078 1000204e     x ..x ..x ..N ..
+10002534:	10002078 10002054 10002078 1000205a     x ..T ..x ..Z ..
+10002544:	10002078 10002078 10002078 10002078     x ..x ..x ..x ..
+10002554:	10002078 10002078 10002078 10002060     x ..x ..x ..` ..
+10002564:	10002066 10002066 10002066 10002066     f ..f ..f ..f ..
+10002574:	10002066 10002066 10002066 10002066     f ..f ..f ..f ..
+10002584:	10002066 10002066 10002066 10002066     f ..f ..f ..f ..
+10002594:	10002066 10002066 10002066 10002066     f ..f ..f ..f ..
+100025a4:	10002066 10002066 10002066 10002066     f ..f ..f ..f ..
+100025b4:	10002070                                p ..
+
+Disassembly of section .VENEER_Code:
+
+2000000c <HardFault_Veneer>:
+    
+    .align 1
+    
+    .globl HardFault_Veneer
+HardFault_Veneer:
+    LDR R0, =HardFault_Handler
+2000000c:	482c      	ldr	r0, [pc, #176]	; (200000c0 <CCU40_3_Veneer+0x20>)
+    MOV PC,R0
+2000000e:	4687      	mov	pc, r0
+	...
+
+2000002c <SVC_Veneer>:
+    .long 0
+    
+/* ======================================================================== */
+    .globl SVC_Veneer
+SVC_Veneer:
+    LDR R0, =SVC_Handler
+2000002c:	4825      	ldr	r0, [pc, #148]	; (200000c4 <CCU40_3_Veneer+0x24>)
+    MOV PC,R0
+2000002e:	4687      	mov	pc, r0
+	...
+
+20000038 <PendSV_Veneer>:
+    .long 0
+    .long 0
+/* ======================================================================== */
+    .globl PendSV_Veneer
+PendSV_Veneer:
+    LDR R0, =PendSV_Handler
+20000038:	4823      	ldr	r0, [pc, #140]	; (200000c8 <CCU40_3_Veneer+0x28>)
+    MOV PC,R0
+2000003a:	4687      	mov	pc, r0
+
+2000003c <SysTick_Veneer>:
+/* ======================================================================== */
+    .globl SysTick_Veneer 
+SysTick_Veneer:
+    LDR R0, =SysTick_Handler
+2000003c:	4823      	ldr	r0, [pc, #140]	; (200000cc <CCU40_3_Veneer+0x2c>)
+    MOV PC,R0
+2000003e:	4687      	mov	pc, r0
+
+20000040 <SCU_0_Veneer>:
+/* ======================================================================== */
+    .globl SCU_0_Veneer 
+SCU_0_Veneer:
+    LDR R0, =SCU_0_IRQHandler
+20000040:	4823      	ldr	r0, [pc, #140]	; (200000d0 <CCU40_3_Veneer+0x30>)
+    MOV PC,R0
+20000042:	4687      	mov	pc, r0
+
+20000044 <SCU_1_Veneer>:
+/* ======================================================================== */
+    .globl SCU_1_Veneer 
+SCU_1_Veneer:
+    LDR R0, =SCU_1_IRQHandler
+20000044:	4823      	ldr	r0, [pc, #140]	; (200000d4 <CCU40_3_Veneer+0x34>)
+    MOV PC,R0
+20000046:	4687      	mov	pc, r0
+
+20000048 <SCU_2_Veneer>:
+/* ======================================================================== */
+    .globl SCU_2_Veneer
+SCU_2_Veneer:
+    LDR R0, =SCU_2_IRQHandler
+20000048:	4823      	ldr	r0, [pc, #140]	; (200000d8 <CCU40_3_Veneer+0x38>)
+    MOV PC,R0
+2000004a:	4687      	mov	pc, r0
+
+2000004c <SCU_3_Veneer>:
+/* ======================================================================== */
+    .globl SCU_3_Veneer 
+SCU_3_Veneer:
+    LDR R0, =ERU0_0_IRQHandler
+2000004c:	4823      	ldr	r0, [pc, #140]	; (200000dc <CCU40_3_Veneer+0x3c>)
+    MOV PC,R0
+2000004e:	4687      	mov	pc, r0
+
+20000050 <SCU_4_Veneer>:
+/* ======================================================================== */
+    .globl SCU_4_Veneer 
+SCU_4_Veneer:
+    LDR R0, =ERU0_1_IRQHandler
+20000050:	4823      	ldr	r0, [pc, #140]	; (200000e0 <CCU40_3_Veneer+0x40>)
+    MOV PC,R0
+20000052:	4687      	mov	pc, r0
+
+20000054 <SCU_5_Veneer>:
+/* ======================================================================== */
+    .globl SCU_5_Veneer 
+SCU_5_Veneer:
+    LDR R0, =ERU0_2_IRQHandler
+20000054:	4823      	ldr	r0, [pc, #140]	; (200000e4 <CCU40_3_Veneer+0x44>)
+    MOV PC,R0
+20000056:	4687      	mov	pc, r0
+
+20000058 <SCU_6_Veneer>:
+/* ======================================================================== */
+    .globl SCU_6_Veneer 
+SCU_6_Veneer:
+    LDR R0, =ERU0_3_IRQHandler
+20000058:	4823      	ldr	r0, [pc, #140]	; (200000e8 <CCU40_3_Veneer+0x48>)
+    MOV PC,R0
+2000005a:	4687      	mov	pc, r0
+	...
+
+20000064 <USIC0_0_Veneer>:
+    .long 0
+    .long 0
+/* ======================================================================== */
+    .globl USIC0_0_Veneer
+USIC0_0_Veneer:
+    LDR R0, =USIC0_0_IRQHandler
+20000064:	4821      	ldr	r0, [pc, #132]	; (200000ec <CCU40_3_Veneer+0x4c>)
+    MOV PC,R0
+20000066:	4687      	mov	pc, r0
+
+20000068 <USIC0_1_Veneer>:
+/* ======================================================================== */
+    .globl USIC0_1_Veneer
+USIC0_1_Veneer:
+    LDR R0, =USIC0_1_IRQHandler
+20000068:	4821      	ldr	r0, [pc, #132]	; (200000f0 <CCU40_3_Veneer+0x50>)
+    MOV PC,R0
+2000006a:	4687      	mov	pc, r0
+
+2000006c <USIC0_2_Veneer>:
+/* ======================================================================== */
+    .globl USIC0_2_Veneer
+USIC0_2_Veneer:
+    LDR R0, =USIC0_2_IRQHandler
+2000006c:	4821      	ldr	r0, [pc, #132]	; (200000f4 <CCU40_3_Veneer+0x54>)
+    MOV PC,R0
+2000006e:	4687      	mov	pc, r0
+
+20000070 <USIC0_3_Veneer>:
+/* ======================================================================== */
+    .globl USIC0_3_Veneer
+USIC0_3_Veneer:
+    LDR R0, =USIC0_3_IRQHandler
+20000070:	4821      	ldr	r0, [pc, #132]	; (200000f8 <CCU40_3_Veneer+0x58>)
+    MOV PC,R0
+20000072:	4687      	mov	pc, r0
+
+20000074 <USIC0_4_Veneer>:
+/* ======================================================================== */
+    .globl USIC0_4_Veneer
+USIC0_4_Veneer:
+    LDR R0, =USIC0_4_IRQHandler
+20000074:	4821      	ldr	r0, [pc, #132]	; (200000fc <CCU40_3_Veneer+0x5c>)
+    MOV PC,R0
+20000076:	4687      	mov	pc, r0
+
+20000078 <USIC0_5_Veneer>:
+/* ======================================================================== */
+    .globl USIC0_5_Veneer
+USIC0_5_Veneer:
+    LDR R0, =USIC0_5_IRQHandler
+20000078:	4821      	ldr	r0, [pc, #132]	; (20000100 <CCU40_3_Veneer+0x60>)
+    MOV PC,R0
+2000007a:	4687      	mov	pc, r0
+
+2000007c <VADC0_C0_0_Veneer>:
+/* ======================================================================== */
+    .globl VADC0_C0_0_Veneer 
+VADC0_C0_0_Veneer:
+    LDR R0, =VADC0_C0_0_IRQHandler
+2000007c:	4821      	ldr	r0, [pc, #132]	; (20000104 <CCU40_3_Veneer+0x64>)
+    MOV PC,R0
+2000007e:	4687      	mov	pc, r0
+
+20000080 <VADC0_C0_1_Veneer>:
+/* ======================================================================== */
+    .globl VADC0_C0_1_Veneer
+VADC0_C0_1_Veneer:
+    LDR R0, =VADC0_C0_1_IRQHandler
+20000080:	4821      	ldr	r0, [pc, #132]	; (20000108 <CCU40_3_Veneer+0x68>)
+    MOV PC,R0
+20000082:	4687      	mov	pc, r0
+	...
+
+20000094 <CCU40_0_Veneer>:
+    .long 0
+    .long 0
+/* ======================================================================== */
+    .globl CCU40_0_Veneer
+CCU40_0_Veneer:
+    LDR R0, =CCU40_0_IRQHandler
+20000094:	481d      	ldr	r0, [pc, #116]	; (2000010c <CCU40_3_Veneer+0x6c>)
+    MOV PC,R0
+20000096:	4687      	mov	pc, r0
+
+20000098 <CCU40_1_Veneer>:
+/* ======================================================================== */
+    .globl CCU40_1_Veneer
+CCU40_1_Veneer:
+    LDR R0, =CCU40_1_IRQHandler
+20000098:	481d      	ldr	r0, [pc, #116]	; (20000110 <CCU40_3_Veneer+0x70>)
+    MOV PC,R0
+2000009a:	4687      	mov	pc, r0
+
+2000009c <CCU40_2_Veneer>:
+/* ======================================================================== */
+    .globl CCU40_2_Veneer
+CCU40_2_Veneer:
+    LDR R0, =CCU40_2_IRQHandler
+2000009c:	481d      	ldr	r0, [pc, #116]	; (20000114 <CCU40_3_Veneer+0x74>)
+    MOV PC,R0
+2000009e:	4687      	mov	pc, r0
+
+200000a0 <CCU40_3_Veneer>:
+/* ======================================================================== */
+    .globl CCU40_3_Veneer
+CCU40_3_Veneer:
+    LDR R0, =CCU40_3_IRQHandler
+200000a0:	481d      	ldr	r0, [pc, #116]	; (20000118 <CCU40_3_Veneer+0x78>)
+    MOV PC,R0
+200000a2:	4687      	mov	pc, r0
+	...
+    
+    .align 1
+    
+    .globl HardFault_Veneer
+HardFault_Veneer:
+    LDR R0, =HardFault_Handler
+200000c0:	10001099 	.word	0x10001099
+    .long 0
+    
+/* ======================================================================== */
+    .globl SVC_Veneer
+SVC_Veneer:
+    LDR R0, =SVC_Handler
+200000c4:	10001099 	.word	0x10001099
+    .long 0
+    .long 0
+/* ======================================================================== */
+    .globl PendSV_Veneer
+PendSV_Veneer:
+    LDR R0, =PendSV_Handler
+200000c8:	10001099 	.word	0x10001099
+    MOV PC,R0
+/* ======================================================================== */
+    .globl SysTick_Veneer 
+SysTick_Veneer:
+    LDR R0, =SysTick_Handler
+200000cc:	10001921 	.word	0x10001921
+    MOV PC,R0
+/* ======================================================================== */
+    .globl SCU_0_Veneer 
+SCU_0_Veneer:
+    LDR R0, =SCU_0_IRQHandler
+200000d0:	10001099 	.word	0x10001099
+    MOV PC,R0
+/* ======================================================================== */
+    .globl SCU_1_Veneer 
+SCU_1_Veneer:
+    LDR R0, =SCU_1_IRQHandler
+200000d4:	10001099 	.word	0x10001099
+    MOV PC,R0
+/* ======================================================================== */
+    .globl SCU_2_Veneer
+SCU_2_Veneer:
+    LDR R0, =SCU_2_IRQHandler
+200000d8:	10001099 	.word	0x10001099
+    MOV PC,R0
+/* ======================================================================== */
+    .globl SCU_3_Veneer 
+SCU_3_Veneer:
+    LDR R0, =ERU0_0_IRQHandler
+200000dc:	10001099 	.word	0x10001099
+    MOV PC,R0
+/* ======================================================================== */
+    .globl SCU_4_Veneer 
+SCU_4_Veneer:
+    LDR R0, =ERU0_1_IRQHandler
+200000e0:	10001099 	.word	0x10001099
+    MOV PC,R0
+/* ======================================================================== */
+    .globl SCU_5_Veneer 
+SCU_5_Veneer:
+    LDR R0, =ERU0_2_IRQHandler
+200000e4:	10001099 	.word	0x10001099
+    MOV PC,R0
+/* ======================================================================== */
+    .globl SCU_6_Veneer 
+SCU_6_Veneer:
+    LDR R0, =ERU0_3_IRQHandler
+200000e8:	10001099 	.word	0x10001099
+    .long 0
+    .long 0
+/* ======================================================================== */
+    .globl USIC0_0_Veneer
+USIC0_0_Veneer:
+    LDR R0, =USIC0_0_IRQHandler
+200000ec:	10001099 	.word	0x10001099
+    MOV PC,R0
+/* ======================================================================== */
+    .globl USIC0_1_Veneer
+USIC0_1_Veneer:
+    LDR R0, =USIC0_1_IRQHandler
+200000f0:	10001099 	.word	0x10001099
+    MOV PC,R0
+/* ======================================================================== */
+    .globl USIC0_2_Veneer
+USIC0_2_Veneer:
+    LDR R0, =USIC0_2_IRQHandler
+200000f4:	10001099 	.word	0x10001099
+    MOV PC,R0
+/* ======================================================================== */
+    .globl USIC0_3_Veneer
+USIC0_3_Veneer:
+    LDR R0, =USIC0_3_IRQHandler
+200000f8:	10001099 	.word	0x10001099
+    MOV PC,R0
+/* ======================================================================== */
+    .globl USIC0_4_Veneer
+USIC0_4_Veneer:
+    LDR R0, =USIC0_4_IRQHandler
+200000fc:	10001099 	.word	0x10001099
+    MOV PC,R0
+/* ======================================================================== */
+    .globl USIC0_5_Veneer
+USIC0_5_Veneer:
+    LDR R0, =USIC0_5_IRQHandler
+20000100:	10001099 	.word	0x10001099
+    MOV PC,R0
+/* ======================================================================== */
+    .globl VADC0_C0_0_Veneer 
+VADC0_C0_0_Veneer:
+    LDR R0, =VADC0_C0_0_IRQHandler
+20000104:	10001099 	.word	0x10001099
+    MOV PC,R0
+/* ======================================================================== */
+    .globl VADC0_C0_1_Veneer
+VADC0_C0_1_Veneer:
+    LDR R0, =VADC0_C0_1_IRQHandler
+20000108:	10001099 	.word	0x10001099
+    .long 0
+    .long 0
+/* ======================================================================== */
+    .globl CCU40_0_Veneer
+CCU40_0_Veneer:
+    LDR R0, =CCU40_0_IRQHandler
+2000010c:	10001099 	.word	0x10001099
+    MOV PC,R0
+/* ======================================================================== */
+    .globl CCU40_1_Veneer
+CCU40_1_Veneer:
+    LDR R0, =CCU40_1_IRQHandler
+20000110:	10001099 	.word	0x10001099
+    MOV PC,R0
+/* ======================================================================== */
+    .globl CCU40_2_Veneer
+CCU40_2_Veneer:
+    LDR R0, =CCU40_2_IRQHandler
+20000114:	10001099 	.word	0x10001099
+    MOV PC,R0
+/* ======================================================================== */
+    .globl CCU40_3_Veneer
+CCU40_3_Veneer:
+    LDR R0, =CCU40_3_IRQHandler
+20000118:	10001099 	.word	0x10001099

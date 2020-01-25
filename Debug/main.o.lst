@@ -1,0 +1,1714 @@
+   1              	 .cpu cortex-m0
+   2              	 .fpu softvfp
+   3              	 .eabi_attribute 20,1
+   4              	 .eabi_attribute 21,1
+   5              	 .eabi_attribute 23,3
+   6              	 .eabi_attribute 24,1
+   7              	 .eabi_attribute 25,1
+   8              	 .eabi_attribute 26,1
+   9              	 .eabi_attribute 30,6
+  10              	 .eabi_attribute 34,0
+  11              	 .eabi_attribute 18,4
+  12              	 .code 16
+  13              	 .file "main.c"
+  14              	 .text
+  15              	.Ltext0:
+  16              	 .cfi_sections .debug_frame
+  17              	 .section .text.XMC_GPIO_SetOutputHigh,"ax",%progbits
+  18              	 .align 2
+  19              	 .code 16
+  20              	 .thumb_func
+  22              	XMC_GPIO_SetOutputHigh:
+  23              	.LFB54:
+  24              	 .file 1 "C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc/xmc_gpio.h"
+   1:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h **** /**
+   2:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  * @file xmc_gpio.h
+   3:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  * @date 2015-06-20
+   4:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+   5:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  * @cond
+   6:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  **************************************************************************************************
+   7:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  * XMClib v2.1.24 - XMC Peripheral Driver Library 
+   8:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+   9:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  * Copyright (c) 2015-2019, Infineon Technologies AG
+  10:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  * All rights reserved.                        
+  11:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  *                                             
+  12:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  * Redistribution and use in source and binary forms, with or without modification,are permitted pr
+  13:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  * following conditions are met:   
+  14:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  *                                                                              
+  15:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  * Redistributions of source code must retain the above copyright notice, this list of conditions a
+  16:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  * disclaimer.                        
+  17:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  * 
+  18:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  * Redistributions in binary form must reproduce the above copyright notice, this list of condition
+  19:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  * disclaimer in the documentation and/or other materials provided with the distribution.          
+  20:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  * 
+  21:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  * Neither the name of the copyright holders nor the names of its contributors may be used to endor
+  22:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  * products derived from this software without specific prior written permission.                  
+  23:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  *                                                                              
+  24:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR I
+  25:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  * INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTI
+  26:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE  FOR ANY DIRECT, IN
+  27:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBS
+  28:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THE
+  29:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  * WHETHER IN CONTRACT, STRICT LIABILITY,OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY
+  30:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.                            
+  31:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  *                                                                              
+  32:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  * To improve the quality of the software, users are encouraged to share modifications, enhancement
+  33:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  * Infineon Technologies AG dave@infineon.com).                                                    
+  34:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  **************************************************************************************************
+  35:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+  36:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  * Change History
+  37:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  * --------------
+  38:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+  39:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  * 2015-02-20:
+  40:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  *     - Initial draft<br>
+  41:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  *     - Documentation improved <br>
+  42:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  *      
+  43:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  * 2015-06-20:
+  44:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  *     - Removed version macros and declaration of GetDriverVersion API
+  45:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+  46:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  * @endcond
+  47:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+  48:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  */
+  49:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h **** 
+  50:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h **** #ifndef XMC_GPIO_H
+  51:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h **** #define XMC_GPIO_H
+  52:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h **** 
+  53:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h **** /**************************************************************************************************
+  54:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  * HEADER FILES
+  55:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  **************************************************************************************************
+  56:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h **** 
+  57:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h **** #include "xmc_common.h"
+  58:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h **** 
+  59:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h **** /**
+  60:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  * @addtogroup XMClib XMC Peripheral Library
+  61:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  * @{
+  62:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  */
+  63:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h **** 
+  64:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h **** /**
+  65:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  * @addtogroup GPIO
+  66:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  * @brief General Purpose Input Output (GPIO) driver for the XMC microcontroller family.
+  67:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+  68:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  * GPIO driver provide a generic and very flexible software interface for all standard digital I/O 
+  69:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  * Each port slice has individual interfaces for the operation as General Purpose I/O and it furthe
+  70:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  * connectivity to the on-chip periphery and the control for the pad characteristics. 
+  71:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+  72:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  * The driver is divided into Input and Output mode.
+  73:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+  74:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  * Input mode features:
+  75:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  * -# Configuration structure XMC_GPIO_CONFIG_t and initialization function XMC_GPIO_Init()
+  76:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  * -# Allows the selection of weak pull-up or pull-down device. Configuration structure XMC_GPIO_MO
+  77:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  * \if XMC1
+  78:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  * -# Allows the selection of input hysteresis. XMC_GPIO_SetInputHysteresis()
+  79:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  * \endif
+  80:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+  81:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  * 
+  82:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  * Output mode features:
+  83:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  * -# Allows the selection of push pull/open drain and Alternate output. Configuration structure XM
+  84:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  * \if XMC4
+  85:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  * -# Allows the selection of pad driver strength. Configuration structure XMC_GPIO_OUTPUT_STRENGTH
+  86:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  * \endif
+  87:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+  88:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  * -# Allows the selection of initial output level. Configuration structure XMC_GPIO_OUTPUT_LEVEL_t
+  89:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+  90:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  *@{
+  91:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  */
+  92:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  
+  93:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h **** /**************************************************************************************************
+  94:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  * MACROS
+  95:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  **************************************************************************************************
+  96:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h **** 
+  97:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h **** #define PORT_IOCR_PC_Pos PORT0_IOCR0_PC0_Pos
+  98:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h **** #define PORT_IOCR_PC_Msk PORT0_IOCR0_PC0_Msk
+  99:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 100:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h **** #define PORT_IOCR_PC_Size 				(8U)
+ 101:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h **** 											
+ 102:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 103:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h **** #define XMC_GPIO_CHECK_OUTPUT_LEVEL(level) ((level == XMC_GPIO_OUTPUT_LEVEL_LOW) || \
+ 104:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****                                             (level == XMC_GPIO_OUTPUT_LEVEL_HIGH))
+ 105:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****                                             
+ 106:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h **** #define XMC_GPIO_CHECK_HWCTRL(hwctrl) ((hwctrl == XMC_GPIO_HWCTRL_DISABLED) || \
+ 107:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****                                        (hwctrl == XMC_GPIO_HWCTRL_PERIPHERAL1) || \
+ 108:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****                                        (hwctrl == XMC_GPIO_HWCTRL_PERIPHERAL2))                    
+ 109:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****                                             
+ 110:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h **** /**************************************************************************************************
+ 111:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  * ENUMS
+ 112:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  **************************************************************************************************
+ 113:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 114:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 115:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h **** /**
+ 116:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  * Defines output level of a pin. Use type \a XMC_GPIO_OUTPUT_LEVEL_t for this enum.
+ 117:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  */
+ 118:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h **** typedef enum XMC_GPIO_OUTPUT_LEVEL
+ 119:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h **** {
+ 120:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****   XMC_GPIO_OUTPUT_LEVEL_LOW  = 0x10000U, /**<  Reset bit */
+ 121:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****   XMC_GPIO_OUTPUT_LEVEL_HIGH = 0x1U, 	/**< Set bit  */
+ 122:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h **** } XMC_GPIO_OUTPUT_LEVEL_t;
+ 123:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 124:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h **** /**
+ 125:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  * Defines direct hardware control characteristics of the pin . Use type \a XMC_GPIO_HWCTRL_t for t
+ 126:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  */
+ 127:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h **** typedef enum XMC_GPIO_HWCTRL
+ 128:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h **** {
+ 129:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****   XMC_GPIO_HWCTRL_DISABLED     = 0x0U, /**<  Software control only */
+ 130:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****   XMC_GPIO_HWCTRL_PERIPHERAL1  = 0x1U, /**<  HWI0/HWO0 control path can override the software confi
+ 131:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****   XMC_GPIO_HWCTRL_PERIPHERAL2  = 0x2U  /**<  HWI1/HWO1 control path can override the software confi
+ 132:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h **** } XMC_GPIO_HWCTRL_t;
+ 133:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 134:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h **** /**************************************************************************************************
+ 135:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  * DEVICE FAMILY EXTENSIONS
+ 136:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  **************************************************************************************************
+ 137:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 138:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  #if UC_FAMILY == XMC1
+ 139:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h **** #include "xmc1_gpio.h"
+ 140:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h **** #elif UC_FAMILY == XMC4
+ 141:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h **** #include "xmc4_gpio.h"
+ 142:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h **** #else
+ 143:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h **** #error "xmc_gpio.h: family device not supported"
+ 144:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h **** #endif
+ 145:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 146:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h **** /**************************************************************************************************
+ 147:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  * API PROTOTYPES
+ 148:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  **************************************************************************************************
+ 149:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 150:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h **** #ifdef __cplusplus
+ 151:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h **** extern "C" {
+ 152:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h **** #endif
+ 153:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 154:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 155:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h **** /**
+ 156:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  * @param  port	  Constant pointer pointing to GPIO port, to access port registers like Pn_OUT,Pn_O
+ 157:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  * @param  pin	  Port pin number.
+ 158:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  * @param  config GPIO configuration data structure. Refer data structure @ref XMC_GPIO_CONFIG_t fo
+ 159:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 160:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  * @return None
+ 161:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 162:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  * \par<b>Description:</b><br>
+ 163:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  * \if XMC1
+ 164:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  * Initializes input / output mode settings like, pull up / pull down devices,hysteresis, push pull
+ 165:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  * Also configures alternate function outputs and clears hardware port control for a selected \a po
+ 166:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  * \a config provides selected I/O settings. It configures hardware registers Pn_IOCR,Pn_OUT, Pn_OM
+ 167:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  * \endif
+ 168:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  * \if XMC4
+ 169:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  * Initializes input / output mode settings like, pull up / pull down devices,push pull /open drain
+ 170:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  * Also configures alternate function outputs and clears hardware port control for selected \a port
+ 171:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  * It configures hardware registers Pn_IOCR,Pn_OUT,Pn_OMR,Pn_PDISC and Pn_PDR.\n
+ 172:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  * \endif
+ 173:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 174:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  * \par<b>Related APIs:</b><BR>
+ 175:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  *  None
+ 176:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 177:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  * \par<b>Note:</b><br>
+ 178:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  * This API is called in definition of DAVE_init by code generation and therefore should not be exp
+ 179:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  * for the normal operation. Use other APIs only after DAVE_init is called successfully (returns DA
+ 180:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 181:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 182:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  */
+ 183:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 184:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  
+ 185:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h **** void XMC_GPIO_Init(XMC_GPIO_PORT_t *const port, const uint8_t pin, const XMC_GPIO_CONFIG_t *const c
+ 186:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  
+ 187:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h **** /**
+ 188:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 189:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  * @param  port	Constant pointer pointing to GPIO port, to access hardware register Pn_IOCR.
+ 190:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  * @param  pin	Port pin number.
+ 191:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  * @param  mode input / output functionality selection. Refer @ref XMC_GPIO_MODE_t for valid values
+ 192:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 193:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  * @return None
+ 194:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 195:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  * \par<b>Description:</b><br>
+ 196:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  * Sets digital input and output driver functionality and characteristics of a GPIO port pin. It co
+ 197:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  * registers Pn_IOCR. \a mode is initially configured during initialization in XMC_GPIO_Init(). Cal
+ 198:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  * the port direction functionality as needed later in the program.
+ 199:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 200:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  * \par<b>Related APIs:</b><BR>
+ 201:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  *  None
+ 202:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 203:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  */
+ 204:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 205:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h **** void XMC_GPIO_SetMode(XMC_GPIO_PORT_t *const port, const uint8_t pin, const XMC_GPIO_MODE_t mode);
+ 206:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 207:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 208:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h **** /**
+ 209:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 210:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  * @param  port	 Constant pointer pointing to GPIO port, to access hardware register Pn_OMR.
+ 211:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  * @param  pin	 Port pin number.
+ 212:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  * @param  level output level selection. Refer @ref XMC_GPIO_OUTPUT_LEVEL_t for valid values.
+ 213:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 214:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  * @return None
+ 215:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 216:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  * \par<b>Description:</b><br>
+ 217:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  * Set port pin output level to high or low.It configures hardware registers Pn_OMR.\a level is ini
+ 218:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  * configured during initialization in XMC_GPIO_Init(). Call this API to alter output level as need
+ 219:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 220:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  * \par<b>Related APIs:</b><BR>
+ 221:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  *  XMC_GPIO_SetOutputHigh(), XMC_GPIO_SetOutputLow().
+ 222:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 223:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  * \par<b>Note:</b><br>
+ 224:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  * Prior to this api, user has to configure port pin to output mode using XMC_GPIO_SetMode().
+ 225:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 226:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  */
+ 227:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 228:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 229:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h **** __STATIC_INLINE void XMC_GPIO_SetOutputLevel(XMC_GPIO_PORT_t *const port, const uint8_t pin, const 
+ 230:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h **** {
+ 231:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****   XMC_ASSERT("XMC_GPIO_SetOutputLevel: Invalid port", XMC_GPIO_CHECK_OUTPUT_PORT(port));
+ 232:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****   XMC_ASSERT("XMC_GPIO_SetOutputLevel: Invalid output level", XMC_GPIO_CHECK_OUTPUT_LEVEL(level));
+ 233:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****   
+ 234:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****   port->OMR = (uint32_t)level << pin;
+ 235:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h **** }
+ 236:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 237:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 238:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h **** /**
+ 239:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  * @param  port constant pointer pointing to GPIO port, to access hardware register Pn_OMR.
+ 240:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  * @param  pin	Port pin number.
+ 241:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 242:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  * @return None
+ 243:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 244:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  * \par<b>Description:</b><br>
+ 245:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  *  Sets port pin output to high. It configures hardware registers Pn_OMR.
+ 246:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 247:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  *  \par<b>Related APIs:</b><BR>
+ 248:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  *  XMC_GPIO_SetOutputLow()
+ 249:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 250:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  * \par<b>Note:</b><br>
+ 251:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  * Prior to this api, user has to configure port pin to output mode using XMC_GPIO_SetMode().\n
+ 252:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  * Register Pn_OMR is virtual and does not contain any flip-flop. A read action delivers the value 
+ 253:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 254:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  */
+ 255:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 256:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h **** __STATIC_INLINE void XMC_GPIO_SetOutputHigh(XMC_GPIO_PORT_t *const port, const uint8_t pin)
+ 257:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h **** {
+  25              	 .loc 1 257 0
+  26              	 .cfi_startproc
+  27 0000 80B5     	 push {r7,lr}
+  28              	.LCFI0:
+  29              	 .cfi_def_cfa_offset 8
+  30              	 .cfi_offset 7,-8
+  31              	 .cfi_offset 14,-4
+  32 0002 82B0     	 sub sp,sp,#8
+  33              	.LCFI1:
+  34              	 .cfi_def_cfa_offset 16
+  35 0004 00AF     	 add r7,sp,#0
+  36              	.LCFI2:
+  37              	 .cfi_def_cfa_register 7
+  38 0006 7860     	 str r0,[r7,#4]
+  39 0008 0A1C     	 mov r2,r1
+  40 000a FB1C     	 add r3,r7,#3
+  41 000c 1A70     	 strb r2,[r3]
+ 258:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****   XMC_ASSERT("XMC_GPIO_SetOutputHigh: Invalid port", XMC_GPIO_CHECK_OUTPUT_PORT(port));
+ 259:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 260:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****   port->OMR = (uint32_t)0x1U << pin;
+  42              	 .loc 1 260 0
+  43 000e FB1C     	 add r3,r7,#3
+  44 0010 1B78     	 ldrb r3,[r3]
+  45 0012 0122     	 mov r2,#1
+  46 0014 9A40     	 lsl r2,r2,r3
+  47 0016 7B68     	 ldr r3,[r7,#4]
+  48 0018 5A60     	 str r2,[r3,#4]
+ 261:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h **** }
+  49              	 .loc 1 261 0
+  50 001a BD46     	 mov sp,r7
+  51 001c 02B0     	 add sp,sp,#8
+  52              	 
+  53 001e 80BD     	 pop {r7,pc}
+  54              	 .cfi_endproc
+  55              	.LFE54:
+  57              	 .section .text.XMC_GPIO_SetOutputLow,"ax",%progbits
+  58              	 .align 2
+  59              	 .code 16
+  60              	 .thumb_func
+  62              	XMC_GPIO_SetOutputLow:
+  63              	.LFB55:
+ 262:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 263:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h **** /**
+ 264:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 265:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  * @param  port	constant pointer pointing to GPIO port, to access hardware register Pn_OMR.
+ 266:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  * @param  pin	port pin number.
+ 267:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 268:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  * @return  None
+ 269:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 270:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  *\par<b>Description:</b><br>
+ 271:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  * Sets port pin output to low. It configures hardware registers Pn_OMR.\n
+ 272:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 273:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  * \par<b>Related APIs:</b><BR>>
+ 274:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  * XMC_GPIO_SetOutputHigh()
+ 275:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 276:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  *\par<b>Note:</b><br>
+ 277:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  * Prior to this api, user has to configure port pin to output mode using XMC_GPIO_SetMode().
+ 278:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  * Register Pn_OMR is virtual and does not contain any flip-flop. A read action delivers the value 
+ 279:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 280:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****  */
+ 281:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 282:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h **** __STATIC_INLINE void XMC_GPIO_SetOutputLow(XMC_GPIO_PORT_t *const port, const uint8_t pin)
+ 283:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h **** {
+  64              	 .loc 1 283 0
+  65              	 .cfi_startproc
+  66 0000 80B5     	 push {r7,lr}
+  67              	.LCFI3:
+  68              	 .cfi_def_cfa_offset 8
+  69              	 .cfi_offset 7,-8
+  70              	 .cfi_offset 14,-4
+  71 0002 82B0     	 sub sp,sp,#8
+  72              	.LCFI4:
+  73              	 .cfi_def_cfa_offset 16
+  74 0004 00AF     	 add r7,sp,#0
+  75              	.LCFI5:
+  76              	 .cfi_def_cfa_register 7
+  77 0006 7860     	 str r0,[r7,#4]
+  78 0008 0A1C     	 mov r2,r1
+  79 000a FB1C     	 add r3,r7,#3
+  80 000c 1A70     	 strb r2,[r3]
+ 284:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****   XMC_ASSERT("XMC_GPIO_SetOutputLow: Invalid port", XMC_GPIO_CHECK_OUTPUT_PORT(port));
+ 285:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 286:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h ****   port->OMR = 0x10000U << pin;
+  81              	 .loc 1 286 0
+  82 000e FB1C     	 add r3,r7,#3
+  83 0010 1B78     	 ldrb r3,[r3]
+  84 0012 8022     	 mov r2,#128
+  85 0014 5202     	 lsl r2,r2,#9
+  86 0016 9A40     	 lsl r2,r2,r3
+  87 0018 7B68     	 ldr r3,[r7,#4]
+  88 001a 5A60     	 str r2,[r3,#4]
+ 287:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc\xmc_gpio.h **** }
+  89              	 .loc 1 287 0
+  90 001c BD46     	 mov sp,r7
+  91 001e 02B0     	 add sp,sp,#8
+  92              	 
+  93 0020 80BD     	 pop {r7,pc}
+  94              	 .cfi_endproc
+  95              	.LFE55:
+  97 0022 C046     	 .section .text.DIGITAL_IO_SetOutputHigh,"ax",%progbits
+  98              	 .align 2
+  99              	 .code 16
+ 100              	 .thumb_func
+ 102              	DIGITAL_IO_SetOutputHigh:
+ 103              	.LFB62:
+ 104              	 .file 2 "C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO/digital_io.h"
+   1:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** /*
+   2:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h ****  *
+   3:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h ****  * @file digital_io.h
+   4:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h ****  * @date 2016-07-08
+   5:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h ****  *
+   6:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h ****  * NOTE:
+   7:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h ****  * This file is generated by DAVE. Any manual modification done to this file will be lost when the 
+   8:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h ****  *
+   9:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h ****  * @cond
+  10:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h ****  **************************************************************************************************
+  11:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h ****  * DIGITAL_IO v4.0.16 - The DIGITAL_IO APP is used to configure a port pin as digital Input/Output.
+  12:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h ****  *
+  13:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h ****  * Copyright (c) 2015-2016, Infineon Technologies AG
+  14:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h ****  * All rights reserved.
+  15:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h ****  *
+  16:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h ****  * Redistribution and use in source and binary forms, with or without modification,are permitted pr
+  17:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h ****  * following conditions are met:
+  18:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h ****  *
+  19:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h ****  *   Redistributions of source code must retain the above copyright notice, this list of conditions
+  20:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h ****  *   disclaimer.
+  21:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h ****  *
+  22:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h ****  *   Redistributions in binary form must reproduce the above copyright notice, this list of conditi
+  23:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h ****  *   following disclaimer in the documentation and/or other materials provided with the distributio
+  24:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h ****  *
+  25:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h ****  *   Neither the name of the copyright holders nor the names of its contributors may be used to end
+  26:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h ****  *   products derived from this software without specific prior written permission.
+  27:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h ****  *
+  28:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h ****  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR I
+  29:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h ****  * INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTI
+  30:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h ****  * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE  FOR ANY DIRECT, IN
+  31:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h ****  * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBS
+  32:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h ****  * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THE
+  33:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h ****  * WHETHER IN CONTRACT, STRICT LIABILITY,OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY
+  34:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h ****  * USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  35:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h ****  *
+  36:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h ****  * To improve the quality of the software, users are encouraged to share modifications, enhancement
+  37:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h ****  * with Infineon Technologies AG (dave@infineon.com).
+  38:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h ****  **************************************************************************************************
+  39:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h ****  *
+  40:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h ****  * Change History
+  41:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h ****  * --------------
+  42:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h ****  *
+  43:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h ****  * 2015-02-16
+  44:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h ****  *     - Initial version
+  45:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h ****  *
+  46:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h ****  * 2015-04-22
+  47:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h ****  *     - XMC_ASSERT is added in static inline functions.<br>
+  48:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h ****  *
+  49:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h ****  * 2015-06-20
+  50:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h ****  *     - Version check added for XMCLib dependency.<br>
+  51:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h ****  *
+  52:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h ****  * 2015-12-22
+  53:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h ****  *     - Added hardware controlled IO feature.
+  54:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h ****  * 2016-07-08:
+  55:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h ****  *     - Fixed incorrect case for an included header.<br>
+  56:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h ****  *
+  57:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h ****  * @endcond
+  58:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h ****  *
+  59:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h ****  */
+  60:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** 
+  61:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** /**************************************************************************************************
+  62:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h ****  * HEADER FILES
+  63:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h ****  **************************************************************************************************
+  64:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** 
+  65:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** #ifndef DIGITAL_IO_H
+  66:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** #define DIGITAL_IO_H
+  67:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** 
+  68:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** #include <xmc_gpio.h>
+  69:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** #include <DAVE_Common.h>
+  70:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** #include "digital_io_conf.h"
+  71:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** 
+  72:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** /**************************************************************************************************
+  73:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h ****  * MACROS
+  74:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h ****  **************************************************************************************************
+  75:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** #if (!((XMC_LIB_MAJOR_VERSION == 2U) && \
+  76:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h ****        (XMC_LIB_MINOR_VERSION >= 0U) && \
+  77:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h ****        (XMC_LIB_PATCH_VERSION >= 0U)))
+  78:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** #error "DIGITAL_IO requires XMC Peripheral Library v2.0.0 or higher"
+  79:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** #endif
+  80:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** 
+  81:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h ****  /*************************************************************************************************
+  82:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h ****  * ENUMS
+  83:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h ****  **************************************************************************************************
+  84:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** 
+  85:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** /**
+  86:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** * @ingroup DIGITAL_IO_enumerations
+  87:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** * @{
+  88:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** */
+  89:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** 
+  90:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** /**
+  91:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** * @brief Initialization status of DIGITAL_IO APP.
+  92:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** */
+  93:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** typedef enum DIGITAL_IO_STATUS
+  94:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** {
+  95:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h ****   DIGITAL_IO_STATUS_OK = 0U,/**< 0=Status OK */
+  96:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h ****   DIGITAL_IO_STATUS_FAILURE = 1U/**< 1=Status Failed */
+  97:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** } DIGITAL_IO_STATUS_t;
+  98:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** 
+  99:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** /**
+ 100:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** * @}
+ 101:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** */
+ 102:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** 
+ 103:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** /**************************************************************************************************
+ 104:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h ****  * DATA STRUCTURES
+ 105:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h ****  **************************************************************************************************
+ 106:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** /**
+ 107:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** * @ingroup DIGITAL_IO_datastructures
+ 108:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** * @{
+ 109:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** */
+ 110:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** 
+ 111:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** /**
+ 112:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** * @brief Initialization data structure of DIGITAL_IO APP
+ 113:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** */
+ 114:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** typedef struct DIGITAL_IO
+ 115:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** {
+ 116:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h ****   XMC_GPIO_PORT_t *const gpio_port;             /**< port number */
+ 117:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h ****   const XMC_GPIO_CONFIG_t gpio_config;          /**< mode, initial output level and pad driver stre
+ 118:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h ****   const uint8_t gpio_pin;                       /**< pin number */
+ 119:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h ****   const XMC_GPIO_HWCTRL_t hwctrl;               /**< Hardware port control */
+ 120:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** } DIGITAL_IO_t;
+ 121:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** 
+ 122:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** 
+ 123:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** /**
+ 124:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** * @}
+ 125:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** */
+ 126:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** 
+ 127:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** 
+ 128:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** /**************************************************************************************************
+ 129:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h ****  * API Prototypes
+ 130:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h ****  **************************************************************************************************
+ 131:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** 
+ 132:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** 
+ 133:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** #ifdef __cplusplus
+ 134:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** extern "C" {
+ 135:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** #endif
+ 136:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** 
+ 137:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** /**
+ 138:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** * @ingroup DIGITAL_IO_apidoc
+ 139:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** * @{
+ 140:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** */
+ 141:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** 
+ 142:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** 
+ 143:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** 
+ 144:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** /**
+ 145:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** * @brief Get DIGITAL_IO APP version
+ 146:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** * @return DAVE_APP_VERSION_t APP version information (major, minor and patch number)
+ 147:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** *
+ 148:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** * \par<b>Description: </b><br>
+ 149:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** * The function can be used to check application software compatibility with a
+ 150:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** * specific version of the APP.
+ 151:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** *
+ 152:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** * Example Usage:
+ 153:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** *
+ 154:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** * @code
+ 155:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** * #include <DAVE.h>
+ 156:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** *
+ 157:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** * int main(void)
+ 158:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** * {
+ 159:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** *   DAVE_STATUS_t init_status;
+ 160:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** *   DAVE_APP_VERSION_t version;
+ 161:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** *
+ 162:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** *   // Initialize DIGITAL_IO APP:
+ 163:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** *   // DIGITAL_IO_Init() is called from within DAVE_Init().
+ 164:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** *   init_status = DAVE_Init();
+ 165:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** *   if(init_status == DAVE_STATUS_SUCCESS)
+ 166:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** *   {
+ 167:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** *     version = DIGITAL_IO_GetAppVersion();
+ 168:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** *     if (version.major != 4U) {
+ 169:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** *     // Probably, not the right version.
+ 170:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** *     }
+ 171:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** *   }
+ 172:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** *
+ 173:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** *     // More code here
+ 174:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** *     while(1) {
+ 175:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** *
+ 176:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** *     }
+ 177:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** *     return (1);
+ 178:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** *  }
+ 179:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** * @endcode<BR>
+ 180:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** */
+ 181:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** 
+ 182:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** DAVE_APP_VERSION_t DIGITAL_IO_GetAppVersion(void);
+ 183:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** 
+ 184:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** /**
+ 185:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** *
+ 186:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** * @brief Function to initialize the port pin as per UI settings.
+ 187:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** * @param handler Pointer pointing to APP data structure. Refer @ref DIGITAL_IO_t for details.
+ 188:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** * @return DIGITAL_IO_STATUS_t DIGITAL_IO APP status. Refer @ref DIGITAL_IO_STATUS_t structure for d
+ 189:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** *
+ 190:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** * \par<b>Description:</b><br>
+ 191:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** * This function initializes GPIO port registers IOCR,PDISC,OMR,PDR/PHCR to configure pin direction,
+ 192:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** * and pad driver strength/hysteresis.
+ 193:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** *
+ 194:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** * \par<b>Related APIs:</b><BR>
+ 195:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** * None
+ 196:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** *
+ 197:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** * Example Usage:
+ 198:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** * @code
+ 199:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** * #include <DAVE.h>//Declarations from DAVE Code Generation (includes SFR declaration)
+ 200:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** * int main(void)
+ 201:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** * {
+ 202:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** *   DAVE_STATUS_t status;
+ 203:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** *   status = DAVE_Init();  //(DAVE_STATUS_t)DIGITAL_IO_Init(&DIGITAL_IO_0) is called within DAVE_In
+ 204:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** *   if(status == DAVE_STATUS_SUCCESS)
+ 205:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** *   {
+ 206:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** *     XMC_DEBUG("DAVE Apps initialization success\n");
+ 207:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** *   }
+ 208:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** *   else
+ 209:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** *   {
+ 210:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** *     XMC_DEBUG(("DAVE Apps initialization failed with status %d\n", status));
+ 211:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** *     while(1U)
+ 212:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** *     {
+ 213:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** *     }
+ 214:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** *   }
+ 215:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** *   //Placeholder for user application code. The while loop below can be replaced with user applica
+ 216:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** *   while(1U)
+ 217:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** *   {
+ 218:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** *   }
+ 219:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** *   return 1U;
+ 220:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** *  }
+ 221:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** *  @endcode
+ 222:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** */
+ 223:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** 
+ 224:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** DIGITAL_IO_STATUS_t DIGITAL_IO_Init(const DIGITAL_IO_t *const handler);
+ 225:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** 
+ 226:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** /**
+ 227:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** *
+ 228:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** * @brief Function to set port pin high.
+ 229:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** * @param handler Pointer pointing to APP data structure. Refer @ref DIGITAL_IO_t for details.
+ 230:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** * @return None
+ 231:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** *
+ 232:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** * \par<b>Description:</b><br>
+ 233:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** * This function configures port output modification register Pn_OMR, to make port pin to high level
+ 234:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** *
+ 235:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** * \par<b>Related APIs:</b><BR>
+ 236:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** *  DIGITAL_IO_SetOutputLow()
+ 237:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** *
+ 238:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** * Example Usage:
+ 239:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** * @code
+ 240:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** * #include <DAVE.h>//Declarations from DAVE Code Generation (includes SFR declaration)
+ 241:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** * int main(void)
+ 242:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** * {
+ 243:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** *   DAVE_STATUS_t status;
+ 244:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** *   status = DAVE_Init();  //(DAVE_STATUS_t)DIGITAL_IO_Init(&DIGITAL_IO_0) is called within DAVE_In
+ 245:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** *   if(status == DAVE_STATUS_SUCCESS)
+ 246:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** *   {
+ 247:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** *     XMC_DEBUG("DAVE Apps initialization success\n");
+ 248:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** *   }
+ 249:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** *   else
+ 250:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** *   {
+ 251:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** *     XMC_DEBUG(("DAVE Apps initialization failed with status %d\n", status));
+ 252:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** *     while(1U)
+ 253:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** *     {
+ 254:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** *     }
+ 255:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** *   }
+ 256:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** *   //Placeholder for user application code. The while loop below can be replaced with user applica
+ 257:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** *   DIGITAL_IO_SetOutputHigh(&DIGITAL_IO_0);
+ 258:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** *   while(1U)
+ 259:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** *   {
+ 260:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** *     // Add application code here
+ 261:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** *   }
+ 262:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** *
+ 263:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** *   return (1);
+ 264:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** * }
+ 265:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** *  @endcode
+ 266:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** */
+ 267:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** 
+ 268:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** __STATIC_INLINE void DIGITAL_IO_SetOutputHigh(const DIGITAL_IO_t *const handler)
+ 269:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** {
+ 105              	 .loc 2 269 0
+ 106              	 .cfi_startproc
+ 107 0000 80B5     	 push {r7,lr}
+ 108              	.LCFI6:
+ 109              	 .cfi_def_cfa_offset 8
+ 110              	 .cfi_offset 7,-8
+ 111              	 .cfi_offset 14,-4
+ 112 0002 82B0     	 sub sp,sp,#8
+ 113              	.LCFI7:
+ 114              	 .cfi_def_cfa_offset 16
+ 115 0004 00AF     	 add r7,sp,#0
+ 116              	.LCFI8:
+ 117              	 .cfi_def_cfa_register 7
+ 118 0006 7860     	 str r0,[r7,#4]
+ 270:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h ****   XMC_ASSERT("DIGITAL_IO_SetOutputHigh: handler null pointer", handler != NULL);
+ 271:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h ****   XMC_GPIO_SetOutputHigh(handler->gpio_port, handler->gpio_pin);
+ 119              	 .loc 2 271 0
+ 120 0008 7B68     	 ldr r3,[r7,#4]
+ 121 000a 1A68     	 ldr r2,[r3]
+ 122 000c 7B68     	 ldr r3,[r7,#4]
+ 123 000e 1B7B     	 ldrb r3,[r3,#12]
+ 124 0010 101C     	 mov r0,r2
+ 125 0012 191C     	 mov r1,r3
+ 126 0014 FFF7FEFF 	 bl XMC_GPIO_SetOutputHigh
+ 272:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** }
+ 127              	 .loc 2 272 0
+ 128 0018 BD46     	 mov sp,r7
+ 129 001a 02B0     	 add sp,sp,#8
+ 130              	 
+ 131 001c 80BD     	 pop {r7,pc}
+ 132              	 .cfi_endproc
+ 133              	.LFE62:
+ 135 001e C046     	 .section .text.DIGITAL_IO_SetOutputLow,"ax",%progbits
+ 136              	 .align 2
+ 137              	 .code 16
+ 138              	 .thumb_func
+ 140              	DIGITAL_IO_SetOutputLow:
+ 141              	.LFB63:
+ 273:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** 
+ 274:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** /**
+ 275:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** * @brief Function to reset port pin.
+ 276:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** * @param handler Pointer pointing to APP data structure. Refer @ref DIGITAL_IO_t for details.
+ 277:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** * @return None
+ 278:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** *
+ 279:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** * \par<b>Description:</b><br>
+ 280:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** * This function configures port output modification register Pn_OMR, to make port pin to low level.
+ 281:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** *
+ 282:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** * \par<b>Related APIs:</b><BR>
+ 283:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** * DIGITAL_IO_SetOutputHigh()
+ 284:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** *
+ 285:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** * Example Usage:
+ 286:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** * @code
+ 287:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** *  #include <DAVE.h>//Declarations from DAVE Code Generation (includes SFR declaration)
+ 288:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** *  int main(void)
+ 289:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** *  {
+ 290:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** *    DAVE_STATUS_t status;
+ 291:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** *    status = DAVE_Init();  //(DAVE_STATUS_t)DIGITAL_IO_Init(&DIGITAL_IO_0) is called within DAVE_I
+ 292:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** *    if(status == DAVE_STATUS_SUCCESS)
+ 293:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** *    {
+ 294:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** *      XMC_DEBUG("DAVE Apps initialization success\n");
+ 295:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** *    }
+ 296:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** *    else
+ 297:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** *    {
+ 298:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** *      XMC_DEBUG(("DAVE Apps initialization failed with status %d\n", status));
+ 299:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** *      while(1U)
+ 300:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** *      {
+ 301:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** *      }
+ 302:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** *    }
+ 303:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** *    //Placeholder for user application code. The while loop below can be replaced with user applic
+ 304:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** *    DIGITAL_IO_SetOutputLow(&DIGITAL_IO_0);
+ 305:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** *    while(1U)
+ 306:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** *    {
+ 307:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** *      // Add application code here
+ 308:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** *    }
+ 309:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** *
+ 310:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** *   return (1);
+ 311:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** * }
+ 312:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** *  @endcode
+ 313:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** */
+ 314:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** 
+ 315:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** __STATIC_INLINE void DIGITAL_IO_SetOutputLow(const DIGITAL_IO_t *const handler)
+ 316:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** {
+ 142              	 .loc 2 316 0
+ 143              	 .cfi_startproc
+ 144 0000 80B5     	 push {r7,lr}
+ 145              	.LCFI9:
+ 146              	 .cfi_def_cfa_offset 8
+ 147              	 .cfi_offset 7,-8
+ 148              	 .cfi_offset 14,-4
+ 149 0002 82B0     	 sub sp,sp,#8
+ 150              	.LCFI10:
+ 151              	 .cfi_def_cfa_offset 16
+ 152 0004 00AF     	 add r7,sp,#0
+ 153              	.LCFI11:
+ 154              	 .cfi_def_cfa_register 7
+ 155 0006 7860     	 str r0,[r7,#4]
+ 317:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h ****   XMC_ASSERT("DIGITAL_IO_SetOutputLow: handler null pointer", handler != NULL);
+ 318:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h ****   XMC_GPIO_SetOutputLow(handler->gpio_port,handler->gpio_pin);
+ 156              	 .loc 2 318 0
+ 157 0008 7B68     	 ldr r3,[r7,#4]
+ 158 000a 1A68     	 ldr r2,[r3]
+ 159 000c 7B68     	 ldr r3,[r7,#4]
+ 160 000e 1B7B     	 ldrb r3,[r3,#12]
+ 161 0010 101C     	 mov r0,r2
+ 162 0012 191C     	 mov r1,r3
+ 163 0014 FFF7FEFF 	 bl XMC_GPIO_SetOutputLow
+ 319:C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO\digital_io.h **** }
+ 164              	 .loc 2 319 0
+ 165 0018 BD46     	 mov sp,r7
+ 166 001a 02B0     	 add sp,sp,#8
+ 167              	 
+ 168 001c 80BD     	 pop {r7,pc}
+ 169              	 .cfi_endproc
+ 170              	.LFE63:
+ 172              	 .global bLed0
+ 173 001e C046     	 .section .bss.bLed0,"aw",%nobits
+ 176              	bLed0:
+ 177 0000 00       	 .space 1
+ 178              	 .global bLed1
+ 179              	 .section .bss.bLed1,"aw",%nobits
+ 182              	bLed1:
+ 183 0000 00       	 .space 1
+ 184              	 .global iTickCounter
+ 185              	 .section .bss.iTickCounter,"aw",%nobits
+ 186              	 .align 2
+ 189              	iTickCounter:
+ 190 0000 00000000 	 .space 4
+ 191              	 .section .text.main,"ax",%progbits
+ 192              	 .align 2
+ 193              	 .global main
+ 194              	 .code 16
+ 195              	 .thumb_func
+ 197              	main:
+ 198              	.LFB84:
+ 199              	 .file 3 "../main.c"
+   1:../main.c     **** #include <DAVE.h> // Declarations from DAVE Code Generation (includes SFR declaration)
+   2:../main.c     **** #include <stdio.h>
+   3:../main.c     **** #include <ctype.h>
+   4:../main.c     **** #include <stdbool.h>
+   5:../main.c     **** 
+   6:../main.c     **** // ***** defines: *****
+   7:../main.c     **** #define ON 1
+   8:../main.c     **** #define OFF 0
+   9:../main.c     **** 
+  10:../main.c     **** // ***** Global Variables: *****
+  11:../main.c     **** // LED Status
+  12:../main.c     **** bool bLed0 = OFF;
+  13:../main.c     **** bool bLed1 = OFF;
+  14:../main.c     **** 
+  15:../main.c     **** // SoftwareTimer:
+  16:../main.c     **** #define INTERVAL 100000U // 100ms
+  17:../main.c     **** 
+  18:../main.c     **** // Tick Counter
+  19:../main.c     **** unsigned int iTickCounter = 0;
+  20:../main.c     **** 
+  21:../main.c     **** // ***** function prototypes: *****
+  22:../main.c     **** // LEDs:
+  23:../main.c     **** void LED0ON (void);
+  24:../main.c     **** void LED0OFF (void);
+  25:../main.c     **** void LED0TOGGLE (void);
+  26:../main.c     **** void LED1ON (void);
+  27:../main.c     **** void LED1OFF (void);
+  28:../main.c     **** void LED1TOGGLE (void);
+  29:../main.c     **** void LEDSequence (void); // LED Sequence
+  30:../main.c     **** 
+  31:../main.c     **** int main(void)	{
+ 200              	 .loc 3 31 0
+ 201              	 .cfi_startproc
+ 202 0000 90B5     	 push {r4,r7,lr}
+ 203              	.LCFI12:
+ 204              	 .cfi_def_cfa_offset 12
+ 205              	 .cfi_offset 4,-12
+ 206              	 .cfi_offset 7,-8
+ 207              	 .cfi_offset 14,-4
+ 208 0002 83B0     	 sub sp,sp,#12
+ 209              	.LCFI13:
+ 210              	 .cfi_def_cfa_offset 24
+ 211 0004 00AF     	 add r7,sp,#0
+ 212              	.LCFI14:
+ 213              	 .cfi_def_cfa_register 7
+  32:../main.c     **** 	uint32_t SoftwareTimer;
+  33:../main.c     **** 	SYSTIMER_STATUS_t statusSYSTIMER;
+  34:../main.c     **** 
+  35:../main.c     **** 	DAVE_Init(); // Initialization of DAVE APPs
+ 214              	 .loc 3 35 0
+ 215 0006 FFF7FEFF 	 bl DAVE_Init
+  36:../main.c     **** 
+  37:../main.c     **** 	SoftwareTimer = (uint32_t)SYSTIMER_CreateTimer(INTERVAL,SYSTIMER_MODE_PERIODIC,(void*)LEDSequence,
+ 216              	 .loc 3 37 0
+ 217 000a 0D4A     	 ldr r2,.L10
+ 218 000c 0D4B     	 ldr r3,.L10+4
+ 219 000e 101C     	 mov r0,r2
+ 220 0010 0121     	 mov r1,#1
+ 221 0012 1A1C     	 mov r2,r3
+ 222 0014 0023     	 mov r3,#0
+ 223 0016 FFF7FEFF 	 bl SYSTIMER_CreateTimer
+ 224 001a 031C     	 mov r3,r0
+ 225 001c 7B60     	 str r3,[r7,#4]
+  38:../main.c     **** 	if (SoftwareTimer != 0U) {
+ 226              	 .loc 3 38 0
+ 227 001e 7B68     	 ldr r3,[r7,#4]
+ 228 0020 002B     	 cmp r3,#0
+ 229 0022 00D1     	 bne .L6
+ 230              	.L7:
+  39:../main.c     **** 		;
+  40:../main.c     **** 	}
+  41:../main.c     **** 	else {
+  42:../main.c     **** 		while (1); // Software timer creation is failed
+ 231              	 .loc 3 42 0 discriminator 1
+ 232 0024 FEE7     	 b .L7
+ 233              	.L6:
+  43:../main.c     **** 	}
+  44:../main.c     **** 	statusSYSTIMER = SYSTIMER_StartTimer(SoftwareTimer);
+ 234              	 .loc 3 44 0
+ 235 0026 FC1C     	 add r4,r7,#3
+ 236 0028 7B68     	 ldr r3,[r7,#4]
+ 237 002a 181C     	 mov r0,r3
+ 238 002c FFF7FEFF 	 bl SYSTIMER_StartTimer
+ 239 0030 031C     	 mov r3,r0
+ 240 0032 2370     	 strb r3,[r4]
+  45:../main.c     **** 	if (statusSYSTIMER == SYSTIMER_STATUS_SUCCESS) {
+ 241              	 .loc 3 45 0
+ 242 0034 FB1C     	 add r3,r7,#3
+ 243 0036 1B78     	 ldrb r3,[r3]
+ 244 0038 002B     	 cmp r3,#0
+ 245 003a 00D0     	 beq .L8
+ 246              	.L9:
+  46:../main.c     **** 		; // Software timer is running
+  47:../main.c     **** 	}
+  48:../main.c     **** 	else {
+  49:../main.c     **** 		while (1); // Error during Software timer start operation
+ 247              	 .loc 3 49 0 discriminator 3
+ 248 003c FEE7     	 b .L9
+ 249              	.L8:
+  50:../main.c     **** 	}
+  51:../main.c     **** 
+  52:../main.c     **** 	while(1U);
+ 250              	 .loc 3 52 0 discriminator 4
+ 251 003e FEE7     	 b .L8
+ 252              	.L11:
+ 253              	 .align 2
+ 254              	.L10:
+ 255 0040 A0860100 	 .word 100000
+ 256 0044 00000000 	 .word LEDSequence
+ 257              	 .cfi_endproc
+ 258              	.LFE84:
+ 260              	 .section .text.LEDSequence,"ax",%progbits
+ 261              	 .align 2
+ 262              	 .global LEDSequence
+ 263              	 .code 16
+ 264              	 .thumb_func
+ 266              	LEDSequence:
+ 267              	.LFB85:
+  53:../main.c     **** }
+  54:../main.c     **** 
+  55:../main.c     **** // LED Sequence
+  56:../main.c     **** void LEDSequence (void) {
+ 268              	 .loc 3 56 0
+ 269              	 .cfi_startproc
+ 270 0000 80B5     	 push {r7,lr}
+ 271              	.LCFI15:
+ 272              	 .cfi_def_cfa_offset 8
+ 273              	 .cfi_offset 7,-8
+ 274              	 .cfi_offset 14,-4
+ 275 0002 00AF     	 add r7,sp,#0
+ 276              	.LCFI16:
+ 277              	 .cfi_def_cfa_register 7
+  57:../main.c     **** 	//SHORT: 1 LONG: 3 PAUSE_LETTER: 3 PAUSE_WORD: 7
+  58:../main.c     **** 	switch (iTickCounter) {
+ 278              	 .loc 3 58 0
+ 279 0004 4E4B     	 ldr r3,.L60
+ 280 0006 1B68     	 ldr r3,[r3]
+ 281 0008 073B     	 sub r3,r3,#7
+ 282 000a AD2B     	 cmp r3,#173
+ 283 000c 00D9     	 bls .LCB210
+ 284 000e 8BE0     	 b .L13
+ 285              	.LCB210:
+ 286 0010 9A00     	 lsl r2,r3,#2
+ 287 0012 4C4B     	 ldr r3,.L60+4
+ 288 0014 D318     	 add r3,r2,r3
+ 289 0016 1B68     	 ldr r3,[r3]
+ 290 0018 9F46     	 mov pc,r3
+ 291              	 .section .rodata.LEDSequence,"a",%progbits
+ 292              	 .align 2
+ 293              	.L15:
+ 294 0000 1A000000 	 .word .L14
+ 295 0004 28010000 	 .word .L13
+ 296 0008 20000000 	 .word .L16
+ 297 000c 28010000 	 .word .L13
+ 298 0010 26000000 	 .word .L17
+ 299 0014 28010000 	 .word .L13
+ 300 0018 2C000000 	 .word .L18
+ 301 001c 28010000 	 .word .L13
+ 302 0020 28010000 	 .word .L13
+ 303 0024 28010000 	 .word .L13
+ 304 0028 32000000 	 .word .L19
+ 305 002c 28010000 	 .word .L13
+ 306 0030 28010000 	 .word .L13
+ 307 0034 28010000 	 .word .L13
+ 308 0038 38000000 	 .word .L20
+ 309 003c 28010000 	 .word .L13
+ 310 0040 3E000000 	 .word .L21
+ 311 0044 3E000000 	 .word .L21
+ 312 0048 3E000000 	 .word .L21
+ 313 004c 28010000 	 .word .L13
+ 314 0050 44000000 	 .word .L22
+ 315 0054 28010000 	 .word .L13
+ 316 0058 4A000000 	 .word .L23
+ 317 005c 28010000 	 .word .L13
+ 318 0060 28010000 	 .word .L13
+ 319 0064 28010000 	 .word .L13
+ 320 0068 50000000 	 .word .L24
+ 321 006c 28010000 	 .word .L13
+ 322 0070 56000000 	 .word .L25
+ 323 0074 56000000 	 .word .L25
+ 324 0078 56000000 	 .word .L25
+ 325 007c 28010000 	 .word .L13
+ 326 0080 5C000000 	 .word .L26
+ 327 0084 28010000 	 .word .L13
+ 328 0088 62000000 	 .word .L27
+ 329 008c 28010000 	 .word .L13
+ 330 0090 28010000 	 .word .L13
+ 331 0094 28010000 	 .word .L13
+ 332 0098 68000000 	 .word .L28
+ 333 009c 68000000 	 .word .L28
+ 334 00a0 68000000 	 .word .L28
+ 335 00a4 28010000 	 .word .L13
+ 336 00a8 6E000000 	 .word .L29
+ 337 00ac 6E000000 	 .word .L29
+ 338 00b0 6E000000 	 .word .L29
+ 339 00b4 28010000 	 .word .L13
+ 340 00b8 74000000 	 .word .L30
+ 341 00bc 74000000 	 .word .L30
+ 342 00c0 74000000 	 .word .L30
+ 343 00c4 28010000 	 .word .L13
+ 344 00c8 28010000 	 .word .L13
+ 345 00cc 28010000 	 .word .L13
+ 346 00d0 28010000 	 .word .L13
+ 347 00d4 28010000 	 .word .L13
+ 348 00d8 28010000 	 .word .L13
+ 349 00dc 28010000 	 .word .L13
+ 350 00e0 7A000000 	 .word .L31
+ 351 00e4 28010000 	 .word .L13
+ 352 00e8 80000000 	 .word .L32
+ 353 00ec 80000000 	 .word .L32
+ 354 00f0 80000000 	 .word .L32
+ 355 00f4 28010000 	 .word .L13
+ 356 00f8 86000000 	 .word .L33
+ 357 00fc 86000000 	 .word .L33
+ 358 0100 86000000 	 .word .L33
+ 359 0104 28010000 	 .word .L13
+ 360 0108 28010000 	 .word .L13
+ 361 010c 28010000 	 .word .L13
+ 362 0110 8C000000 	 .word .L34
+ 363 0114 8C000000 	 .word .L34
+ 364 0118 8C000000 	 .word .L34
+ 365 011c 28010000 	 .word .L13
+ 366 0120 92000000 	 .word .L35
+ 367 0124 92000000 	 .word .L35
+ 368 0128 92000000 	 .word .L35
+ 369 012c 28010000 	 .word .L13
+ 370 0130 98000000 	 .word .L36
+ 371 0134 98000000 	 .word .L36
+ 372 0138 98000000 	 .word .L36
+ 373 013c 28010000 	 .word .L13
+ 374 0140 28010000 	 .word .L13
+ 375 0144 28010000 	 .word .L13
+ 376 0148 9E000000 	 .word .L37
+ 377 014c 28010000 	 .word .L13
+ 378 0150 A4000000 	 .word .L38
+ 379 0154 A4000000 	 .word .L38
+ 380 0158 A4000000 	 .word .L38
+ 381 015c 28010000 	 .word .L13
+ 382 0160 AA000000 	 .word .L39
+ 383 0164 28010000 	 .word .L13
+ 384 0168 28010000 	 .word .L13
+ 385 016c 28010000 	 .word .L13
+ 386 0170 B0000000 	 .word .L40
+ 387 0174 28010000 	 .word .L13
+ 388 0178 B6000000 	 .word .L41
+ 389 017c B6000000 	 .word .L41
+ 390 0180 B6000000 	 .word .L41
+ 391 0184 28010000 	 .word .L13
+ 392 0188 BC000000 	 .word .L42
+ 393 018c 28010000 	 .word .L13
+ 394 0190 C2000000 	 .word .L43
+ 395 0194 28010000 	 .word .L13
+ 396 0198 28010000 	 .word .L13
+ 397 019c 28010000 	 .word .L13
+ 398 01a0 C8000000 	 .word .L44
+ 399 01a4 C8000000 	 .word .L44
+ 400 01a8 C8000000 	 .word .L44
+ 401 01ac 28010000 	 .word .L13
+ 402 01b0 CE000000 	 .word .L45
+ 403 01b4 28010000 	 .word .L13
+ 404 01b8 D4000000 	 .word .L46
+ 405 01bc 28010000 	 .word .L13
+ 406 01c0 28010000 	 .word .L13
+ 407 01c4 28010000 	 .word .L13
+ 408 01c8 28010000 	 .word .L13
+ 409 01cc 28010000 	 .word .L13
+ 410 01d0 28010000 	 .word .L13
+ 411 01d4 28010000 	 .word .L13
+ 412 01d8 DA000000 	 .word .L47
+ 413 01dc 28010000 	 .word .L13
+ 414 01e0 E0000000 	 .word .L48
+ 415 01e4 28010000 	 .word .L13
+ 416 01e8 E6000000 	 .word .L49
+ 417 01ec 28010000 	 .word .L13
+ 418 01f0 28010000 	 .word .L13
+ 419 01f4 28010000 	 .word .L13
+ 420 01f8 EC000000 	 .word .L50
+ 421 01fc EC000000 	 .word .L50
+ 422 0200 EC000000 	 .word .L50
+ 423 0204 28010000 	 .word .L13
+ 424 0208 F2000000 	 .word .L51
+ 425 020c F2000000 	 .word .L51
+ 426 0210 F2000000 	 .word .L51
+ 427 0214 28010000 	 .word .L13
+ 428 0218 F8000000 	 .word .L52
+ 429 021c F8000000 	 .word .L52
+ 430 0220 F8000000 	 .word .L52
+ 431 0224 28010000 	 .word .L13
+ 432 0228 28010000 	 .word .L13
+ 433 022c 28010000 	 .word .L13
+ 434 0230 FE000000 	 .word .L53
+ 435 0234 28010000 	 .word .L13
+ 436 0238 04010000 	 .word .L54
+ 437 023c 28010000 	 .word .L13
+ 438 0240 0A010000 	 .word .L55
+ 439 0244 28010000 	 .word .L13
+ 440 0248 28010000 	 .word .L13
+ 441 024c 28010000 	 .word .L13
+ 442 0250 28010000 	 .word .L13
+ 443 0254 28010000 	 .word .L13
+ 444 0258 28010000 	 .word .L13
+ 445 025c 28010000 	 .word .L13
+ 446 0260 10010000 	 .word .L56
+ 447 0264 16010000 	 .word .L57
+ 448 0268 16010000 	 .word .L57
+ 449 026c 16010000 	 .word .L57
+ 450 0270 16010000 	 .word .L57
+ 451 0274 16010000 	 .word .L57
+ 452 0278 16010000 	 .word .L57
+ 453 027c 16010000 	 .word .L57
+ 454 0280 16010000 	 .word .L57
+ 455 0284 16010000 	 .word .L57
+ 456 0288 16010000 	 .word .L57
+ 457 028c 16010000 	 .word .L57
+ 458 0290 16010000 	 .word .L57
+ 459 0294 16010000 	 .word .L57
+ 460 0298 16010000 	 .word .L57
+ 461 029c 16010000 	 .word .L57
+ 462 02a0 16010000 	 .word .L57
+ 463 02a4 16010000 	 .word .L57
+ 464 02a8 16010000 	 .word .L57
+ 465 02ac 16010000 	 .word .L57
+ 466 02b0 16010000 	 .word .L57
+ 467 02b4 20010000 	 .word .L58
+ 468              	 .section .text.LEDSequence
+ 469              	.L14:
+  59:../main.c     **** 		// PAUSE_WORD: 7
+  60:../main.c     **** 		//H ....
+  61:../main.c     **** 		case 7: LED0ON(); break;
+ 470              	 .loc 3 61 0
+ 471 001a FFF7FEFF 	 bl LED0ON
+ 472 001e 88E0     	 b .L59
+ 473              	.L16:
+  62:../main.c     **** 		case 9: LED0ON(); break;
+ 474              	 .loc 3 62 0
+ 475 0020 FFF7FEFF 	 bl LED0ON
+ 476 0024 85E0     	 b .L59
+ 477              	.L17:
+  63:../main.c     **** 		case 11: LED0ON(); break;
+ 478              	 .loc 3 63 0
+ 479 0026 FFF7FEFF 	 bl LED0ON
+ 480 002a 82E0     	 b .L59
+ 481              	.L18:
+  64:../main.c     **** 		case 13: LED0ON(); break;
+ 482              	 .loc 3 64 0
+ 483 002c FFF7FEFF 	 bl LED0ON
+ 484 0030 7FE0     	 b .L59
+ 485              	.L19:
+  65:../main.c     **** 		// PAUSE_LETTER: 3
+  66:../main.c     **** 		//E .
+  67:../main.c     **** 		case 17: LED0ON(); break;
+ 486              	 .loc 3 67 0
+ 487 0032 FFF7FEFF 	 bl LED0ON
+ 488 0036 7CE0     	 b .L59
+ 489              	.L20:
+  68:../main.c     **** 		// PAUSE_LETTER: 3
+  69:../main.c     **** 		//L	.-..
+  70:../main.c     **** 		case 21: LED0ON(); break;
+ 490              	 .loc 3 70 0
+ 491 0038 FFF7FEFF 	 bl LED0ON
+ 492 003c 79E0     	 b .L59
+ 493              	.L21:
+  71:../main.c     **** 		case 23 ... 25: LED0ON(); break;
+ 494              	 .loc 3 71 0
+ 495 003e FFF7FEFF 	 bl LED0ON
+ 496 0042 76E0     	 b .L59
+ 497              	.L22:
+  72:../main.c     **** 		case 27: LED0ON(); break;
+ 498              	 .loc 3 72 0
+ 499 0044 FFF7FEFF 	 bl LED0ON
+ 500 0048 73E0     	 b .L59
+ 501              	.L23:
+  73:../main.c     **** 		case 29: LED0ON(); break;
+ 502              	 .loc 3 73 0
+ 503 004a FFF7FEFF 	 bl LED0ON
+ 504 004e 70E0     	 b .L59
+ 505              	.L24:
+  74:../main.c     **** 		// PAUSE_LETTER: 3
+  75:../main.c     **** 		//L	.-..
+  76:../main.c     **** 		case 33: LED0ON(); break;
+ 506              	 .loc 3 76 0
+ 507 0050 FFF7FEFF 	 bl LED0ON
+ 508 0054 6DE0     	 b .L59
+ 509              	.L25:
+  77:../main.c     **** 		case 35 ... 37: LED0ON(); break;
+ 510              	 .loc 3 77 0
+ 511 0056 FFF7FEFF 	 bl LED0ON
+ 512 005a 6AE0     	 b .L59
+ 513              	.L26:
+  78:../main.c     **** 		case 39: LED0ON(); break;
+ 514              	 .loc 3 78 0
+ 515 005c FFF7FEFF 	 bl LED0ON
+ 516 0060 67E0     	 b .L59
+ 517              	.L27:
+  79:../main.c     **** 		case 41: LED0ON(); break;
+ 518              	 .loc 3 79 0
+ 519 0062 FFF7FEFF 	 bl LED0ON
+ 520 0066 64E0     	 b .L59
+ 521              	.L28:
+  80:../main.c     **** 		// PAUSE_LETTER: 3
+  81:../main.c     **** 		//O	---
+  82:../main.c     **** 		case 45 ... 47: LED0ON(); break;
+ 522              	 .loc 3 82 0
+ 523 0068 FFF7FEFF 	 bl LED0ON
+ 524 006c 61E0     	 b .L59
+ 525              	.L29:
+  83:../main.c     **** 		case 49 ... 51: LED0ON(); break;
+ 526              	 .loc 3 83 0
+ 527 006e FFF7FEFF 	 bl LED0ON
+ 528 0072 5EE0     	 b .L59
+ 529              	.L30:
+  84:../main.c     **** 		case 53 ... 55: LED0ON(); break;
+ 530              	 .loc 3 84 0
+ 531 0074 FFF7FEFF 	 bl LED0ON
+ 532 0078 5BE0     	 b .L59
+ 533              	.L31:
+  85:../main.c     **** 		// PAUSE_WORD: 7
+  86:../main.c     **** 		//W	.--
+  87:../main.c     **** 		case 63: LED0ON(); break;
+ 534              	 .loc 3 87 0
+ 535 007a FFF7FEFF 	 bl LED0ON
+ 536 007e 58E0     	 b .L59
+ 537              	.L32:
+  88:../main.c     **** 		case 65 ... 67: LED0ON(); break;
+ 538              	 .loc 3 88 0
+ 539 0080 FFF7FEFF 	 bl LED0ON
+ 540 0084 55E0     	 b .L59
+ 541              	.L33:
+  89:../main.c     **** 		case 69 ... 71: LED0ON(); break;
+ 542              	 .loc 3 89 0
+ 543 0086 FFF7FEFF 	 bl LED0ON
+ 544 008a 52E0     	 b .L59
+ 545              	.L34:
+  90:../main.c     **** 		// PAUSE_LETTER: 3
+  91:../main.c     **** 		//O	---
+  92:../main.c     **** 		case 75 ... 77: LED0ON(); break;
+ 546              	 .loc 3 92 0
+ 547 008c FFF7FEFF 	 bl LED0ON
+ 548 0090 4FE0     	 b .L59
+ 549              	.L35:
+  93:../main.c     **** 		case 79 ... 81: LED0ON(); break;
+ 550              	 .loc 3 93 0
+ 551 0092 FFF7FEFF 	 bl LED0ON
+ 552 0096 4CE0     	 b .L59
+ 553              	.L36:
+  94:../main.c     **** 		case 83 ... 85: LED0ON(); break;
+ 554              	 .loc 3 94 0
+ 555 0098 FFF7FEFF 	 bl LED0ON
+ 556 009c 49E0     	 b .L59
+ 557              	.L37:
+  95:../main.c     **** 		// PAUSE_LETTER: 3
+  96:../main.c     **** 		//R	.-.
+  97:../main.c     **** 		case 89: LED0ON(); break;
+ 558              	 .loc 3 97 0
+ 559 009e FFF7FEFF 	 bl LED0ON
+ 560 00a2 46E0     	 b .L59
+ 561              	.L38:
+  98:../main.c     **** 		case 91 ... 93: LED0ON(); break;
+ 562              	 .loc 3 98 0
+ 563 00a4 FFF7FEFF 	 bl LED0ON
+ 564 00a8 43E0     	 b .L59
+ 565              	.L39:
+  99:../main.c     **** 		case 95: LED0ON(); break;
+ 566              	 .loc 3 99 0
+ 567 00aa FFF7FEFF 	 bl LED0ON
+ 568 00ae 40E0     	 b .L59
+ 569              	.L40:
+ 100:../main.c     **** 		// PAUSE_LETTER: 3
+ 101:../main.c     **** 		//L	.-..
+ 102:../main.c     **** 		case 99: LED0ON(); break;
+ 570              	 .loc 3 102 0
+ 571 00b0 FFF7FEFF 	 bl LED0ON
+ 572 00b4 3DE0     	 b .L59
+ 573              	.L41:
+ 103:../main.c     **** 		case 101 ... 103: LED0ON(); break;
+ 574              	 .loc 3 103 0
+ 575 00b6 FFF7FEFF 	 bl LED0ON
+ 576 00ba 3AE0     	 b .L59
+ 577              	.L42:
+ 104:../main.c     **** 		case 105: LED0ON(); break;
+ 578              	 .loc 3 104 0
+ 579 00bc FFF7FEFF 	 bl LED0ON
+ 580 00c0 37E0     	 b .L59
+ 581              	.L43:
+ 105:../main.c     **** 		case 107: LED0ON(); break;
+ 582              	 .loc 3 105 0
+ 583 00c2 FFF7FEFF 	 bl LED0ON
+ 584 00c6 34E0     	 b .L59
+ 585              	.L44:
+ 106:../main.c     **** 		// PAUSE_LETTER: 3
+ 107:../main.c     **** 		//D	-..
+ 108:../main.c     **** 		case 111 ... 113: LED0ON(); break;
+ 586              	 .loc 3 108 0
+ 587 00c8 FFF7FEFF 	 bl LED0ON
+ 588 00cc 31E0     	 b .L59
+ 589              	.L45:
+ 109:../main.c     **** 		case 115: LED0ON(); break;
+ 590              	 .loc 3 109 0
+ 591 00ce FFF7FEFF 	 bl LED0ON
+ 592 00d2 2EE0     	 b .L59
+ 593              	.L46:
+ 110:../main.c     **** 		case 117: LED0ON(); break;
+ 594              	 .loc 3 110 0
+ 595 00d4 FFF7FEFF 	 bl LED0ON
+ 596 00d8 2BE0     	 b .L59
+ 597              	.L47:
+ 111:../main.c     **** 
+ 112:../main.c     **** 		// PAUSE_LETTER: 7
+ 113:../main.c     **** 		//S	...
+ 114:../main.c     **** 		case 125: LED1ON(); break;
+ 598              	 .loc 3 114 0
+ 599 00da FFF7FEFF 	 bl LED1ON
+ 600 00de 28E0     	 b .L59
+ 601              	.L48:
+ 115:../main.c     **** 		case 127: LED1ON(); break;
+ 602              	 .loc 3 115 0
+ 603 00e0 FFF7FEFF 	 bl LED1ON
+ 604 00e4 25E0     	 b .L59
+ 605              	.L49:
+ 116:../main.c     **** 		case 129: LED1ON(); break;
+ 606              	 .loc 3 116 0
+ 607 00e6 FFF7FEFF 	 bl LED1ON
+ 608 00ea 22E0     	 b .L59
+ 609              	.L50:
+ 117:../main.c     **** 
+ 118:../main.c     **** 		// PAUSE_WORD: 3
+ 119:../main.c     **** 		//O	---
+ 120:../main.c     **** 		case 133 ... 135: LED1ON(); break;
+ 610              	 .loc 3 120 0
+ 611 00ec FFF7FEFF 	 bl LED1ON
+ 612 00f0 1FE0     	 b .L59
+ 613              	.L51:
+ 121:../main.c     **** 		case 137 ... 139: LED1ON(); break;
+ 614              	 .loc 3 121 0
+ 615 00f2 FFF7FEFF 	 bl LED1ON
+ 616 00f6 1CE0     	 b .L59
+ 617              	.L52:
+ 122:../main.c     **** 		case 141 ... 143: LED1ON(); break;
+ 618              	 .loc 3 122 0
+ 619 00f8 FFF7FEFF 	 bl LED1ON
+ 620 00fc 19E0     	 b .L59
+ 621              	.L53:
+ 123:../main.c     **** 
+ 124:../main.c     **** 		// PAUSE_WORD: 3
+ 125:../main.c     **** 		//S	...
+ 126:../main.c     **** 		case 147: LED1ON(); break;
+ 622              	 .loc 3 126 0
+ 623 00fe FFF7FEFF 	 bl LED1ON
+ 624 0102 16E0     	 b .L59
+ 625              	.L54:
+ 127:../main.c     **** 		case 149: LED1ON(); break;
+ 626              	 .loc 3 127 0
+ 627 0104 FFF7FEFF 	 bl LED1ON
+ 628 0108 13E0     	 b .L59
+ 629              	.L55:
+ 128:../main.c     **** 		case 151: LED1ON(); break;
+ 630              	 .loc 3 128 0
+ 631 010a FFF7FEFF 	 bl LED1ON
+ 632 010e 10E0     	 b .L59
+ 633              	.L56:
+ 129:../main.c     **** 
+ 130:../main.c     **** 		// BLINKING NOT-SYNCHRONOUS
+ 131:../main.c     **** 		case 159: LED0TOGGLE(); break;
+ 634              	 .loc 3 131 0
+ 635 0110 FFF7FEFF 	 bl LED0TOGGLE
+ 636 0114 0DE0     	 b .L59
+ 637              	.L57:
+ 132:../main.c     **** 		case 160 ... 179: LED0TOGGLE(), LED1TOGGLE(); break;
+ 638              	 .loc 3 132 0
+ 639 0116 FFF7FEFF 	 bl LED0TOGGLE
+ 640 011a FFF7FEFF 	 bl LED1TOGGLE
+ 641 011e 08E0     	 b .L59
+ 642              	.L58:
+ 133:../main.c     **** 
+ 134:../main.c     **** 		// TIMER RESET
+ 135:../main.c     **** 		case 180: iTickCounter = 0; break;
+ 643              	 .loc 3 135 0
+ 644 0120 074B     	 ldr r3,.L60
+ 645 0122 0022     	 mov r2,#0
+ 646 0124 1A60     	 str r2,[r3]
+ 647 0126 04E0     	 b .L59
+ 648              	.L13:
+ 136:../main.c     **** 		default: LED0OFF(), LED1OFF(); break;
+ 649              	 .loc 3 136 0
+ 650 0128 FFF7FEFF 	 bl LED0OFF
+ 651 012c FFF7FEFF 	 bl LED1OFF
+ 652 0130 C046     	 mov r8,r8
+ 653              	.L59:
+ 137:../main.c     **** 	}
+ 138:../main.c     **** 	iTickCounter++;
+ 654              	 .loc 3 138 0
+ 655 0132 034B     	 ldr r3,.L60
+ 656 0134 1B68     	 ldr r3,[r3]
+ 657 0136 5A1C     	 add r2,r3,#1
+ 658 0138 014B     	 ldr r3,.L60
+ 659 013a 1A60     	 str r2,[r3]
+ 139:../main.c     **** }
+ 660              	 .loc 3 139 0
+ 661 013c BD46     	 mov sp,r7
+ 662              	 
+ 663 013e 80BD     	 pop {r7,pc}
+ 664              	.L61:
+ 665              	 .align 2
+ 666              	.L60:
+ 667 0140 00000000 	 .word iTickCounter
+ 668 0144 00000000 	 .word .L15
+ 669              	 .cfi_endproc
+ 670              	.LFE85:
+ 672              	 .section .text.LED0ON,"ax",%progbits
+ 673              	 .align 2
+ 674              	 .global LED0ON
+ 675              	 .code 16
+ 676              	 .thumb_func
+ 678              	LED0ON:
+ 679              	.LFB86:
+ 140:../main.c     **** 
+ 141:../main.c     **** 
+ 142:../main.c     **** void LED0ON (void) {
+ 680              	 .loc 3 142 0
+ 681              	 .cfi_startproc
+ 682 0000 80B5     	 push {r7,lr}
+ 683              	.LCFI17:
+ 684              	 .cfi_def_cfa_offset 8
+ 685              	 .cfi_offset 7,-8
+ 686              	 .cfi_offset 14,-4
+ 687 0002 00AF     	 add r7,sp,#0
+ 688              	.LCFI18:
+ 689              	 .cfi_def_cfa_register 7
+ 143:../main.c     **** 	DIGITAL_IO_SetOutputHigh(&LED_P1_P0);
+ 690              	 .loc 3 143 0
+ 691 0004 044B     	 ldr r3,.L63
+ 692 0006 181C     	 mov r0,r3
+ 693 0008 FFF7FEFF 	 bl DIGITAL_IO_SetOutputHigh
+ 144:../main.c     **** 	bLed0 = ON;
+ 694              	 .loc 3 144 0
+ 695 000c 034B     	 ldr r3,.L63+4
+ 696 000e 0122     	 mov r2,#1
+ 697 0010 1A70     	 strb r2,[r3]
+ 145:../main.c     **** }
+ 698              	 .loc 3 145 0
+ 699 0012 BD46     	 mov sp,r7
+ 700              	 
+ 701 0014 80BD     	 pop {r7,pc}
+ 702              	.L64:
+ 703 0016 C046     	 .align 2
+ 704              	.L63:
+ 705 0018 00000000 	 .word LED_P1_P0
+ 706 001c 00000000 	 .word bLed0
+ 707              	 .cfi_endproc
+ 708              	.LFE86:
+ 710              	 .section .text.LED0OFF,"ax",%progbits
+ 711              	 .align 2
+ 712              	 .global LED0OFF
+ 713              	 .code 16
+ 714              	 .thumb_func
+ 716              	LED0OFF:
+ 717              	.LFB87:
+ 146:../main.c     **** void LED0OFF (void) {
+ 718              	 .loc 3 146 0
+ 719              	 .cfi_startproc
+ 720 0000 80B5     	 push {r7,lr}
+ 721              	.LCFI19:
+ 722              	 .cfi_def_cfa_offset 8
+ 723              	 .cfi_offset 7,-8
+ 724              	 .cfi_offset 14,-4
+ 725 0002 00AF     	 add r7,sp,#0
+ 726              	.LCFI20:
+ 727              	 .cfi_def_cfa_register 7
+ 147:../main.c     **** 	DIGITAL_IO_SetOutputLow(&LED_P1_P0);
+ 728              	 .loc 3 147 0
+ 729 0004 044B     	 ldr r3,.L66
+ 730 0006 181C     	 mov r0,r3
+ 731 0008 FFF7FEFF 	 bl DIGITAL_IO_SetOutputLow
+ 148:../main.c     **** 	bLed0 = OFF;
+ 732              	 .loc 3 148 0
+ 733 000c 034B     	 ldr r3,.L66+4
+ 734 000e 0022     	 mov r2,#0
+ 735 0010 1A70     	 strb r2,[r3]
+ 149:../main.c     **** }
+ 736              	 .loc 3 149 0
+ 737 0012 BD46     	 mov sp,r7
+ 738              	 
+ 739 0014 80BD     	 pop {r7,pc}
+ 740              	.L67:
+ 741 0016 C046     	 .align 2
+ 742              	.L66:
+ 743 0018 00000000 	 .word LED_P1_P0
+ 744 001c 00000000 	 .word bLed0
+ 745              	 .cfi_endproc
+ 746              	.LFE87:
+ 748              	 .section .text.LED0TOGGLE,"ax",%progbits
+ 749              	 .align 2
+ 750              	 .global LED0TOGGLE
+ 751              	 .code 16
+ 752              	 .thumb_func
+ 754              	LED0TOGGLE:
+ 755              	.LFB88:
+ 150:../main.c     **** void LED0TOGGLE (void) {
+ 756              	 .loc 3 150 0
+ 757              	 .cfi_startproc
+ 758 0000 80B5     	 push {r7,lr}
+ 759              	.LCFI21:
+ 760              	 .cfi_def_cfa_offset 8
+ 761              	 .cfi_offset 7,-8
+ 762              	 .cfi_offset 14,-4
+ 763 0002 00AF     	 add r7,sp,#0
+ 764              	.LCFI22:
+ 765              	 .cfi_def_cfa_register 7
+ 151:../main.c     **** 	if (bLed0 == OFF)
+ 766              	 .loc 3 151 0
+ 767 0004 064B     	 ldr r3,.L71
+ 768 0006 1B78     	 ldrb r3,[r3]
+ 769 0008 0122     	 mov r2,#1
+ 770 000a 5340     	 eor r3,r2
+ 771 000c DBB2     	 uxtb r3,r3
+ 772 000e 002B     	 cmp r3,#0
+ 773 0010 02D0     	 beq .L69
+ 152:../main.c     **** 		LED0ON();
+ 774              	 .loc 3 152 0
+ 775 0012 FFF7FEFF 	 bl LED0ON
+ 776 0016 01E0     	 b .L68
+ 777              	.L69:
+ 153:../main.c     **** 	else
+ 154:../main.c     **** 		LED0OFF();
+ 778              	 .loc 3 154 0
+ 779 0018 FFF7FEFF 	 bl LED0OFF
+ 780              	.L68:
+ 155:../main.c     **** }
+ 781              	 .loc 3 155 0
+ 782 001c BD46     	 mov sp,r7
+ 783              	 
+ 784 001e 80BD     	 pop {r7,pc}
+ 785              	.L72:
+ 786              	 .align 2
+ 787              	.L71:
+ 788 0020 00000000 	 .word bLed0
+ 789              	 .cfi_endproc
+ 790              	.LFE88:
+ 792              	 .section .text.LED1ON,"ax",%progbits
+ 793              	 .align 2
+ 794              	 .global LED1ON
+ 795              	 .code 16
+ 796              	 .thumb_func
+ 798              	LED1ON:
+ 799              	.LFB89:
+ 156:../main.c     **** void LED1ON (void) {
+ 800              	 .loc 3 156 0
+ 801              	 .cfi_startproc
+ 802 0000 80B5     	 push {r7,lr}
+ 803              	.LCFI23:
+ 804              	 .cfi_def_cfa_offset 8
+ 805              	 .cfi_offset 7,-8
+ 806              	 .cfi_offset 14,-4
+ 807 0002 00AF     	 add r7,sp,#0
+ 808              	.LCFI24:
+ 809              	 .cfi_def_cfa_register 7
+ 157:../main.c     **** 	DIGITAL_IO_SetOutputHigh(&LED_P1_P1);
+ 810              	 .loc 3 157 0
+ 811 0004 044B     	 ldr r3,.L74
+ 812 0006 181C     	 mov r0,r3
+ 813 0008 FFF7FEFF 	 bl DIGITAL_IO_SetOutputHigh
+ 158:../main.c     **** 	bLed1 = ON;
+ 814              	 .loc 3 158 0
+ 815 000c 034B     	 ldr r3,.L74+4
+ 816 000e 0122     	 mov r2,#1
+ 817 0010 1A70     	 strb r2,[r3]
+ 159:../main.c     **** }
+ 818              	 .loc 3 159 0
+ 819 0012 BD46     	 mov sp,r7
+ 820              	 
+ 821 0014 80BD     	 pop {r7,pc}
+ 822              	.L75:
+ 823 0016 C046     	 .align 2
+ 824              	.L74:
+ 825 0018 00000000 	 .word LED_P1_P1
+ 826 001c 00000000 	 .word bLed1
+ 827              	 .cfi_endproc
+ 828              	.LFE89:
+ 830              	 .section .text.LED1OFF,"ax",%progbits
+ 831              	 .align 2
+ 832              	 .global LED1OFF
+ 833              	 .code 16
+ 834              	 .thumb_func
+ 836              	LED1OFF:
+ 837              	.LFB90:
+ 160:../main.c     **** void LED1OFF (void) {
+ 838              	 .loc 3 160 0
+ 839              	 .cfi_startproc
+ 840 0000 80B5     	 push {r7,lr}
+ 841              	.LCFI25:
+ 842              	 .cfi_def_cfa_offset 8
+ 843              	 .cfi_offset 7,-8
+ 844              	 .cfi_offset 14,-4
+ 845 0002 00AF     	 add r7,sp,#0
+ 846              	.LCFI26:
+ 847              	 .cfi_def_cfa_register 7
+ 161:../main.c     **** 	DIGITAL_IO_SetOutputLow(&LED_P1_P1);
+ 848              	 .loc 3 161 0
+ 849 0004 044B     	 ldr r3,.L77
+ 850 0006 181C     	 mov r0,r3
+ 851 0008 FFF7FEFF 	 bl DIGITAL_IO_SetOutputLow
+ 162:../main.c     **** 	bLed1 = OFF;
+ 852              	 .loc 3 162 0
+ 853 000c 034B     	 ldr r3,.L77+4
+ 854 000e 0022     	 mov r2,#0
+ 855 0010 1A70     	 strb r2,[r3]
+ 163:../main.c     **** }
+ 856              	 .loc 3 163 0
+ 857 0012 BD46     	 mov sp,r7
+ 858              	 
+ 859 0014 80BD     	 pop {r7,pc}
+ 860              	.L78:
+ 861 0016 C046     	 .align 2
+ 862              	.L77:
+ 863 0018 00000000 	 .word LED_P1_P1
+ 864 001c 00000000 	 .word bLed1
+ 865              	 .cfi_endproc
+ 866              	.LFE90:
+ 868              	 .section .text.LED1TOGGLE,"ax",%progbits
+ 869              	 .align 2
+ 870              	 .global LED1TOGGLE
+ 871              	 .code 16
+ 872              	 .thumb_func
+ 874              	LED1TOGGLE:
+ 875              	.LFB91:
+ 164:../main.c     **** void LED1TOGGLE (void) {
+ 876              	 .loc 3 164 0
+ 877              	 .cfi_startproc
+ 878 0000 80B5     	 push {r7,lr}
+ 879              	.LCFI27:
+ 880              	 .cfi_def_cfa_offset 8
+ 881              	 .cfi_offset 7,-8
+ 882              	 .cfi_offset 14,-4
+ 883 0002 00AF     	 add r7,sp,#0
+ 884              	.LCFI28:
+ 885              	 .cfi_def_cfa_register 7
+ 165:../main.c     **** 	if (bLed1 == OFF)
+ 886              	 .loc 3 165 0
+ 887 0004 064B     	 ldr r3,.L82
+ 888 0006 1B78     	 ldrb r3,[r3]
+ 889 0008 0122     	 mov r2,#1
+ 890 000a 5340     	 eor r3,r2
+ 891 000c DBB2     	 uxtb r3,r3
+ 892 000e 002B     	 cmp r3,#0
+ 893 0010 02D0     	 beq .L80
+ 166:../main.c     **** 		LED1ON();
+ 894              	 .loc 3 166 0
+ 895 0012 FFF7FEFF 	 bl LED1ON
+ 896 0016 01E0     	 b .L79
+ 897              	.L80:
+ 167:../main.c     **** 	else
+ 168:../main.c     **** 		LED1OFF();
+ 898              	 .loc 3 168 0
+ 899 0018 FFF7FEFF 	 bl LED1OFF
+ 900              	.L79:
+ 169:../main.c     **** }
+ 901              	 .loc 3 169 0
+ 902 001c BD46     	 mov sp,r7
+ 903              	 
+ 904 001e 80BD     	 pop {r7,pc}
+ 905              	.L83:
+ 906              	 .align 2
+ 907              	.L82:
+ 908 0020 00000000 	 .word bLed1
+ 909              	 .cfi_endproc
+ 910              	.LFE91:
+ 912              	 .text
+ 913              	.Letext0:
+ 914              	 .file 4 "c:\\users\\jrjkr\\downloads\\dave_4-4-2_64bit_2018-02-23\\dave-ide-4.4.2-64bit\\eclipse\\arm-gcc-49\\arm-none-eabi\\include\\machine\\_default_types.h"
+ 915              	 .file 5 "c:\\users\\jrjkr\\downloads\\dave_4-4-2_64bit_2018-02-23\\dave-ide-4.4.2-64bit\\eclipse\\arm-gcc-49\\arm-none-eabi\\include\\stdint.h"
+ 916              	 .file 6 "C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/XMCLib/inc/xmc1_gpio.h"
+ 917              	 .file 7 "C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/SYSTIMER/systimer.h"
+ 918              	 .file 8 "C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/CMSIS/Include/cmsis_gcc.h"
+ 919              	 .file 9 "C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Libraries/CMSIS/Infineon/XMC1100_series/Include/system_XMC1100.h"
+ 920              	 .file 10 "C:/Workspaces/DAVE-4.4.2-64Bit/HelloWorld/Dave/Generated/DIGITAL_IO/digital_io_extern.h"
+DEFINED SYMBOLS
+                            *ABS*:00000000 main.c
+    {standard input}:18     .text.XMC_GPIO_SetOutputHigh:00000000 $t
+    {standard input}:22     .text.XMC_GPIO_SetOutputHigh:00000000 XMC_GPIO_SetOutputHigh
+    {standard input}:58     .text.XMC_GPIO_SetOutputLow:00000000 $t
+    {standard input}:62     .text.XMC_GPIO_SetOutputLow:00000000 XMC_GPIO_SetOutputLow
+    {standard input}:98     .text.DIGITAL_IO_SetOutputHigh:00000000 $t
+    {standard input}:102    .text.DIGITAL_IO_SetOutputHigh:00000000 DIGITAL_IO_SetOutputHigh
+    {standard input}:136    .text.DIGITAL_IO_SetOutputLow:00000000 $t
+    {standard input}:140    .text.DIGITAL_IO_SetOutputLow:00000000 DIGITAL_IO_SetOutputLow
+    {standard input}:176    .bss.bLed0:00000000 bLed0
+    {standard input}:177    .bss.bLed0:00000000 $d
+    {standard input}:182    .bss.bLed1:00000000 bLed1
+    {standard input}:183    .bss.bLed1:00000000 $d
+    {standard input}:189    .bss.iTickCounter:00000000 iTickCounter
+    {standard input}:186    .bss.iTickCounter:00000000 $d
+    {standard input}:192    .text.main:00000000 $t
+    {standard input}:197    .text.main:00000000 main
+    {standard input}:255    .text.main:00000040 $d
+    {standard input}:266    .text.LEDSequence:00000000 LEDSequence
+    {standard input}:261    .text.LEDSequence:00000000 $t
+    {standard input}:292    .rodata.LEDSequence:00000000 $d
+    {standard input}:678    .text.LED0ON:00000000 LED0ON
+    {standard input}:798    .text.LED1ON:00000000 LED1ON
+    {standard input}:754    .text.LED0TOGGLE:00000000 LED0TOGGLE
+    {standard input}:874    .text.LED1TOGGLE:00000000 LED1TOGGLE
+    {standard input}:716    .text.LED0OFF:00000000 LED0OFF
+    {standard input}:836    .text.LED1OFF:00000000 LED1OFF
+    {standard input}:667    .text.LEDSequence:00000140 $d
+    {standard input}:673    .text.LED0ON:00000000 $t
+    {standard input}:705    .text.LED0ON:00000018 $d
+    {standard input}:711    .text.LED0OFF:00000000 $t
+    {standard input}:743    .text.LED0OFF:00000018 $d
+    {standard input}:749    .text.LED0TOGGLE:00000000 $t
+    {standard input}:788    .text.LED0TOGGLE:00000020 $d
+    {standard input}:793    .text.LED1ON:00000000 $t
+    {standard input}:825    .text.LED1ON:00000018 $d
+    {standard input}:831    .text.LED1OFF:00000000 $t
+    {standard input}:863    .text.LED1OFF:00000018 $d
+    {standard input}:869    .text.LED1TOGGLE:00000000 $t
+    {standard input}:908    .text.LED1TOGGLE:00000020 $d
+                     .debug_frame:00000010 $d
+
+UNDEFINED SYMBOLS
+DAVE_Init
+SYSTIMER_CreateTimer
+SYSTIMER_StartTimer
+LED_P1_P0
+LED_P1_P1
